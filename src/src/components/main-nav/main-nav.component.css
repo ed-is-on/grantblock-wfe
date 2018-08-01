@@ -1,0 +1,36 @@
+ ul {
+
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+}
+#mainBar { background-color: slategray; overflow: auto; width: 100%; 
+ }
+
+.mainNav li {
+   list-style-type: none !important;
+    float: left;
+    font-size: 2em;
+}
+
+.mainNav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    margin: 0px 20px 0px 20px;
+      border-radius: 15px 150px 30px 5px;
+    padding: 14px 16px;
+    background-color: orange;
+    text-decoration: none;
+}
+
+
+.mainNav li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.mainNav .active {
+    background-color: darkgoldenrod;
+    color: black;
+}

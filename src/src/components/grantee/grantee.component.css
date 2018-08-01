@@ -1,0 +1,41 @@
+.cBody {background-color: whitesmoke; width: 80%; height: 100%; margin: auto; }
+
+.tCenter{background-color: lightblue; width: 95%; height: 45%; margin: auto;}
+.tLeft {background-color: blue; }
+.tRight {background-color: green; }
+
+.bCenter{background-color: lightgoldenrodyellow; height: 45%;  width: 95%; margin: auto; }
+.bLeft {background-color: white;}
+.bRight {background-color: white;}
+
+.quad {display: inline-block; float: left; width: 45%; height: 95%; margin: 1% 2.5%;}
+
+/* Grantee Menu CSS */
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #111;
+}
+
+.exit {
+    background-color: cobolt;
+}

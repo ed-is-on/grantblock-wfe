@@ -1,0 +1,35 @@
+<div>
+	<h2 mat-dialog-title>New Transaction</h2>
+	<h5>Available Balance: {{data.availableBalance | currency }}</h5>
+	<mat-dialog-content>
+		<form id="newTransactionForm" #newTransactionsForm="ngForm">
+      <div>
+				<div class="form-group">
+					<label for="transactionAmount">Amount
+            <!-- <span [hidden]="transactionAmount.valid" class="usa-input-error-message" [ngClass]="{'usa-input-error':transactionAmount.invalid}" />required field</span> -->
+            </label>
+					<input name="transactionAmount" [(ngModel)]="newTransactionData.amount" id="transactionAmount" type="number" step="1"
+					 required #transactionAmount="ngModel" [max]="data.availableBalance" >           
+				</div>
+				<div class="form-group">
+					<label for="transactionPurpose">Purpose</label>
+					<input name="transactionPurpose" [(ngModel)]="newTransactionData.purpose" id="transactionPurpose" type="text" />
+				</div>
+				<div class="form-group">
+					<label for="transactionLocation">Location</label>
+					<input name="transactionLocation" [(ngModel)]="newTransactionData.location" id="transactionLocation" type="text" />
+				</div>
+				<div class="form-group">
+					<label for="transactionAttachment">Attach File (Max Size: 2MB)</label>
+					<input name="transactionAttachment" [(ngModel)]="newTransactionData.attachments" id="transactionAttachment" type="file" />
+				</div>
+				<br>
+				<!-- <strong>{{data}}</strong> -->
+			</div>
+		</form>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button mat-raised-button (click)="CancelConfirm()">Cancel</button>
+		<button mat-raised-button [disabled]="newTransactionsForm.form.invalid || AllowSubmit()" (click)="CloseConfirm()">Submit</button>
+	</mat-dialog-actions>
+</div>

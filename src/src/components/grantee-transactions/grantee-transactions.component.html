@@ -1,0 +1,29 @@
+<figure>
+	{{selectedGrantee.name}}<span *ngIf="selectedGrantee.name.split('')[selectedGrantee.name.length-1] !== 's'">'s</span><span *ngIf="selectedGrantee.name.split('')[selectedGrantee.name.length-1] === 's'">'</span> Available Balance: <b>{{availableBalance | currency}}</b>
+  <figcaption>
+    <h2>Transactions</h2>
+    <button id="newTaButton" class="button newTA" (click)="NewTransaction()" >New Transaction</button>
+  </figcaption>
+	<table>
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Amount</th>
+				<th>Accepted</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let _transaction of myTransactions" class="selection">
+				<td>{{_transaction.date | date:'MM/dd/yy'}}</td>
+				<td>{{_transaction.amount | currency }}</td>
+				<td class="status">
+					<span *ngFor="let _approval of _transaction.approvers">
+            <span *ngIf="_approval.approvalStatus===0" [class]="GetApprovalClass(_approval)">&#9745;</span>
+            <span *ngIf="_approval.approvalStatus===1" [class]="GetApprovalClass(_approval)">&#9746;</span>
+            <span *ngIf="_approval.approvalStatus===2" [class]="GetApprovalClass(_approval)">&#9744;</span>
+          </span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</figure>

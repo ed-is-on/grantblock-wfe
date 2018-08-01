@@ -1,0 +1,40 @@
+<figure>
+  Review
+	<table>
+		<!-- <figcaption>
+			<h2>Review</h2>
+		</figcaption> -->
+		<thead>
+			<tr>
+				<th>Transaction</th>
+				<th>Approval</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="selection">
+				<td>0123</td>
+				<td class="status">
+					<span class="approved"><button id="approvalButton" class="button awaitingApr" (click)="openDialog()">Awaiting Approval</button></span>
+				</td>
+			</tr>
+			<tr class="selection">
+				<td>4567</td>
+				<td class="status">
+					<span class="approved">&#9745;</span>
+				</td>
+			</tr>
+			<tr class="selection">
+				<td>8901</td>
+				<td class="status">
+					<span class="approved">&#9745;</span>
+				</td>
+			</tr>
+			<tr class="selection">
+				<td>2345</td>
+				<td class="status">
+					<span class="approved">&#9745;</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</figure>

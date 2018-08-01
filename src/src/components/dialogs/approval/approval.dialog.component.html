@@ -1,0 +1,12 @@
+<div>
+	<h2 mat-dialog-title>Grantee Approval</h2>
+	<mat-dialog-content>
+		This is the content for the dialog
+		<br>
+		<strong>{{data}}</strong>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button mat-raised-button (click)="CloseConfirm()" >Approve</button>
+		<button mat-raised-button (click)="CancelConfirm()" >Reject</button>
+	</mat-dialog-actions>
+</div>

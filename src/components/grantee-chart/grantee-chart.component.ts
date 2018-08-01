@@ -87,6 +87,9 @@ export class GranteeChartComponent implements OnInit {
     },
     title: {
       text: 'Grantee Drawdowns'
+    },
+    credits:{
+      enabled: false
     }
   }
   Highcharts = Highcharts;

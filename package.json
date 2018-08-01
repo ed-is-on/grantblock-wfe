@@ -1,5 +1,5 @@
 {
-  "name": "GrantBlock WFE",
+  "name": "GrantBlock-WFE",
   "description": "",
   "dependencies": {
     "@angular/animations": "^6.1.0",

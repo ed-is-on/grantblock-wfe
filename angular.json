@@ -13,15 +13,15 @@
           "options": {
             "outputPath": "dist",
             "index": "src/index.html",
-            "main": "src/src/main.ts",
+            "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/src/polyfills.ts",
+            "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
               "src/favicon.ico"
             ],
             "styles": [
-              "src/src/styles.css"
+              "src/styles.css"
             ],
             "scripts": []
           },
@@ -65,13 +65,13 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/src/test.ts",
+            "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/src/polyfills.ts",
+            "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "src/src/styles.css"
+              "src/styles.css"
             ],
             "assets": [
               "src/assets",

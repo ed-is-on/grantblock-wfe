@@ -11,7 +11,7 @@
 		</li>
 		<li>
 			<select aria-placeholder="Select A Grantee" name="GranteeSelector" id="granteeSelector" [(ngModel)]="grantee" (ngChnage)="UpdateSelectedGrantee(grantee)">
-		    <option *ngFor="let _grantee of GetAllGrantees()" [ngValue]="_grantee">{{_grantee.name}}</option>
+		    <option *ngFor="let _grantee of GetAllGrantees()" [ngValue]="_grantee">{{_grantee.Name}}</option>
 	    </select>
 		</li>
 		<li style="float:right">

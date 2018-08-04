@@ -4,6 +4,7 @@ import { Transactions } from '../../models/transactions.model';
 import { TransactionApprover, enumApprovalStatus } from '../../models/approver.model';
 import { TransactionsService } from '../../services/transactions.service';
 import { TransactionDialogComponent } from '../dialogs/transaction/transaction.dialog.component';
+import { Grantee } from '../../models/grantee.model';
 
 @Component({
   selector: 'grantee-transactions',
@@ -12,8 +13,8 @@ import { TransactionDialogComponent } from '../dialogs/transaction/transaction.d
   providers: [TransactionsService]
 })
 export class GranteeTransactionsComponent implements OnInit {
-  availableBalance: number
-  selectedGrantee
+  availableBalance: number;
+  selectedGrantee: Grantee;
   @Input() set UpdateSelectedGrantee(_grantee) {
     this.selectedGrantee = _grantee;
     this.GetTransactions();
@@ -31,12 +32,12 @@ export class GranteeTransactionsComponent implements OnInit {
     this.GetTransactions();
   }
 
-  UpdateAvailableBalance(){
-     this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.id, this.selectedGrantee.amount, this.myTransactions);
+  UpdateAvailableBalance() {
+    this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.Id, this.selectedGrantee.Amount, this.myTransactions);
   }
 
   GetTransactions() {
-    this.myTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.id).sort((x,y)=>{return y.date.valueOf()-x.date.valueOf()});
+    this.myTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.Id).sort((x, y) => { return y.date.valueOf() - x.date.valueOf() });
     this.myTransactions.map((trans) => {
       trans.approvers = this.$transactions.SelectRandomApprovers(trans.granteeId);
     })
@@ -68,15 +69,15 @@ export class GranteeTransactionsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Success!!', result)
-      try{
-        if(result){
-          const newTransaction = new Transactions(result.data.granteeId,result.data.granteeName, result.data.amount, new Date(), result.data.purpose || '', result.data.location || '');
+      try {
+        if (result) {
+          const newTransaction = new Transactions(result.data.grantee.Id, result.data.grantee.Name, result.data.amount, new Date(), result.data.purpose || '', result.data.location || '');
           newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
           this.myTransactions.push(newTransaction);
           this.UpdateAvailableBalance();
         }
       }
-      catch(error){
+      catch (error) {
         console.log(error);
       }
     })

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { GranteeService } from '../../services/grantee.service'
+import { Grantee } from '../../models/grantee.model';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { GranteeService } from '../../services/grantee.service'
 })
 export class GranteeComponent implements OnInit {
 
-  grantee;
+  grantee: Grantee;
 
   constructor(
     private $granteeService: GranteeService
@@ -20,8 +21,8 @@ export class GranteeComponent implements OnInit {
     
   }
   
-  GetAllGrantees(){
-    return this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.name < y.name){return -1}else{return 1}});
+  GetAllGrantees():Grantee[]{
+    return this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.Name < y.Name){return -1}else{return 1}});
   }
 
   UpdateSelectedGrantee(_grantee){

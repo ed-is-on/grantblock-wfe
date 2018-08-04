@@ -84,7 +84,13 @@ export class GranteeChartComponent implements OnInit {
     yAxis: {
       title: {
         text: 'Dollars'
+      },
+      labels:{
+        format: '${value:,.0f}'
       }
+    },
+    tooltip:{
+      pointFormat:"${point.y:,.2f}"
     },
     title: {
       text: 'Grantee Drawdowns'

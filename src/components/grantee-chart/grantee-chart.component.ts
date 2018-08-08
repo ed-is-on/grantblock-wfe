@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import chartData from './grantee-chart.data';
 import { Transactions } from '../../models/transactions.model';
+import { Grantee } from '../../models/grantee.model';
 import { TransactionsService } from '../../services/transactions.service'
 
 @Component({
@@ -12,7 +13,7 @@ import { TransactionsService } from '../../services/transactions.service'
 })
 export class GranteeChartComponent implements OnInit {
 
-  selectedGrantee;
+  selectedGrantee: Grantee;
   allTransactions: Transactions[];
   chartData: {
     amounts: number[],
@@ -22,7 +23,7 @@ export class GranteeChartComponent implements OnInit {
     dates: []
   };
 
-  @Input() set UpdateSelectedGrantee(_grantee) {
+  @Input() set UpdateSelectedGrantee(_grantee: Grantee) {
     this.selectedGrantee = _grantee;
     this.bootstrapComponent();
   }
@@ -40,7 +41,7 @@ export class GranteeChartComponent implements OnInit {
    */
   bootstrapComponent() {
     if (this.selectedGrantee) {
-      this.allTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.id)
+      this.allTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.Id)
         .sort((a, b) => { return a.date.valueOf() - b.date.valueOf() });
       this.ParseChartData();
     }
@@ -53,7 +54,7 @@ export class GranteeChartComponent implements OnInit {
     // Set Amounts
     let _amounts: number[] = [];
     // adding the initial amount to the chart
-    this.allTransactions.unshift(new Transactions(this.selectedGrantee.id, this.selectedGrantee.name, this.selectedGrantee.amount, new Date('10/1/2016')));
+    this.allTransactions.unshift(new Transactions(this.selectedGrantee.Id, this.selectedGrantee.Name, this.selectedGrantee.Amount, new Date('10/1/2016')));
     // Push running total into the _amounts array
     this.allTransactions
       .map((_trans) => {
@@ -63,7 +64,7 @@ export class GranteeChartComponent implements OnInit {
         _amounts.push(total + currentAmount);
         return total + currentAmount;
       });
-    _amounts.unshift(parseInt(this.selectedGrantee.amount));
+    _amounts.unshift(this.selectedGrantee.Amount);
     this.chartOptions.series[0].data = _amounts;
 
     // Set Dates
@@ -83,7 +84,13 @@ export class GranteeChartComponent implements OnInit {
     yAxis: {
       title: {
         text: 'Dollars'
+      },
+      labels:{
+        format: '${value:,.0f}'
       }
+    },
+    tooltip:{
+      pointFormat:"${point.y:,.2f}"
     },
     title: {
       text: 'Grantee Drawdowns'

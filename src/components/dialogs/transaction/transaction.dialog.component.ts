@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { Transactions } from '../../../models/transactions.model';
+import { Grantee } from '../../../models/grantee.model';
 
 @Component({
   selector: 'new-transaction-dialog',
@@ -14,16 +15,14 @@ export class TransactionDialogComponent implements OnInit {
     location?:string,
     purpose?:string,
     attachments?:any,
-    granteeId?:number,
-    granteeName?:string
+    grantee?: Grantee
   } = {}
 
   constructor(
     public thisDialog: MatDialogRef<TransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data
   ) { 
-    this.newTransactionData.granteeId = this.data.grantee.id;
-    this.newTransactionData.granteeName = this.data.grantee.name;
+    this.newTransactionData.grantee = this.data.grantee;
   }
 
   ngOnInit() {

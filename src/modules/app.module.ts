@@ -14,6 +14,7 @@ import { GranteeTransactionsComponent } from '../components/grantee-transactions
 import { GranteeApprovalsComponent } from '../components/grantee-approvals/grantee-approvals.component';
 import { GranteeChartComponent } from '../components/grantee-chart/grantee-chart.component'
 import { MainNavComponent } from '../components/main-nav/main-nav.component'
+import { EducationComponent } from '../components/education/education.component';
 
 // Dialogs
 import { ApprovalDialogComponent } from '../components/dialogs/approval/approval.dialog.component';
@@ -34,7 +35,8 @@ import { GranteeService } from '../services/grantee.service';
     ApprovalDialogComponent,
     TransactionDialogComponent,
     GranteeChartComponent,
-    MainNavComponent
+    MainNavComponent, 
+    EducationComponent
   ],
   providers:[
     GranteeService

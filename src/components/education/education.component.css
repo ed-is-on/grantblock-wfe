@@ -1,0 +1,69 @@
+.sec-pod {
+    background-color:  #333;;
+    width: 600px; 
+    height: 350px; 
+    border: 5px solid white; 
+    outline: 3px solid slategray;
+    padding: 20px;
+    margin: 30px;
+    display: inline-block;
+    float: left;}
+
+.sec-podHalf {
+    background-color:  #333;; 
+    width: 285px; 
+    height: 350px;
+    border: 5px solid white; 
+    outline: 3px solid slategray;
+    padding: 20px;
+    margin: 30px;
+    display: inline-block;
+    float: left;}
+
+.testFont {
+    font-size: 10em; 
+    color: white;}
+.sph1 {
+    margin-right: 15px;
+}
+.sph2 { 
+    margin-left: 15px;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 25;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: right;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 5px;
+    width: 200px;
+    border: 2px solid slategray;
+    margin: 10px 25px ;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: slategrey;
+    
+}
+
+.exit {
+    background-color: cobolt;
+}
+
+.animate {
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}

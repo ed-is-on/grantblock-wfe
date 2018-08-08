@@ -17,20 +17,30 @@
 .mainNav li a {
     display: block;
     color: white;
+    width: 300px;
     text-align: center;
-    margin: 0px 20px 0px 20px;
-      border-radius: 15px 150px 30px 5px;
+    margin: 0px 0px 0px 24px;
+  margin-bottom: -18px !important;
+  border-radius: 10px 10px 0px 0px;
     padding: 14px 16px;
     background-color: orange;
     text-decoration: none;
 }
 
 
-.mainNav li a:hover:not(.active) {
+
+.mainNav li a:hover:not(.activeTab) {
     background-color: #111;
 }
 
-.mainNav .active {
+.mainNav .activeTab {
     background-color: darkgoldenrod;
     color: black;
+}
+
+.animate {
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
 }

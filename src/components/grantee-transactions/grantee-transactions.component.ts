@@ -37,6 +37,7 @@ export class GranteeTransactionsComponent implements OnInit {
   }
 
   GetTransactions() {
+    console.log(this.$transactions.GetGranteesTransactions2(this.selectedGrantee.Id));
     this.myTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.Id).sort((x, y) => { return y.date.valueOf() - x.date.valueOf() });
     this.myTransactions.map((trans) => {
       trans.approvers = this.$transactions.SelectRandomApprovers(trans.granteeId);

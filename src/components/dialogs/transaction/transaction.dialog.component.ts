@@ -2,6 +2,10 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import { Transactions } from '../../../models/transactions.model';
 import { Grantee } from '../../../models/grantee.model';
+import { DataService } from '../../../hyperledger/data.service';
+import * as HyperLedgerClasses from '../../../hyperledger/com.usgov.ed.grants';
+import { CreateActionRequest } from '../../../hyperledger/com.usgov.ed.grants';
+
 
 @Component({
   selector: 'new-transaction-dialog',
@@ -9,6 +13,8 @@ import { Grantee } from '../../../models/grantee.model';
   styleUrls: ['./transaction.dialog.component.css']
 })
 export class TransactionDialogComponent implements OnInit {
+
+  private namespace:string = 'CreateActionRequest';
 
   newTransactionData:{
     amount?:number,
@@ -19,6 +25,7 @@ export class TransactionDialogComponent implements OnInit {
   } = {}
 
   constructor(
+    private $dataService: DataService<CreateActionRequest>,
     public thisDialog: MatDialogRef<TransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data
   ) { 
@@ -29,7 +36,16 @@ export class TransactionDialogComponent implements OnInit {
   }
 
   CloseConfirm(){
-    this.thisDialog.close({success:true, data:this.newTransactionData});
+    const hyperledgerGrantee = new HyperLedgerClasses.Grantee();
+    hyperledgerGrantee.userId = this.data.grantee.Id;
+    const actionRequest = new HyperLedgerClasses.CreateActionRequest();
+    actionRequest.requestor = hyperledgerGrantee;
+    actionRequest.requestValue = this.newTransactionData.amount;
+    this.$dataService.add(this.namespace, actionRequest).subscribe((results)=>{
+      console.log('New Transaction Results',results);
+    });
+    
+    // this.thisDialog.close({success:true, data:this.newTransactionData});
   }
 
   CancelConfirm(){

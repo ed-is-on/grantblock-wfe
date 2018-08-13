@@ -36,8 +36,10 @@ export class GranteeComponent implements OnInit {
       ))})
   
       this.allGrantees = grantees;
+      return grantees
     } catch (error) {
       this.allGrantees = this.GetAllGrantees();      
+      return grantees
     }
   }
 

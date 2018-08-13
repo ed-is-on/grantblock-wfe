@@ -6,12 +6,12 @@
 		<li>
 			<a href="#Transactions" class="animate">My Transactions</a>
 		</li> -->
-		<li>
+		<li *ngIf="allGrantees && allGrantees.length > 0">
 			<a routerLink="grantee">LoginAs</a>
 		</li>
 		<li>
-			<select aria-placeholder="Select A Grantee" name="GranteeSelector" id="granteeSelector" [(ngModel)]="grantee" (ngChnage)="UpdateSelectedGrantee(grantee)">
-				<option *ngFor="let _grantee of GetAllGrantees()" [ngValue]="_grantee">{{_grantee.Name}}</option>
+			<select *ngIf="allGrantees && allGrantees.length > 0" aria-placeholder="Select A Grantee" name="GranteeSelector" id="granteeSelector" [(ngModel)]="grantee" (ngChnage)="UpdateSelectedGrantee(grantee)">
+				<option *ngFor="let _grantee of allGrantees" [ngValue]="_grantee">{{_grantee.Name}}</option>
 			</select>
 		</li>
 		<!-- <li style="float:right">

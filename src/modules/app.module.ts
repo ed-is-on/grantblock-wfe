@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app.routing.module';
+import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -23,9 +24,10 @@ import { TransactionDialogComponent } from '../components/dialogs/transaction/tr
 // Services
 import { GranteeService } from '../services/grantee.service';
 // import { TransactionsService } from '../services/transactions.service';
+import { DataService } from '../hyperledger/data.service';
 
 @NgModule({
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, MaterialModule, HighchartsChartModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule],
   declarations: [
     AppComponent,
     HelloComponent,
@@ -39,7 +41,8 @@ import { GranteeService } from '../services/grantee.service';
     EducationComponent
   ],
   providers:[
-    GranteeService
+    GranteeService,
+    DataService
   ],
   entryComponents:[
     ApprovalDialogComponent,

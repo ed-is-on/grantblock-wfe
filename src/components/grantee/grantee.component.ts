@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { GranteeService } from '../../services/grantee.service'
 import { Grantee } from '../../models/grantee.model';
+import { of } from 'rxjs/observable/of';
+
 
 
 @Component({
@@ -11,6 +13,7 @@ import { Grantee } from '../../models/grantee.model';
 })
 export class GranteeComponent implements OnInit {
 
+  allGrantees: Grantee[];
   grantee: Grantee;
 
   constructor(
@@ -18,11 +21,24 @@ export class GranteeComponent implements OnInit {
   ) { }
 
   ngOnInit(){
-    
+    this.GetHyperledgerGrantees();
   }
   
   GetAllGrantees():Grantee[]{
     return this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.Name < y.Name){return -1}else{return 1}});
+  }
+
+  GetHyperledgerGrantees(){
+    const grantees:Grantee[] = [];
+    try {
+      this.$granteeService.GetAllGrantees2().subscribe((x) => {x.forEach(_x=>grantees.push(
+        new Grantee(_x.pocName, _x.grantBalance, _x.userId)
+      ))})
+  
+      this.allGrantees = grantees;
+    } catch (error) {
+      this.allGrantees = this.GetAllGrantees();      
+    }
   }
 
   UpdateSelectedGrantee(_grantee){

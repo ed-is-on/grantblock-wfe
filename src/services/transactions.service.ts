@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { GranteeService } from './grantee.service';
 import { Transactions } from '../models/transactions.model';
 import { TransactionApprover } from '../models/approver.model';
+// import $namespaces from './namespaces';
 import $dataFactory from '../data';
 
 @Injectable()
 export class TransactionsService {
 
   constructor(
-    private $granteeService: GranteeService
-  ) {
+    private $granteeService: GranteeService,
+    ) {
     this.AssignApprovers();
   }
 

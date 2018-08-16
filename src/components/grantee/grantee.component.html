@@ -1,21 +1,21 @@
 <div>
 	<ul>
 		<li>
-			<a href="#home">Home</a>
+			<a href="#home" class="animate">Home</a>
 		</li>
 		<li>
-			<a href="#Transactions">My Transactions</a>
+			<a href="#Transactions" class="animate">My Transactions</a>
 		</li>
 		<li>
 			<a href="#Profile">Profile</a>
 		</li>
 		<li>
 			<select aria-placeholder="Select A Grantee" name="GranteeSelector" id="granteeSelector" [(ngModel)]="grantee" (ngChnage)="UpdateSelectedGrantee(grantee)">
-		    <option *ngFor="let _grantee of GetAllGrantees()" [ngValue]="_grantee">{{_grantee.name}}</option>
+		    <option *ngFor="let _grantee of GetAllGrantees()" [ngValue]="_grantee">{{_grantee.Name}}</option>
 	    </select>
 		</li>
 		<li style="float:right">
-			<a class="exit" href="#logOut">Logout</a>
+			<a class="exit" href="#logOut" class="animate">Logout</a>
 		</li>
 	</ul>
 	<form class="use-form">

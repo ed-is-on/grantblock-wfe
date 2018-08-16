@@ -1,5 +1,5 @@
 <figure>
-	{{selectedGrantee.name}}<span *ngIf="selectedGrantee.name.split('')[selectedGrantee.name.length-1] !== 's'">'s</span><span *ngIf="selectedGrantee.name.split('')[selectedGrantee.name.length-1] === 's'">'</span> Available Balance: <b>{{availableBalance | currency}}</b>
+	{{selectedGrantee.Name}}<span *ngIf="selectedGrantee.Name.split('')[selectedGrantee.Name.length-1] !== 's'">'s</span><span *ngIf="selectedGrantee.Name.split('')[selectedGrantee.Name.length-1] === 's'">'</span> Available Balance: <b>{{availableBalance | currency}}</b>
   <figcaption>
     <h2>Transactions</h2>
     <button id="newTaButton" class="button newTA" (click)="NewTransaction()" >New Transaction</button>

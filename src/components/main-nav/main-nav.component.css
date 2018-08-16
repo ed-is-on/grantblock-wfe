@@ -19,13 +19,14 @@
     color: white;
     width: 300px;
     text-align: center;
-    margin: 0px 0px 0px 24px;
-  margin-bottom: -18px !important;
-  border-radius: 10px 10px 0px 0px;
+    margin: 0px 0px 0px 20px;
+  margin-bottom: -15px !important;
+      border-radius: 30px 30px 5px 5px;
     padding: 14px 16px;
     background-color: orange;
     text-decoration: none;
 }
+
 
 
 

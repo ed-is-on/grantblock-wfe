@@ -23,8 +23,9 @@ import { TransactionDialogComponent } from '../components/dialogs/transaction/tr
 
 // Services
 import { GranteeService } from '../services/grantee.service';
-// import { TransactionsService } from '../services/transactions.service';
+import { TransactionsService } from '../services/transactions.service';
 import { DataService } from '../hyperledger/data.service';
+import { GrantBlockService } from '../services/grantblock.service';
 
 @NgModule({
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule],
@@ -42,7 +43,9 @@ import { DataService } from '../hyperledger/data.service';
   ],
   providers:[
     GranteeService,
-    DataService
+    TransactionsService,
+    DataService,
+    GrantBlockService
   ],
   entryComponents:[
     ApprovalDialogComponent,

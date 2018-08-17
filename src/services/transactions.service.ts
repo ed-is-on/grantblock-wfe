@@ -4,8 +4,6 @@ import { Transactions } from '../models/transactions.model';
 import { TransactionApprover } from '../models/approver.model';
 // import $namespaces from './namespaces';
 import $dataFactory from '../data';
-import { DataService } from '../hyperledger/data.service';
-import { ActionRequest } from '../hyperledger/com.usgov.ed.grants';
 
 @Injectable()
 export class TransactionsService {
@@ -13,8 +11,7 @@ export class TransactionsService {
   private namespace:string = 'ActionRequest';
 
   constructor(
-    private $granteeService: GranteeService,
-    private $dataService: DataService<ActionRequest>
+    private $granteeService: GranteeService
     ) {
     this.AssignApprovers();
   }
@@ -37,12 +34,6 @@ export class TransactionsService {
 
   GetGranteesTransactions(_granteeId) {
     return $dataFactory.transactions.filter((_trans) => { return _trans.granteeId === _granteeId && _trans.date.getFullYear() >= new Date('1/1/2017').getFullYear() })
-  }
-
-  GetGranteesTransactions2(_granteeId){
-    this.$dataService.getAll(this.namespace).subscribe((results)=>{
-      console.log(results);
-    })
   }
 
   GetGranteesAvailableBalance(_granteeId, _amount, _transactions?: Transactions[]) {

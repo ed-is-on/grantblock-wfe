@@ -5,6 +5,7 @@ import { TransactionApprover, enumApprovalStatus } from '../../models/approver.m
 import { TransactionsService } from '../../services/transactions.service';
 import { TransactionDialogComponent } from '../dialogs/transaction/transaction.dialog.component';
 import { Grantee } from '../../models/grantee.model';
+import { GrantBlockService } from '../../services/grantblock.service';
 
 @Component({
   selector: 'grantee-transactions',
@@ -25,6 +26,7 @@ export class GranteeTransactionsComponent implements OnInit {
   allStatuses = enumApprovalStatus;
   constructor(
     private $transactions: TransactionsService,
+    private $grantBlockService: GrantBlockService,
     public dialog: MatDialog
   ) { }
 
@@ -37,12 +39,9 @@ export class GranteeTransactionsComponent implements OnInit {
   }
 
   GetTransactions() {
-    console.log(this.$transactions.GetGranteesTransactions2(this.selectedGrantee.Id));
-    this.myTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.Id).sort((x, y) => { return y.date.valueOf() - x.date.valueOf() });
-    this.myTransactions.map((trans) => {
-      trans.approvers = this.$transactions.SelectRandomApprovers(trans.granteeId);
+    this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results)=>{
+      this.myTransactions = results;
     })
-    // console.log('Getting money!', this.myTransactions);
   }
 
   GetApprovalClass(_approval: TransactionApprover) {
@@ -71,11 +70,12 @@ export class GranteeTransactionsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('Success!!', result)
       try {
-        if (result) {
-          const newTransaction = new Transactions(result.data.grantee.Id, result.data.grantee.Name, result.data.amount, new Date(), result.data.purpose || '', result.data.location || '');
-          newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
-          this.myTransactions.push(newTransaction);
-          this.UpdateAvailableBalance();
+        if (result.success) {
+          // const newTransaction = new Transactions(result.data.results.requestor, result.data.newTransaction.grantee.Name, result.data.results.requestValue, new Date(), result.data.purpose || '', result.data.location || '');
+          // // newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
+          // this.myTransactions.unshift(newTransaction);
+          // this.UpdateAvailableBalance();
+          this.GetTransactions();
         }
       }
       catch (error) {

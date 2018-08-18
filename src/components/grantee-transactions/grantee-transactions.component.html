@@ -10,6 +10,7 @@
 				<th>Date</th>
 				<th>Amount</th>
 				<th>Accepted</th>
+				<th>Type</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -18,11 +19,12 @@
 				<td>{{_transaction.amount | currency }}</td>
 				<td class="status">
 					<span *ngFor="let _approval of _transaction.approvers">
-            <span *ngIf="_approval.approvalStatus===0" [class]="GetApprovalClass(_approval)">&#9745;</span>
+						<span *ngIf="_approval.approvalStatus===0" [class]="GetApprovalClass(_approval)">&#9745;</span>
             <span *ngIf="_approval.approvalStatus===1" [class]="GetApprovalClass(_approval)">&#9746;</span>
             <span *ngIf="_approval.approvalStatus===2" [class]="GetApprovalClass(_approval)">&#9744;</span>
           </span>
 				</td>
+				<td>{{_transaction.type}}</td>
 			</tr>
 		</tbody>
 	</table>

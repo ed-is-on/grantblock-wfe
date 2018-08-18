@@ -6,6 +6,7 @@ import { DataService } from '../../../hyperledger/data.service';
 import * as HyperLedgerClasses from '../../../hyperledger/com.usgov.ed.grants';
 import { CreateActionRequest } from '../../../hyperledger/com.usgov.ed.grants';
 import { Http } from '@angular/http';
+import { GrantBlockService } from '../../../services/grantblock.service';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class TransactionDialogComponent implements OnInit {
 
   constructor(
     private $http: Http,
+    private $grantBlockService: GrantBlockService,
     private $dataService: DataService<CreateActionRequest>,
     public thisDialog: MatDialogRef<TransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data
@@ -43,22 +45,20 @@ export class TransactionDialogComponent implements OnInit {
     const actionRequest = new HyperLedgerClasses.CreateActionRequest();
     actionRequest.requestor = hyperledgerGrantee;
     actionRequest.requestValue = this.newTransactionData.amount;
-    this.$http.post(`http://edhyperledger.eastus2.cloudapp.azure.com:3000/api/CreateActionRequest`, {
-      "$class": `com.usgov.ed.grants.${this.namespace}`,
-      "requestValue": this.newTransactionData.amount,
-      "requestor": this.data.grantee.Id
-    }).subscribe((results) => {
-      console.log('New Transaction Results', results);
-      if (results.ok) {
-        this.thisDialog.close({ success: true, data: { results: results.json(), newTransaction: this.newTransactionData } });
-      }
-    }, (_error) => {
-      console.error(_error);
-      this.thisDialog.close({ success: false, data: _error })
-    },
-      () => {
-        console.log('completed new transaction creation call');
-      });
+
+    this.$grantBlockService.CreateTransaction({ requestValue: this.newTransactionData.amount, requestor: this.data.grantee.Id })
+      .subscribe((results) => {
+        console.log('New Transaction Results', results);
+        if (results.ok) {
+          this.thisDialog.close({ success: true, data: { results: results.json(), newTransaction: this.newTransactionData } });
+        }
+      }, (_error) => {
+        console.error(_error);
+        this.thisDialog.close({ success: false, data: _error })
+      },
+        () => {
+          console.log('completed new transaction creation call');
+        });
     // this.$dataService.add(this.namespace, actionRequest).subscribe((results)=>{
     //   console.log('New Transaction Results',results);
     // });

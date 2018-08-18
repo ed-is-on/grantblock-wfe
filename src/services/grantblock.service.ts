@@ -33,7 +33,7 @@ export class GrantBlockService {
             var ownerId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
             // console.log(decodeURIComponent(_value.owner));
             // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
-            return _value = new Transactions(ownerId, '', _value.requestValue)
+            return _value = new Transactions(ownerId, '', _value.requestValue,new Date(_value.createdDate),null,null,_value.status,_value.type);
         });
 
         return transactions;

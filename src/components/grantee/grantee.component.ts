@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { GranteeService } from '../../services/grantee.service'
 import { Grantee } from '../../models/grantee.model';
-import { of } from 'rxjs/observable/of';
 import { GrantBlockService } from '../../services/grantblock.service';
 
 
@@ -28,11 +27,10 @@ export class GranteeComponent implements OnInit {
 
   GetAllGrantees() {
     this.$grantBlockService.GetAllGrantees().subscribe((result) => {
-      if(result.length > 0){
         this.allGrantees = result;
-      } else {
-        this.allGrantees = this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.Name < y.Name){return -1}else{return 1}});
-      }
+    },()=>{
+      // Getting data from the grantee from the demo if hyperledger is unavailable 
+      this.allGrantees = this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.Name < y.Name){return -1}else{return 1}});
     })
   }
 

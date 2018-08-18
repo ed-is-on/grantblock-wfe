@@ -14,6 +14,7 @@ export class GrantBlockService {
     private apiUrl: string;
     //    console.log('Decoded Value - ', decodeURIComponent(result.owner).match()[1]);
     private granteePattern: RegExp = /Grantee\#(g.*)\}$/;
+    private namespacePrefix: string = "com.usgov.ed.grants";
 
     constructor(
         private $http: Http,
@@ -45,10 +46,10 @@ export class GrantBlockService {
                 return _value = new Grantee(_value.pocName, _value.grantBalance, _value.userId, _value.pocEmail);
             });
         })
-        .catch((error)=>{
-            console.info('Error Accessing Blockchain', error);
-            return of(this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.Name < y.Name){return -1}else{return 1}}));
-        })
+            .catch((error) => {
+                console.info('Error Accessing Blockchain', error);
+                return of(this.$granteeService.GetAllGrantees().sort((x, y) => { if (x.Name < y.Name) { return -1 } else { return 1 } }));
+            })
     }
 
     GetAllTransactions(): Observable<any> {
@@ -68,18 +69,24 @@ export class GrantBlockService {
         var owner = this.GetGrantBlockOwnerId(_granteeId);
         return this.$http.get(`${this.apiUrl}queries/selectGranteeActionRequests?owner=${owner}`)
             .map(this.parseTransactions)
-            .catch((error)=>{
+            .catch((error) => {
                 console.info('Error Getting Blockchain Transactions', error);
                 var granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
-                            .sort((x, y) => { return y.date.valueOf() - x.date.valueOf() })
-                            .map((trans)=>{
-                                trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
-                                return trans;
-                            })
+                    .sort((x, y) => { return y.date.valueOf() - x.date.valueOf() })
+                    .map((trans) => {
+                        trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
+                        return trans;
+                    })
                 return of(granteesTransactions);
             })
     }
 
+    CreateTransaction(_payload: { requestValue: number, requestor: string }): Observable<any> {
+        var result;
+        _payload["$class"] = `${this.namespacePrefix}.CreateActionRequest`;
+        // console.log(_payload);
+        return this.$http.post(`${this.apiUrl}CreateActionRequest`, _payload)
+    }
 
 
 }

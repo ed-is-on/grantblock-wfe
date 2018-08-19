@@ -1,4 +1,4 @@
-<highcharts-chart *ngIf="allTransactions.length > 0"
+<highcharts-chart *ngIf="allTransactions && allTransactions.length > 0"
   [Highcharts]="Highcharts"
   [(options)]="chartOptions"
   [(update)]="showChart"

@@ -27,10 +27,14 @@ export class GranteeComponent implements OnInit {
 
   GetAllGrantees() {
     this.$grantBlockService.GetAllGrantees().subscribe((result) => {
-        this.allGrantees = result;
+        this.allGrantees = result
+        // Sorting the results alphabetically
+        .sort((x,y)=>{ return x.Name > y.Name ? 1 : x.Name < y.Name ? -1 : 0;});
     },()=>{
       // Getting data from the grantee from the demo if hyperledger is unavailable 
-      this.allGrantees = this.$granteeService.GetAllGrantees().sort((x,y)=>{if(x.Name < y.Name){return -1}else{return 1}});
+      this.allGrantees = this.$granteeService.GetAllGrantees()
+        // Sorting the results alphabetically
+        .sort((x,y)=>{ return x.Name > y.Name ? 1 : x.Name < y.Name ? -1 : 0;});
     })
   }
 

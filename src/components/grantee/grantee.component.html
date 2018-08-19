@@ -10,7 +10,8 @@
 			<a routerLink="grantee">LoginAs</a>
 		</li>
 		<li>
-			<select *ngIf="allGrantees && allGrantees.length > 0" aria-placeholder="Select A Grantee" name="GranteeSelector" id="granteeSelector" [(ngModel)]="grantee" (ngChnage)="UpdateSelectedGrantee(grantee)">
+			<select *ngIf="allGrantees && allGrantees.length > 0" aria-placeholder="Select A Grantee" name="GranteeSelector" id="granteeSelector"
+			 [(ngModel)]="grantee" (ngChnage)="UpdateSelectedGrantee(grantee)">
 				<option *ngFor="let _grantee of allGrantees" [ngValue]="_grantee">{{_grantee.Name}} {{_grantee.Id}}</option>
 			</select>
 		</li>
@@ -32,10 +33,10 @@
 	</div>
 	<div id="bottom" class="bCenter">
 		<div id="bottom_left" class="bLeft quad">
-			<grantee-approvals></grantee-approvals>
+			<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee"></grantee-chart>
 		</div>
 		<div id="bottom_right" class="bRight quad">
-			<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee"></grantee-chart>
+			<grantee-approvals></grantee-approvals>
 		</div>
 	</div>
 </div>

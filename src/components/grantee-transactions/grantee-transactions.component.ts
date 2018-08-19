@@ -35,11 +35,20 @@ export class GranteeTransactionsComponent implements OnInit {
   }
 
   UpdateAvailableBalance() {
-    this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.Id, this.selectedGrantee.Amount, this.myTransactions);
+    this.$grantBlockService.GetGranteeAvailableBalance(this.selectedGrantee.Id)
+      .then(
+        (_availableBalance) => {
+          this.availableBalance = _availableBalance;
+          // console.log('Stream: ', _availableBalance);
+          // console.log('Total Available Balance:', _availableBalance);
+        }).catch((_error) => {
+          console.log(_error);
+          this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.Id, this.selectedGrantee.Amount, this.myTransactions);
+        })
   }
 
   GetTransactions() {
-    this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results)=>{
+    this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results) => {
       this.myTransactions = results;
     })
   }
@@ -74,8 +83,8 @@ export class GranteeTransactionsComponent implements OnInit {
           // const newTransaction = new Transactions(result.data.results.requestor, result.data.newTransaction.grantee.Name, result.data.results.requestValue, new Date(), result.data.purpose || '', result.data.location || '');
           // // newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
           // this.myTransactions.unshift(newTransaction);
-          // this.UpdateAvailableBalance();
           this.GetTransactions();
+          this.UpdateAvailableBalance();
         }
       }
       catch (error) {

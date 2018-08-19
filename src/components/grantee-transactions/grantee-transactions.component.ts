@@ -47,7 +47,7 @@ export class GranteeTransactionsComponent implements OnInit {
 
   GetTransactions() {
     this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results) => {
-      this.myTransactions = results;
+      this.myTransactions = results.sort((a,b)=>{return a.date > b.date ? -1 : a.date < b.date ? 1 : 0;});
     })
   }
 

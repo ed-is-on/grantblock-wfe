@@ -39,8 +39,6 @@ export class GranteeTransactionsComponent implements OnInit {
       .then(
         (_availableBalance) => {
           this.availableBalance = _availableBalance;
-          // console.log('Stream: ', _availableBalance);
-          // console.log('Total Available Balance:', _availableBalance);
         }).catch((_error) => {
           console.log(_error);
           this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.Id, this.selectedGrantee.Amount, this.myTransactions);

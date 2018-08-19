@@ -64,14 +64,15 @@ export class GranteeTransactionsComponent implements OnInit {
   NewTransaction(): void {
 
     const dialogRef = this.dialog.open(TransactionDialogComponent, {
-      width: '600px',
+      width: '500px',
+      height: 'auto',
+      closeOnNavigation: true,
       data: {
         grantee: this.selectedGrantee,
         availableBalance: this.availableBalance
       },
       disableClose: true,
-      hasBackdrop: false,
-      panelClass: 'grantblockModal'
+      hasBackdrop: true
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -1,6 +1,6 @@
-<highcharts-chart
+<highcharts-chart *ngIf="allTransactions.length > 0"
   [Highcharts]="Highcharts"
   [(options)]="chartOptions"
-  [(update)]="selectedGrantee"
+  [(update)]="showChart"
   style="width: 100%; height: 400px; display: block;"
 ></highcharts-chart>

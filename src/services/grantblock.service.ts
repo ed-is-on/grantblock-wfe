@@ -12,7 +12,6 @@ import { TransactionsService } from './transactions.service';
 export class GrantBlockService {
 
     private apiUrl: string;
-    //    console.log('Decoded Value - ', decodeURIComponent(result.owner).match()[1]);
     private granteePattern: RegExp = /Grantee\#(g.*)\}$/;
     private namespacePrefix: string = "com.usgov.ed.grants";
 
@@ -30,12 +29,9 @@ export class GrantBlockService {
 
     private parseTransactions(response): any {
         var transactions = response.json().map((_value) => {
-            var ownerId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-            // console.log(decodeURIComponent(_value.owner));
-            // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
-            return _value = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type);
+            var ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)\}$/)[1];
+            return new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type);
         });
-
         return transactions;
 
     }
@@ -74,7 +70,9 @@ export class GrantBlockService {
                 var granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
                     .sort((x, y) => { return y.date.valueOf() - x.date.valueOf() })
                     .map((trans) => {
-                        trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
+                        if(trans.type !== 'AWARD'){
+                            trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
+                        }
                         return trans;
                     })
                 return of(granteesTransactions);
@@ -97,7 +95,7 @@ export class GrantBlockService {
                     return _runningTotal + _currentValue
                 })
         }
-        
+
         return availableBalance;
     }
 

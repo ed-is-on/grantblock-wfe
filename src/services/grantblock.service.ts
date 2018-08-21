@@ -12,7 +12,7 @@ import { TransactionsService } from './transactions.service';
 export class GrantBlockService {
 
     private apiUrl: string;
-    private granteePattern: RegExp = /Grantee\#(g.*)\}$/;
+    private granteePattern: RegExp = /Grantee\#(g.*)$/;
     private namespacePrefix: string = "com.usgov.ed.grants";
 
     constructor(
@@ -24,12 +24,12 @@ export class GrantBlockService {
     }
 
     private GetGrantBlockOwnerId(_granteeId: string): string {
-        return `resource:com.usgov.ed.grants.Grantee%23Resource%2520%257Bid=com.usgov.ed.grants.Grantee%2523${_granteeId}%257D`;
+        return `resource%3Acom.usgov.ed.grants.Grantee%23${_granteeId}`;
     }
 
     private parseTransactions(response): any {
         var transactions = response.json().map((_value) => {
-            var ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)\}$/)[1];
+            var ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
             return new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type);
         });
         return transactions;

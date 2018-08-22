@@ -25,7 +25,7 @@
 <div class="cBody">
 	<div id="top" classs="tCenter">
 		<div id="top_left" class="tLeft quad">
-			<grantee-transactions *ngIf="grantee" [UpdateSelectedGrantee]="grantee"></grantee-transactions>
+			<grantee-transactions *ngIf="grantee" [UpdateSelectedGrantee]="grantee" (updatedTransactions)="onTransactionsUpdated()" ></grantee-transactions>
 		</div>
 		<div id="top_right" class=" tRight quad">
 			<grantee-chart transactions="grantee"></grantee-chart>
@@ -33,7 +33,7 @@
 	</div>
 	<div id="bottom" class="bCenter">
 		<div id="bottom_left" class="bLeft quad">
-			<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee"></grantee-chart>
+			<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee" [UpdateTransactions]="updatedTransactions"></grantee-chart>
 		</div>
 		<div id="bottom_right" class="bRight quad">
 			<grantee-approvals></grantee-approvals>

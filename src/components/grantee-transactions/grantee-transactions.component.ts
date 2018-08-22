@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Transactions } from '../../models/transactions.model';
 import { TransactionApprover, enumApprovalStatus } from '../../models/approver.model';
@@ -22,8 +22,12 @@ export class GranteeTransactionsComponent implements OnInit {
     this.UpdateAvailableBalance();
   }
 
+  /** This property emits an event whenenver a new transaction has successfully been created */
+  @Output() updatedTransactions = new EventEmitter<void>();
+
   myTransactions: Transactions[];
   allStatuses = enumApprovalStatus;
+
   constructor(
     private $transactions: TransactionsService,
     private $grantBlockService: GrantBlockService,
@@ -84,6 +88,7 @@ export class GranteeTransactionsComponent implements OnInit {
           // this.myTransactions.unshift(newTransaction);
           this.GetTransactions();
           this.UpdateAvailableBalance();
+          this.updatedTransactions.emit();
         }
       }
       catch (error) {

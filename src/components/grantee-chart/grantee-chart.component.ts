@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, OnDestroy } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import chartData from './grantee-chart.data';
 import { Transactions } from '../../models/transactions.model';
@@ -10,9 +10,10 @@ import { GrantBlockService } from '../../services/grantblock.service';
   selector: 'grantee-chart',
   templateUrl: './grantee-chart.component.html',
   styleUrls: ['./grantee-chart.component.css'],
-  providers: [TransactionsService, GrantBlockService]
+  providers: [TransactionsService, GrantBlockService],
+  inputs: ['UpdateTransactions']
 })
-export class GranteeChartComponent implements OnInit {
+export class GranteeChartComponent implements OnInit, OnDestroy {
   /** This property is used to toggle the highcharts display*/
   showChart: Boolean = false;
   /** This property is used to store the selected grantee that is passed into this component */
@@ -32,12 +33,29 @@ export class GranteeChartComponent implements OnInit {
     this.bootstrapComponent();
   }
 
+  /** An event emmitter input property that is used to update the grantee chart component */
+  @Input() UpdateTransactions: EventEmitter<void>;
+
   constructor(
     public $transactions: TransactionsService,
     private $grantblockService: GrantBlockService
   ) { }
 
   ngOnInit() {
+    if (this.UpdateTransactions) {
+      // subscribing to the Update Transactions event. 
+      this.UpdateTransactions.subscribe(() => {
+        this.bootstrapComponent();
+      },
+        () => { console.log('error emmitting transaction update') },
+        () => { console.log('subscription complete') })
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.UpdateTransactions) {
+      this.UpdateTransactions.unsubscribe();
+    }
   }
 
   /**

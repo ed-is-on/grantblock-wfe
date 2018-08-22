@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, EventEmitter } from '@angular/core'
 import { GranteeService } from '../../services/grantee.service'
 import { Grantee } from '../../models/grantee.model';
 import { GrantBlockService } from '../../services/grantblock.service';
@@ -15,6 +15,7 @@ export class GranteeComponent implements OnInit {
 
   allGrantees: Grantee[];
   grantee: Grantee;
+  updatedTransactions: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private $granteeService: GranteeService,
@@ -40,6 +41,11 @@ export class GranteeComponent implements OnInit {
 
   UpdateSelectedGrantee(_grantee) {
     this.grantee = _grantee
+  }
+
+  onTransactionsUpdated(){
+    // Emmitting an event to all subscribers of the updated Transactions event listener
+    this.updatedTransactions.next();
   }
 
 }

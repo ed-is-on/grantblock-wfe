@@ -85,12 +85,16 @@ export class GranteeChartComponent implements OnInit {
         text: 'Dollars'
       }
     },
+    chart: {
+      height: (9 / 16 * 100) + '%' 
+  },
     title: {
       text: 'Grantee Drawdowns'
     },
     credits:{
       enabled: false
-    }
+    },
+    className: "hcStyleRef"
   }
   Highcharts = Highcharts;
 

@@ -1,12 +1,24 @@
-.cBody {background-color: whitesmoke; width: 80%; height: 100%; margin: auto; }
-
-.tCenter{background-color: lightblue; width: 95%; height: 45%; margin: auto;}
 
 
-.bCenter{background-color: lightgoldenrodyellow; height: 45%;  width: 95%; margin: auto; }
+
+/* Grantee Menu CSS */
+
+.sec-pod {
+    background-color:  #333;;
+    width: 600px; 
+    height: 350px !important; 
+    border: 5px solid white; 
+    outline: 3px solid slategray;
+    padding: 20px;
+    margin: 30px;
+
+    float: left;}
+    #gChart { height: 200px; background-color: blue}
 
 
-.quad {display: inline-block; float: left; width: 45%; height: 95%; margin: 1% 2.5%;}
+.testFont {
+    font-size: 10em; 
+    color: white;}
 
 /* Grantee Menu CSS */
 
@@ -33,7 +45,15 @@ li a {
 li a:hover:not(.active) {
     background-color: #111;
 }
-
+.mobileButton {
+    background-color: Orange;
+    text-align: center;
+    border-bottom: solid 5px slategray; 
+    width: 100%; 
+    height: 100px; 
+    padding: 20px;
+    font-size: 2em;
+    color: #111;}
 .exit {
     background-color: cobolt;
 }
@@ -43,3 +63,25 @@ li a:hover:not(.active) {
     -o-transition: all 1s ease-in-out;
     transition: all 1s ease-in-out;
 }
+@media only screen and (max-width:800px) {
+    /* For tablets: */
+.sec-pod {
+    width: 100%; 
+    margin: auto;
+    height: 600px !important; 
+    background-color: blue;}
+#grantTop {
+    background-color: greenyellow;}
+  }
+  @media only screen and (max-width:500px) {
+    /* For mobile phones: */
+  
+.sec-pod {
+    width: 100%; 
+    margin: auto;
+    height: 400px !important; 
+ 
+    background-color: red;}
+#grantBottom {
+    background-color: orange;}
+  }

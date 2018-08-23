@@ -58,9 +58,7 @@ li a:hover:not(.active) {
     
 }
 
-.exit {
-    background-color: cobolt;
-}
+
 
 .animate {
     -webkit-transition: all 1s ease-in-out;

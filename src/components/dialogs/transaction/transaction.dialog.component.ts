@@ -1,7 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Transactions } from '../../../models/transactions.model';
 import { Grantee } from '../../../models/grantee.model';
+import { DataService } from '../../../hyperledger/data.service';
+import * as HyperLedgerClasses from '../../../hyperledger/com.usgov.ed.grants';
+import { CreateActionRequest } from '../../../hyperledger/com.usgov.ed.grants';
+import { Http } from '@angular/http';
+import { GrantBlockService } from '../../../services/grantblock.service';
+
 
 @Component({
   selector: 'new-transaction-dialog',
@@ -10,36 +16,64 @@ import { Grantee } from '../../../models/grantee.model';
 })
 export class TransactionDialogComponent implements OnInit {
 
-  newTransactionData:{
-    amount?:number,
-    location?:string,
-    purpose?:string,
-    attachments?:any,
+  private namespace: string = 'CreateActionRequest';
+
+  newTransactionData: {
+    amount?: number,
+    location?: string,
+    purpose?: string,
+    attachments?: any,
     grantee?: Grantee
   } = {}
 
   constructor(
+    private $http: Http,
+    private $grantBlockService: GrantBlockService,
+    private $dataService: DataService<CreateActionRequest>,
     public thisDialog: MatDialogRef<TransactionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data
-  ) { 
+  ) {
     this.newTransactionData.grantee = this.data.grantee;
   }
 
   ngOnInit() {
   }
 
-  CloseConfirm(){
-    this.thisDialog.close({success:true, data:this.newTransactionData});
+  CloseConfirm() {
+    const hyperledgerGrantee = new HyperLedgerClasses.Grantee();
+    hyperledgerGrantee.userId = this.data.grantee.Id;
+    const actionRequest = new HyperLedgerClasses.CreateActionRequest();
+    actionRequest.requestor = hyperledgerGrantee;
+    actionRequest.requestValue = this.newTransactionData.amount;
+
+    this.$grantBlockService.CreateTransaction({ requestValue: this.newTransactionData.amount, requestor: this.data.grantee.Id })
+      .subscribe((results) => {
+        console.log('New Transaction Results', results);
+        if (results.ok) {
+          this.thisDialog.close({ success: true, data: { results: results.json(), newTransaction: this.newTransactionData } });
+        }
+      }, (_error) => {
+        console.error(_error);
+        this.thisDialog.close({ success: false, data: _error })
+      },
+        () => {
+          console.log('completed new transaction creation call');
+        });
+    // this.$dataService.add(this.namespace, actionRequest).subscribe((results)=>{
+    //   console.log('New Transaction Results',results);
+    // });
+
+    // this.thisDialog.close({success:true, data:this.newTransactionData});
   }
 
-  CancelConfirm(){
-    this.thisDialog.close({success:false})
+  CancelConfirm() {
+    this.thisDialog.close({ success: false })
   }
 
-  AllowSubmit(){
+  AllowSubmit() {
     let allowSubmit = false;
-    if( this.newTransactionData.amount > this.data.availableBalance){
-        allowSubmit = true;
+    if (this.newTransactionData.amount > this.data.availableBalance) {
+      allowSubmit = true;
     }
     return allowSubmit;
   }

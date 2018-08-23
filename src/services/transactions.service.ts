@@ -2,21 +2,24 @@ import { Injectable } from '@angular/core';
 import { GranteeService } from './grantee.service';
 import { Transactions } from '../models/transactions.model';
 import { TransactionApprover } from '../models/approver.model';
+// import $namespaces from './namespaces';
 import $dataFactory from '../data';
 
 @Injectable()
 export class TransactionsService {
 
+  private namespace:string = 'ActionRequest';
+
   constructor(
     private $granteeService: GranteeService
-  ) {
+    ) {
     this.AssignApprovers();
   }
 
   private transactionsList: Transactions[] = [
-    new Transactions('1', 'Albus', 186.61, new Date('10/4/16')),
-    new Transactions('1', 'Albus', 30500, new Date('10/17/16')),
-    new Transactions('1', 'Albus', 102.9, new Date('10/21/16'))
+    new Transactions('g1', 'Albus', 186.61, new Date('10/4/16')),
+    new Transactions('g1', 'Albus', 30500, new Date('10/17/16')),
+    new Transactions('g1', 'Albus', 102.9, new Date('10/21/16'))
   ]
 
   PopulateTransactionsList(_numberOfTransactions: number) {

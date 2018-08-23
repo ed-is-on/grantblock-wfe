@@ -1,7 +1,7 @@
 import { TransactionApprover } from './approver.model'
 export class Transactions {
 
-  transactionId: number;
+  transactionId: string;
   granteeId: string;
   granteeName: string;
   date: Date;
@@ -13,21 +13,22 @@ export class Transactions {
   approvers?: TransactionApprover[]
 
   constructor(
-    _id: string,
+    _granteeId: string,
     _name: string,
     _amount: number,
     _date?: Date,
     _purpose?: string,
     _location?: string,
     _status?: string,
-    _type?: string
+    _type?: string,
+    _transactionId?:string
   ) {
-    this.granteeId = _id;
+    this.granteeId = _granteeId;
     this.granteeName = _name;
     this.amount = parseInt(_amount.toString());
     this.location = _location || '';
     this.purpose = _purpose || '';
-    this.transactionId = Math.floor(Math.random() * 2000) + 1;
+    this.transactionId = _transactionId || `${Math.floor(Math.random() * 2000) + 1}`;
     this.date = _date || new Date();
     this.status = _status;
     this.type = _type;

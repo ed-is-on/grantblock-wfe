@@ -16,6 +16,10 @@ export class GranteeComponent implements OnInit {
   allGrantees: Grantee[];
   grantee: Grantee;
   updatedTransactions: EventEmitter<void> = new EventEmitter<void>();
+  displayPod1: Boolean = true;
+  displayPod2: Boolean = true;
+  displayPod3: Boolean = true;
+  displayPod4: Boolean = true;
 
   constructor(
     private $granteeService: GranteeService,
@@ -48,5 +52,35 @@ export class GranteeComponent implements OnInit {
     this.updatedTransactions.next();
   }
 
+  onMobileView() {
+    let _onMobileView: Boolean = true;
+    if (window.innerWidth <= 768) {
+      _onMobileView = false;
+    }
+    // console.log(window.innerWidth);
+    return _onMobileView;
+
+  }
+
+  togglePod(_podNumber: number) {
+
+    switch (_podNumber) {
+      case 1:
+        this.displayPod1 = !this.displayPod1;
+        break;
+      case 2:
+        this.displayPod2 = !this.displayPod2;
+        break;
+      case 3:
+        this.displayPod3 = !this.displayPod3;
+        break;
+      case 4:
+        this.displayPod4 = !this.displayPod4;
+        break;
+      default:
+        break;
+    }
+
+  }
 }
 

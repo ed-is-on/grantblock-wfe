@@ -1,9 +1,11 @@
 <figure>
-	{{selectedGrantee.Name}}<span *ngIf="selectedGrantee.Name.split('')[selectedGrantee.Name.length-1] !== 's'">'s</span><span *ngIf="selectedGrantee.Name.split('')[selectedGrantee.Name.length-1] === 's'">'</span> Available Balance: <b>{{availableBalance | currency}}</b>
-  <figcaption>
-    <h2>Transactions</h2>
-    <button id="newTaButton" class="button newTA" (click)="NewTransaction()" >New Transaction</button>
-  </figcaption>
+	{{selectedGrantee.Name}}<span *ngIf="selectedGrantee.Name.split('')[selectedGrantee.Name.length-1] !== 's'">'s</span><span
+	 *ngIf="selectedGrantee.Name.split('')[selectedGrantee.Name.length-1] === 's'">'</span> Available Balance: <b>{{availableBalance
+		| currency}}</b>
+	<figcaption>
+		<h2>Transactions</h2>
+		<button id="newTaButton" class="button newTA" (click)="NewTransaction()">New Transaction</button>
+	</figcaption>
 	<table>
 		<thead>
 			<tr>
@@ -20,12 +22,48 @@
 				<td class="status">
 					<span *ngFor="let _approval of _transaction.approvers">
 						<span *ngIf="_approval.approvalStatus===0" [class]="GetApprovalClass(_approval)">&#9745;</span>
-            <span *ngIf="_approval.approvalStatus===1" [class]="GetApprovalClass(_approval)">&#9746;</span>
-            <span *ngIf="_approval.approvalStatus===2" [class]="GetApprovalClass(_approval)">&#9744;</span>
-          </span>
+						<span *ngIf="_approval.approvalStatus===1" [class]="GetApprovalClass(_approval)">&#9746;</span>
+						<span *ngIf="_approval.approvalStatus===2" [class]="GetApprovalClass(_approval)">&#9744;</span>
+					</span>
 				</td>
 				<td>{{_transaction.type}}</td>
 			</tr>
 		</tbody>
 	</table>
+
+	<table mat-table [dataSource]="dataSource">
+		<ng-container matColumnDef="date">
+			<th mat-header-cell *matHeaderCellDef> Date </th>
+			<td mat-cell *matCellDef="let _trans"> {{_trans.date | date:'MM/dd/yy'}} </td>
+		</ng-container>
+
+
+		<ng-container matColumnDef="amount">
+			<th mat-header-cell *matHeaderCellDef> Amount </th>
+			<td mat-cell *matCellDef="let _trans"> {{_trans.amount | currency}} </td>
+		</ng-container>
+
+
+		<ng-container matColumnDef="approvers">
+			<th mat-header-cell *matHeaderCellDef> Accepted </th>
+			<td mat-cell *matCellDef="let _trans">
+				<span *ngFor="let _approval of _trans.approvers">
+					<span *ngIf="_approval.approvalStatus===0" [class]="GetApprovalClass(_approval)">&#9745;</span>
+					<span *ngIf="_approval.approvalStatus===1" [class]="GetApprovalClass(_approval)">&#9746;</span>
+					<span *ngIf="_approval.approvalStatus===2" [class]="GetApprovalClass(_approval)">&#9744;</span>
+				</span>
+			</td>
+		</ng-container>
+
+
+		<ng-container matColumnDef="type">
+			<th mat-header-cell *matHeaderCellDef> Type </th>
+			<td mat-cell *matCellDef="let _trans"> {{_trans.type}} </td>
+		</ng-container>
+
+		<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+		<tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+	</table>
+
+	<mat-paginator [pageSizeOptions]="[5,10]" showFirstLastButtons></mat-paginator>
 </figure>

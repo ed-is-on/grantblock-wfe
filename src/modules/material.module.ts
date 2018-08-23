@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 
 @NgModule({
   imports: [
     MatDialogModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
-  exports:[
+  exports: [
     MatDialogModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
 })
 export class MaterialModule { }

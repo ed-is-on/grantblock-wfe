@@ -19,6 +19,8 @@ export class GranteeApprovalsComponent implements OnInit {
   openDialog(): void {
    
     const dialogRef = this.dialog.open(ApprovalDialogComponent,{
+      closeOnNavigation: true,
+      disableClose: true,
       hasBackdrop:true
     });
 

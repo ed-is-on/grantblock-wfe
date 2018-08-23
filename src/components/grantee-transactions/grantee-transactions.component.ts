@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { Transactions } from '../../models/transactions.model';
 import { TransactionApprover, enumApprovalStatus } from '../../models/approver.model';
 import { TransactionsService } from '../../services/transactions.service';
 import { TransactionDialogComponent } from '../dialogs/transaction/transaction.dialog.component';
 import { Grantee } from '../../models/grantee.model';
+import { GrantBlockService } from '../../services/grantblock.service';
 
 @Component({
   selector: 'grantee-transactions',
@@ -22,26 +23,39 @@ export class GranteeTransactionsComponent implements OnInit {
   }
 
   myTransactions: Transactions[];
+  dataSource;
   allStatuses = enumApprovalStatus;
+  displayedColumns: string[] = ['date', 'amount', 'approvers', 'type']
   constructor(
     private $transactions: TransactionsService,
+    private $grantBlockService: GrantBlockService,
     public dialog: MatDialog
   ) { }
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit() {
     this.GetTransactions();
   }
 
   UpdateAvailableBalance() {
-    this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.Id, this.selectedGrantee.Amount, this.myTransactions);
+    this.$grantBlockService.GetGranteeAvailableBalance(this.selectedGrantee.Id)
+      .then(
+        (_availableBalance) => {
+          this.availableBalance = _availableBalance;
+        }).catch((_error) => {
+          console.log(_error);
+          this.availableBalance = this.$transactions.GetGranteesAvailableBalance(this.selectedGrantee.Id, this.selectedGrantee.Amount, this.myTransactions);
+        })
   }
 
   GetTransactions() {
-    this.myTransactions = this.$transactions.GetGranteesTransactions(this.selectedGrantee.Id).sort((x, y) => { return y.date.valueOf() - x.date.valueOf() });
-    this.myTransactions.map((trans) => {
-      trans.approvers = this.$transactions.SelectRandomApprovers(trans.granteeId);
+    this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results) => {
+      this.myTransactions = results.sort((a, b) => { return a.date > b.date ? -1 : a.date < b.date ? 1 : 0; });
+      this.dataSource = new MatTableDataSource(this.myTransactions);
+      this.dataSource.paginator = this.paginator;
+
     })
-    // console.log('Getting money!', this.myTransactions);
   }
 
   GetApprovalClass(_approval: TransactionApprover) {
@@ -57,23 +71,25 @@ export class GranteeTransactionsComponent implements OnInit {
   NewTransaction(): void {
 
     const dialogRef = this.dialog.open(TransactionDialogComponent, {
-      width: '600px',
+      width: '500px',
+      height: 'auto',
+      closeOnNavigation: true,
       data: {
         grantee: this.selectedGrantee,
         availableBalance: this.availableBalance
       },
       disableClose: true,
-      hasBackdrop: false,
-      panelClass: 'grantblockModal'
+      hasBackdrop: true
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Success!!', result)
       try {
-        if (result) {
-          const newTransaction = new Transactions(result.data.grantee.Id, result.data.grantee.Name, result.data.amount, new Date(), result.data.purpose || '', result.data.location || '');
-          newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
-          this.myTransactions.push(newTransaction);
+        if (result.success) {
+          // const newTransaction = new Transactions(result.data.results.requestor, result.data.newTransaction.grantee.Name, result.data.results.requestValue, new Date(), result.data.purpose || '', result.data.location || '');
+          // // newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
+          // this.myTransactions.unshift(newTransaction);
+          this.GetTransactions();
           this.UpdateAvailableBalance();
         }
       }

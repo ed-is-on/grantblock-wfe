@@ -125,12 +125,16 @@ export class GranteeChartComponent implements OnInit, OnDestroy {
     tooltip: {
       pointFormat: "${point.y:,.2f}"
     },
+    chart: {
+      height: (9 / 16 * 100) + '%'
+    },
     title: {
       text: 'Grantee Drawdowns'
     },
     credits: {
       enabled: false
-    }
+    },
+    className: "hcStyleRef"
   }
 
   Highcharts = Highcharts;

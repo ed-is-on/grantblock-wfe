@@ -1,11 +1,5 @@
 <div>
 	<ul>
-		<!-- <li>
-			<a href="#home" class="animate">Home</a>
-		</li>
-		<li>
-			<a href="#Transactions" class="animate">My Transactions</a>
-		</li> -->
 		<li *ngIf="allGrantees && allGrantees.length > 0">
 			<a routerLink="grantee">LoginAs</a>
 		</li>
@@ -15,28 +9,29 @@
 				<option *ngFor="let _grantee of allGrantees" [ngValue]="_grantee">{{_grantee.Name}} {{_grantee.Id}}</option>
 			</select>
 		</li>
-		<!-- <li style="float:right">
-			<a class="exit" href="#logOut" class="animate">Logout</a>
-		</li> -->
 	</ul>
-	<form class="use-form">
-	</form>
 </div>
-<div class="cBody">
-	<div id="top" classs="tCenter">
-		<div id="top_left" class="tLeft quad">
-			<grantee-transactions *ngIf="grantee" [UpdateSelectedGrantee]="grantee" (updatedTransactions)="onTransactionsUpdated()" ></grantee-transactions>
-		</div>
-		<div id="top_right" class=" tRight quad">
-			<grantee-chart transactions="grantee"></grantee-chart>
-		</div>
+<div style="clear:both"></div>
+<div id="grantTop">
+	<div [hidden]="onMobileView()" (click)="togglePod(1)" class="mobileButton">My Transactions</div>
+	<div [hidden]="!onMobileView() && displayPod1" class="sec-pod">
+		<grantee-transactions *ngIf="grantee" [UpdateSelectedGrantee]="grantee" (updatedTransactions)="onTransactionsUpdated()"></grantee-transactions>
 	</div>
-	<div id="bottom" class="bCenter">
-		<div id="bottom_left" class="bLeft quad">
-			<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee" [UpdateTransactions]="updatedTransactions"></grantee-chart>
-		</div>
-		<div id="bottom_right" class="bRight quad">
-			<grantee-approvals></grantee-approvals>
-		</div>
+	<div *ngIf="!onMobileView()" style="clear:both"></div>
+	<div [hidden]="onMobileView()" (click)="togglePod(2)" class="mobileButton"> All Grantees Chart</div>
+	<div [hidden]="!onMobileView() && displayPod2" class="sec-pod">
+		<grantee-chart transactions="grantee" style="background-color: blue; height: 200px; "></grantee-chart>
+	</div>
+</div>
+<div style="clear:both"></div>
+<div id="grantBottom">
+	<div [hidden]="onMobileView()" (click)="togglePod(3)" class="mobileButton">Grantee Chart</div>
+	<div [hidden]="!onMobileView() && displayPod3" class="sec-pod">
+		<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee" [UpdateTransactions]="updatedTransactions"></grantee-chart>
+	</div>
+	<div *ngIf="!onMobileView()" style="clear:both"></div>
+	<div [hidden]="onMobileView()" (click)="togglePod(4)" class="mobileButton">Approvals</div>
+	<div [hidden]="!onMobileView() && displayPod4" class="sec-pod">
+		<grantee-approvals></grantee-approvals>
 	</div>
 </div>

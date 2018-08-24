@@ -3,10 +3,24 @@
 	<mat-dialog-content>
 		This is the content for the dialog
 		<br>
+		<div>
+		<mat-radio-group>
+				<mat-radio-button value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>
+				<mat-radio-button value="2" (change)="handleChange(2)">I Reject This Transaction </mat-radio-button>
+		</mat-radio-group>
+		</div>
+		<br>
+		<mat-form-field>
+				<mat-select placeholder="Favorite food">
+				  <mat-option *ngFor="let food of foods" [value]="food.value">
+					{{food.viewValue}}
+				  </mat-option>
+				</mat-select>
+			  </mat-form-field>
 		<strong>{{data}}</strong>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-raised-button (click)="CloseConfirm()" >Approve</button>
-		<button mat-raised-button (click)="CancelConfirm()" >Reject</button>
+		<button [disabled]="approveReject !== 'approve'" mat-raised-button (click)="CloseConfirm()" >Approve</button>
+		<button [disabled]="approveReject !== 'reject'"  mat-raised-button (click)="CancelConfirm()" >Reject</button>
 	</mat-dialog-actions>
 </div>

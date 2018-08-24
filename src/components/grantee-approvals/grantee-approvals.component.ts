@@ -21,7 +21,9 @@ export class GranteeApprovalsComponent implements OnInit {
     const dialogRef = this.dialog.open(ApprovalDialogComponent,{
       closeOnNavigation: true,
       disableClose: true,
-      hasBackdrop:true
+      hasBackdrop:true,
+      height: '600px',
+      width: '800px',
     });
 
     dialogRef.afterClosed().subscribe(result=>{

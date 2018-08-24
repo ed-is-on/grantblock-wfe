@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { Transactions } from '../../models/transactions.model';
 import { TransactionApprover, enumApprovalStatus } from '../../models/approver.model';
@@ -21,6 +21,9 @@ export class GranteeTransactionsComponent implements OnInit {
     this.GetTransactions();
     this.UpdateAvailableBalance();
   }
+
+  /** This property emits an event whenever a new transaction has successfully been created */
+  @Output() updatedTransactions = new EventEmitter<void>();
 
   myTransactions: Transactions[];
   dataSource;
@@ -86,9 +89,7 @@ export class GranteeTransactionsComponent implements OnInit {
       console.log('Success!!', result)
       try {
         if (result.success) {
-          // const newTransaction = new Transactions(result.data.results.requestor, result.data.newTransaction.grantee.Name, result.data.results.requestValue, new Date(), result.data.purpose || '', result.data.location || '');
-          // // newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
-          // this.myTransactions.unshift(newTransaction);
+          this.updatedTransactions.emit();
           this.GetTransactions();
           this.UpdateAvailableBalance();
         }

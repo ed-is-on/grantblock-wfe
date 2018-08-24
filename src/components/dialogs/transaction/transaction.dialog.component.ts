@@ -59,11 +59,6 @@ export class TransactionDialogComponent implements OnInit {
         () => {
           console.log('completed new transaction creation call');
         });
-    // this.$dataService.add(this.namespace, actionRequest).subscribe((results)=>{
-    //   console.log('New Transaction Results',results);
-    // });
-
-    // this.thisDialog.close({success:true, data:this.newTransactionData});
   }
 
   CancelConfirm() {

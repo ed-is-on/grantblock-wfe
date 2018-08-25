@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
-export interface Food {
+export interface reason {
   value: string;
   viewValue: string;
 }
@@ -19,9 +19,12 @@ export class ApprovalDialogComponent implements OnInit {
   ) { }
 
   approveReject:string;
+  transactionAmt : string ="$4753.10"
+  defaultProfilePic: string ='assets/sample-receipt.jpg';
+
 
   ngOnInit() {
-    this.approveReject='approve';
+    this.approveReject='cancel';
   }
 
   CloseConfirm(){
@@ -42,10 +45,10 @@ export class ApprovalDialogComponent implements OnInit {
     }
   }
 
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
+  reasons: reason[] = [
+    {value: '0', viewValue: 'Transaction Description does not match receipt'},
+    {value: '1', viewValue: 'Transaction Amount does not match receipt amount'},
+    {value: '2', viewValue: 'Receipt is missing or unreadable'}
   ];
 
 }

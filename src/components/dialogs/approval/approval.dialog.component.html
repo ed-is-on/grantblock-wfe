@@ -1,26 +1,43 @@
 <div>
-	<h2 mat-dialog-title>Grantee Approval</h2>
+	<h2 mat-dialog-title><b>Transaction Approval</b></h2>
 	<mat-dialog-content>
-		This is the content for the dialog
+		
 		<br>
 		<div>
+			<div>
+				Transaction Type:
+				<br>
+				Transaction Description:
+				<br>
+				Transaction Amount: {{transactionAmt}}
+				<br>
+				<mat-dialog-actions>
+						<button [disabled]="showReceipt !== 'show'" mat-raised-button>Show Receipt</button>
+						<button [disabled]="showReceipt !== 'hide'"  mat-raised-button>Hide Receipt</button>
+					</mat-dialog-actions>
+				<img [src]="defaultProfilePic" />
+			</div>
 		<mat-radio-group>
-				<mat-radio-button value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>
-				<mat-radio-button value="2" (change)="handleChange(2)">I Reject This Transaction </mat-radio-button>
+				<mat-radio-button color="primary" value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>
+				<mat-radio-button color="warn" value="2" (change)="handleChange(2)">I Reject This Transaction </mat-radio-button>
 		</mat-radio-group>
 		</div>
 		<br>
-		<mat-form-field>
-				<mat-select placeholder="Favorite food">
-				  <mat-option *ngFor="let food of foods" [value]="food.value">
-					{{food.viewValue}}
+		<div *ngIf="approveReject == 'reject'">
+			<mat-form-field><font color="red">Select a reason for Rejection</font>
+				<br><br>
+				<mat-select>
+				  <mat-option *ngFor="let reason of reasons" [value]="reason.value">
+					{{reason.viewValue}}
 				  </mat-option>
 				</mat-select>
-			  </mat-form-field>
+				</mat-form-field>
+			</div>
 		<strong>{{data}}</strong>
 	</mat-dialog-content>
 	<mat-dialog-actions>
 		<button [disabled]="approveReject !== 'approve'" mat-raised-button (click)="CloseConfirm()" >Approve</button>
 		<button [disabled]="approveReject !== 'reject'"  mat-raised-button (click)="CancelConfirm()" >Reject</button>
+		<button mat-raised-button (click)="CancelConfirm()" >Cancel</button>
 	</mat-dialog-actions>
 </div>

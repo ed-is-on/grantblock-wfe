@@ -22,8 +22,8 @@ export class GranteeApprovalsComponent implements OnInit {
       closeOnNavigation: true,
       disableClose: true,
       hasBackdrop:true,
-      height: '600px',
-      width: '800px',
+      height: '800px',
+      width: '1000px',
     });
 
     dialogRef.afterClosed().subscribe(result=>{

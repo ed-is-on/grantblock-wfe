@@ -21,6 +21,9 @@ export class ApprovalDialogComponent implements OnInit {
   approveReject:string;
   transactionAmt : string ="$4753.10"
   defaultProfilePic: string ='assets/sample-receipt.jpg';
+  showReceipt: string='Show Receipt';
+  showReceiptVal: string='';
+  comments: string='';
 
 
   ngOnInit() {
@@ -28,6 +31,7 @@ export class ApprovalDialogComponent implements OnInit {
   }
 
   CloseConfirm(){
+    confirm("Are you sure?");
     this.thisDialog.close('Confirm');
   }
 
@@ -45,8 +49,20 @@ export class ApprovalDialogComponent implements OnInit {
     }
   }
 
+  receiptChange(){
+    if (this.showReceipt == 'Show Receipt') {
+      this.showReceipt = 'Hide Receipt'
+      this.showReceiptVal = 'yes';
+    }
+    else {
+      this.showReceipt = 'Show Receipt';
+      this.showReceiptVal = '';
+    }
+
+  }
+
   reasons: reason[] = [
-    {value: '0', viewValue: 'Transaction Description does not match receipt'},
+    {value: '0', viewValue: 'Transaction Description does not match receipt description'},
     {value: '1', viewValue: 'Transaction Amount does not match receipt amount'},
     {value: '2', viewValue: 'Receipt is missing or unreadable'}
   ];

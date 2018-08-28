@@ -44,6 +44,7 @@ export class ApprovalDialogComponent implements OnInit {
   private _prevSelected: any;
 
   handleChange(evt) {
+    this.reasonSelected = '';
     if (evt==1) {
       this.approveReject='approve';
     } else {

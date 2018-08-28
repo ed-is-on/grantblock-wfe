@@ -12,7 +12,7 @@
 				Transaction Amount: {{transactionAmt}}
 				<br>
 				<mat-dialog-actions>
-						<button mat-raised-button (click)="receiptChange()">{{showReceipt}}</button>
+						<button mat-button color="warn" (click)="receiptChange()">{{showReceipt}}</button>
 				</mat-dialog-actions>
 				<br>
 				<img  *ngIf="showReceiptVal" [src]="defaultProfilePic" />

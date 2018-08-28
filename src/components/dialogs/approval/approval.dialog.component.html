@@ -1,49 +1,50 @@
 <div>
-	<h2 mat-dialog-title><b>Transaction Approval</b></h2>
+	<h2 mat-dialog-title>
+		<b>Transaction Approval</b>
+	</h2>
 	<mat-dialog-content>
-		
+
 		<br>
 		<div>
 			<div>
 				Transaction Type: Drawdown
+				<br> Transaction Description: Miscellaneous description, blah blah blah.
+				<br> Transaction Amount: {{transactionAmt}}
 				<br>
-				Transaction Description: Miscellaneous description, blah blah blah.
+				<div>
+					<button mat-button color="warn" (click)="receiptChange()">{{showReceipt}}</button>
+				</div>
 				<br>
-				Transaction Amount: {{transactionAmt}}
-				<br>
-				<mat-dialog-actions>
-						<button mat-button color="warn" (click)="receiptChange()">{{showReceipt}}</button>
-				</mat-dialog-actions>
-				<br>
-				<img  *ngIf="showReceiptVal" [src]="defaultProfilePic" />
+				<img *ngIf="showReceiptVal" [src]="defaultProfilePic" />
 			</div>
-		<mat-radio-group>
+			<mat-radio-group>
 				<mat-radio-button color="primary" value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>
 				<mat-radio-button color="warn" value="2" (change)="handleChange(2)">I Reject This Transaction </mat-radio-button>
-		</mat-radio-group>
+			</mat-radio-group>
 		</div>
-		<br>
-
-		Comments (Required)
-		<textarea matInput placeholder="Enter your comments" id="comments"
-			required [(ngModel)]="comments" rows="30" cols="120"> 
+		<br> Comments (Required)
+		<textarea matInput placeholder="Enter your comments" id="comments" required [(ngModel)]="comments" rows="30" cols="120"> 
 		</textarea>
 
 		<div *ngIf="approveReject == 'reject'">
-			<mat-form-field><font color="red">Select a reason for Rejection</font>
-				<br><br>
+			<mat-form-field>
+				<font color="red">Select a reason for Rejection</font>
+				<br>
+				<br>
 				<mat-select [(ngModel)]="reasonSelected">
-				  <mat-option *ngFor="let reason of reasons" [value]="reason.value" required>
-					{{reason.viewValue}}
-				  </mat-option>
+					<mat-option *ngFor="let reason of reasons" [value]="reason.value" required>
+						{{reason.viewValue}}
+					</mat-option>
 				</mat-select>
 			</mat-form-field>
 		</div>
 		<strong>{{data}}</strong>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button [disabled]="(approveReject !== 'approve')  || (!comments)" mat-raised-button (click)="CloseConfirm()" >Approve</button>
-		<button [disabled]="(approveReject !== 'reject') || (!comments) || (!reasonSelected) "  mat-raised-button (click)="CancelConfirm()" >Reject</button>
-		<button mat-raised-button (click)="CancelConfirm()" >Cancel</button>
+
+		<div style="text-align:right; width:100%; padding:0;">
+		<button button (click)="CancelConfirm()">Cancel</button>
+		<button [disabled]="((approveReject == 'reject') && ((!comments) || (!reasonSelected))) || ((approveReject == 'approve')  || (!comments)) " button (click)="CancelConfirm()" >Submit</button>
+		</div>
 	</mat-dialog-actions>
 </div>

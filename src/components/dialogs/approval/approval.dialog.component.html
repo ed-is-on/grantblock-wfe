@@ -32,7 +32,7 @@
 		<div *ngIf="approveReject == 'reject'">
 			<mat-form-field><font color="red">Select a reason for Rejection</font>
 				<br><br>
-				<mat-select>
+				<mat-select [(ngModel)]="reasonSelected">
 				  <mat-option *ngFor="let reason of reasons" [value]="reason.value" required>
 					{{reason.viewValue}}
 				  </mat-option>
@@ -42,8 +42,8 @@
 		<strong>{{data}}</strong>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button [disabled]="approveReject !== 'approve'" mat-raised-button (click)="CloseConfirm()" >Approve</button>
-		<button [disabled]="approveReject !== 'reject'"  mat-raised-button (click)="CancelConfirm()" >Reject</button>
+		<button [disabled]="(approveReject !== 'approve')  || (!comments)" mat-raised-button (click)="CloseConfirm()" >Approve</button>
+		<button [disabled]="(approveReject !== 'reject') || (!comments) || (!reasonSelected) "  mat-raised-button (click)="CancelConfirm()" >Reject</button>
 		<button mat-raised-button (click)="CancelConfirm()" >Cancel</button>
 	</mat-dialog-actions>
 </div>

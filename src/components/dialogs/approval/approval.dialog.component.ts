@@ -25,6 +25,7 @@ export class ApprovalDialogComponent implements OnInit {
   showReceipt: string='Show Receipt';
   showReceiptVal: string='';
   comments: string='';
+  reasonSelected: string='';
 
 
   ngOnInit() {
@@ -44,9 +45,9 @@ export class ApprovalDialogComponent implements OnInit {
 
   handleChange(evt) {
     if (evt==1) {
-      this.approveReject='approve'
+      this.approveReject='approve';
     } else {
-      this.approveReject='reject'
+      this.approveReject='reject';
     }
   }
 

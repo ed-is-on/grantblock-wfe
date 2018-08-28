@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {FormControl, Validators} from '@angular/forms';
 
 export interface reason {
   value: string;

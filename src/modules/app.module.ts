@@ -10,6 +10,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 
+
 // Components
 import { AppComponent } from '../app/app.component';
 import { HelloComponent } from '../app/hello.component';
@@ -31,7 +32,7 @@ import { DataService } from '../hyperledger/data.service';
 import { GrantBlockService } from '../services/grantblock.service';
 
 @NgModule({
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule,MatFormFieldModule,MatSelectModule, MatRadioModule ],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule,MatFormFieldModule,MatSelectModule, MatRadioModule],
   declarations: [
     AppComponent,
     HelloComponent,

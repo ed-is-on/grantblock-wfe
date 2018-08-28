@@ -23,10 +23,12 @@
 		</mat-radio-group>
 		</div>
 		<br>
-		Approver Comments (Required)
-		<textarea 
-			required [(ngModel)]="comments"ows="30" cols="120"> 
+
+		Comments (Required)
+		<textarea matInput placeholder="Enter your comments" id="comments"
+			required [(ngModel)]="comments" rows="30" cols="120"> 
 		</textarea>
+
 		<div *ngIf="approveReject == 'reject'">
 			<mat-form-field><font color="red">Select a reason for Rejection</font>
 				<br><br>

@@ -10,7 +10,9 @@ export class Transactions {
   type?: string;
   purpose?: string;
   location?: string;
-  approvers?: TransactionApprover[]
+  approvers?: TransactionApprover[];
+  receiptHash?: string;
+  receiptImage?: string;
 
   constructor(
     _granteeId: string,
@@ -21,7 +23,9 @@ export class Transactions {
     _location?: string,
     _status?: string,
     _type?: string,
-    _transactionId?:string
+    _transactionId?:string,
+    _receiptHash?:string,
+    _receiptImage?:string
   ) {
     this.granteeId = _granteeId;
     this.granteeName = _name;
@@ -32,6 +36,8 @@ export class Transactions {
     this.date = _date || new Date();
     this.status = _status;
     this.type = _type;
+    this.receiptHash = _receiptHash || '';
+    this.receiptImage = _receiptImage || '';
   }
 
   getDetails() {

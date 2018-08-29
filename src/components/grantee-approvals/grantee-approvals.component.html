@@ -12,7 +12,7 @@
 		</thead>
 		<tbody>
 			<tr class="selection" *ngFor="let _trans of myApprovals">
-				<td>{{_trans.Id}}</td>
+				<td>{{_trans.transactionId}}</td>
 				<td class="status">
 					<span><button id="approvalButton" class="button awaitingApr" (click)="openDialog()">Awaiting Approval</button></span>
 				</td>

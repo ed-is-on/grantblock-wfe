@@ -3,6 +3,7 @@ import {MatDialog} from '@angular/material';
 import { ApprovalDialogComponent } from '../dialogs/approval/approval.dialog.component';
 import { GrantBlockService } from '../../services/grantblock.service';
 import { Transactions } from '../../models/transactions.model';
+import { TransactionApprover } from '../../models/approver.model';
 
 @Component({
   selector: 'grantee-approvals',
@@ -17,7 +18,7 @@ export class GranteeApprovalsComponent implements OnInit {
   ) { }
 
   granteeId: string;
-  myApprovals: Transactions[];
+  myApprovals: TransactionApprover[];
   @Input() set SetGranteeId(_granteeId:string){
     this.granteeId = _granteeId;
     console.log(this.granteeId);

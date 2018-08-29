@@ -47,7 +47,7 @@ export class GrantBlockService {
             if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                 let transactionApprovers: TransactionApprover[] = [];
                 _value.assignedValidators.forEach((_approver) => {
-                    transactionApprovers.push(new TransactionApprover(_approver.userId, enumApprovalStatus.Pending))
+                    transactionApprovers.push(new TransactionApprover(_approver.userId,_value.requestId,transaction.date,transaction.amount.toString(), enumApprovalStatus.Pending, transaction.status, transaction.receiptImage))
                 });
 
                 transaction.AddApprovers(transactionApprovers);
@@ -65,7 +65,7 @@ export class GrantBlockService {
         /** A pointer to the service's ConvertToProperCase() function */
         let approvers = response.json().map((_value) => {
             let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
-            let approver = new TransactionApprover(ownerId);
+            let approver = new TransactionApprover(ownerId,_value.requestId,new Date(_value.createdDate),_value.requestValue);
             return approver;
         });
         return approvers;
@@ -96,7 +96,7 @@ export class GrantBlockService {
                         if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                             newTransaction.approvers = [];
                             _value.assignedValidators.forEach((_validator) => {
-                                newTransaction.approvers.push(new TransactionApprover(_validator.userId))
+                                newTransaction.approvers.push(new TransactionApprover(_validator.userId,_value.requestId,newTransaction.date,newTransaction.amount.toString(),undefined,newTransaction.status,newTransaction.receiptImage))
                             })
                         }
                         return newTransaction;
@@ -130,7 +130,7 @@ export class GrantBlockService {
      * This function returns all transaction approvals that belong to a grantee
      * @param _granteeId The id of grantee as a string
      */
-    GetGranteeApprovals(_granteeId: string): Observable<Transactions[]> {
+    GetGranteeApprovals(_granteeId: string): Observable<TransactionApprover[]> {
         /*
         let owner = this.GetGrantBlockOwnerId(_granteeId);
         return this.$http.get(`${this.apiUrl}queries/selectGranteesActionRequestsForValidation?owner=${owner}`)
@@ -160,6 +160,8 @@ export class GrantBlockService {
                 if(approvers.indexOf(_granteeId) > -1){
                     return _trans;
                 }
+            }).map((_trans: Transactions)=>{
+                return new TransactionApprover(_granteeId,_trans.transactionId, _trans.date, _trans.amount.toString(),undefined,_trans.status, _trans.receiptImage)
             })
         })
     }

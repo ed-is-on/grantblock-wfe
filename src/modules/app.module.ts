@@ -4,8 +4,13 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from './material.module'
+import { MaterialModule} from './material.module'
 import { HighchartsChartModule } from 'highcharts-angular';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material';
+
 
 // Components
 import { AppComponent } from '../app/app.component';
@@ -28,7 +33,7 @@ import { DataService } from '../hyperledger/data.service';
 import { GrantBlockService } from '../services/grantblock.service';
 
 @NgModule({
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule,MatFormFieldModule,MatSelectModule, MatRadioModule, MatButtonModule],
   declarations: [
     AppComponent,
     HelloComponent,

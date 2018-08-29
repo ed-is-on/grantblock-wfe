@@ -28,22 +28,47 @@ export class GrantBlockService {
         return `resource%3Acom.usgov.ed.grants.Grantee%23${_granteeId}`;
     }
 
+    private ConvertToProperCase(str): string {
+        return str.toLowerCase().split(/[\s]+|[$_]/).map((word) => {
+            return `${word.charAt(0).toUpperCase()}${word.slice(1)}`
+        }).join(' ');
+    }
+    /**
+     * This functions parses all the transactions returned from the REST call into instances of the Transaction class
+     * @param response http response object containing transactions
+     */
     private parseTransactions(response): any {
+        /** A pointer to the service's ConvertToProperCase() function */
         let transactions = response.json().map((_value) => {
             let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
+            _value.type = this.ConvertToProperCase(_value.type);
+            _value.status = this.ConvertToProperCase(_value.status);
             let transaction = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type, _value.requestId);
-            if(_value.assignedValidators && _value.assignedValidators.length > 0){
-                    let transactionApprovers:TransactionApprover[]=[];
-                     _value.assignedValidators.forEach((_approver)=>{
-                        transactionApprovers.push(new TransactionApprover(_approver.userId, enumApprovalStatus.Pending))
-                     });
+            if (_value.assignedValidators && _value.assignedValidators.length > 0) {
+                let transactionApprovers: TransactionApprover[] = [];
+                _value.assignedValidators.forEach((_approver) => {
+                    transactionApprovers.push(new TransactionApprover(_approver.userId, enumApprovalStatus.Pending))
+                });
 
-                    transaction.AddApprovers(transactionApprovers);
-                }
+                transaction.AddApprovers(transactionApprovers);
+            }
             return transaction;
         });
         return transactions;
 
+    }
+    /**
+     * This functions parses all the transaction approvers returned from the REST call into instances of the Transaction class
+     * @param response http response object containing transactions
+     */
+    private parseTransactionApprovers(response): any {
+        /** A pointer to the service's ConvertToProperCase() function */
+        let approvers = response.json().map((_value) => {
+            let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
+            let approver = new TransactionApprover(ownerId);
+            return approver;
+        });
+        return approvers;
     }
 
     GetAllGrantees(): Observable<Grantee[]> {
@@ -63,18 +88,30 @@ export class GrantBlockService {
             .map((results) => {
                 return results.json()
                     .map((_value) => {
-                        const transactionId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                        console.log(decodeURIComponent(_value.owner));
+                        const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
+                        // console.log(decodeURIComponent(_value.owner));
                         // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
-                        return _value = new Transactions(transactionId, '', _value.requestValue);
+
+                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                        if (_value.assignedValidators && _value.assignedValidators.length > 0) {
+                            newTransaction.approvers = [];
+                            _value.assignedValidators.forEach((_validator) => {
+                                newTransaction.approvers.push(new TransactionApprover(_validator.userId))
+                            })
+                        }
+                        return newTransaction;
                     });
             });
     }
 
+    /**
+     * This function returns all transactions that belong to a grantee
+     * @param _granteeId The id of grantee as a string
+     */
     GetGranteeTransactions(_granteeId: string): Observable<Transactions[]> {
         let owner = this.GetGrantBlockOwnerId(_granteeId);
         return this.$http.get(`${this.apiUrl}queries/selectGranteeActionRequests?owner=${owner}`)
-            .map(this.parseTransactions)
+            .map(this.parseTransactions, this)
             .catch((error) => {
                 console.info('Error Getting Blockchain Transactions', error);
                 let granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
@@ -87,6 +124,44 @@ export class GrantBlockService {
                     })
                 return of(granteesTransactions);
             })
+    }
+
+    /**
+     * This function returns all transaction approvals that belong to a grantee
+     * @param _granteeId The id of grantee as a string
+     */
+    GetGranteeApprovals(_granteeId: string): Observable<Transactions[]> {
+        /*
+        let owner = this.GetGrantBlockOwnerId(_granteeId);
+        return this.$http.get(`${this.apiUrl}queries/selectGranteesActionRequestsForValidation?owner=${owner}`)
+            .map(this.parseTransactionApprovers, this)
+            .catch((error) => {
+                console.info('Error Getting Blockchain Transactions', error);
+                let granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
+                    .sort((x, y) => { return y.date.valueOf() - x.date.valueOf() })
+                    .map((trans) => {
+                        if (trans.type !== 'AWARD') {
+                            trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
+                        }
+                        return trans;
+                    })
+                return of(granteesTransactions);
+            })
+        */
+        return this.GetAllTransactions().map((_allTrans: Transactions[]) => {
+            return _allTrans.filter((_trans)=>{
+                return _trans.type.toLocaleLowerCase() === 'drawdown';
+            }).map((_trans) => {
+                if (_trans.type.toLocaleLowerCase() === 'drawdown' && _trans.approvers && _trans.approvers.length > 0) {
+                    return _trans;
+                }
+            }).filter((_trans: Transactions) => {
+                let approvers = _trans.approvers.map((x)=>{return x.approverId});
+                if(approvers.indexOf(_granteeId) > -1){
+                    return _trans;
+                }
+            })
+        })
     }
 
     /**
@@ -120,24 +195,17 @@ export class GrantBlockService {
         return this.$http.post(`${this.apiUrl}CreateActionRequest`, _payload)
     }
 
-    AddValidatingGrantees(_numberOfValidators: number, _transactionId: string): Observable<TransactionApprover[]> {
+    AddValidatingGrantees(_transactionId: string, _numberOfValidators?: number): Observable<Response> {
         let transactionApprovers: TransactionApprover[] = [];
+        _numberOfValidators = _numberOfValidators || 3;
         let _payload = {
             "$class": `${this.namespacePrefix}.AddValidatingGrantees`,
             "validators": _numberOfValidators.toString(),
             "request": _transactionId
         }
-        this.$http.post(`${this.apiUrl}AddValidatingGrantees`, _payload).subscribe(
+        return this.$http.post(`${this.apiUrl}AddValidatingGrantees`, _payload).map(
             (results) => {
-                console.log(results);
-            },
-            (_error) => {
-                console.log('Error adding validating grantees', _error)
-            },
-            () => {
-                console.log('Complete')
-            }
-        )
-        return of(transactionApprovers);
+                return results.json();
+            });
     }
 }

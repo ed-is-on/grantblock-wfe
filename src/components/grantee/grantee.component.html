@@ -18,9 +18,9 @@
 		<grantee-transactions *ngIf="grantee" [UpdateSelectedGrantee]="grantee" (updatedTransactions)="onTransactionsUpdated()"></grantee-transactions>
 	</div>
 	<div *ngIf="!onMobileView()" style="clear:both"></div>
-	<div [hidden]="onMobileView()" (click)="togglePod(2)" class="mobileButton"> All Grantees Chart</div>
+	<div [hidden]="onMobileView()" (click)="togglePod(2)" class="mobileButton"> My Approvals</div>
 	<div [hidden]="!onMobileView() && displayPod2" class="sec-pod">
-		<grantee-chart transactions="grantee" style="background-color: blue; height: 200px; "></grantee-chart>
+		<grantee-approvals *ngIf="grantee" [SetGranteeId]="grantee.Id"></grantee-approvals>
 	</div>
 </div>
 <div style="clear:both"></div>
@@ -30,8 +30,8 @@
 		<grantee-chart *ngIf="grantee" [UpdateSelectedGrantee]="grantee" [UpdateTransactions]="updatedTransactions"></grantee-chart>
 	</div>
 	<div *ngIf="!onMobileView()" style="clear:both"></div>
-	<div [hidden]="onMobileView()" (click)="togglePod(4)" class="mobileButton">Approvals</div>
+	<div [hidden]="onMobileView()" (click)="togglePod(4)" class="mobileButton">My Profile</div>
 	<div [hidden]="!onMobileView() && displayPod4" class="sec-pod">
-		<grantee-approvals></grantee-approvals>
+			<grantee-chart transactions="grantee" style="background-color: blue; height: 200px; "></grantee-chart>
 	</div>
 </div>

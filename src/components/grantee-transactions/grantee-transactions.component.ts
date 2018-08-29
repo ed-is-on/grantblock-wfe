@@ -26,9 +26,9 @@ export class GranteeTransactionsComponent implements OnInit {
   @Output() updatedTransactions = new EventEmitter<void>();
 
   myTransactions: Transactions[];
-  dataSource;
+  matTableDataSource: MatTableDataSource<Transactions> = new MatTableDataSource<Transactions>();
   allStatuses = enumApprovalStatus;
-  displayedColumns: string[] = ['date', 'amount', 'approvers', 'type']
+  displayedColumns: string[] = ['date', 'amount', 'approvers', 'type', 'status']
   constructor(
     private $transactions: TransactionsService,
     private $grantBlockService: GrantBlockService,
@@ -55,9 +55,8 @@ export class GranteeTransactionsComponent implements OnInit {
   GetTransactions() {
     this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results) => {
       this.myTransactions = results.sort((a, b) => { return a.date > b.date ? -1 : a.date < b.date ? 1 : 0; });
-      this.dataSource = new MatTableDataSource(this.myTransactions);
-      this.dataSource.paginator = this.paginator;
-
+      this.matTableDataSource.data = this.myTransactions;
+      this.matTableDataSource.paginator = this.paginator;
     })
   }
 
@@ -86,12 +85,22 @@ export class GranteeTransactionsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Success!!', result)
       try {
         if (result.success) {
-          this.updatedTransactions.emit();
-          this.GetTransactions();
-          this.UpdateAvailableBalance();
+          this.$grantBlockService.AddValidatingGrantees(result.data.results.requestId).subscribe(
+            (_results) => {
+              console.log('Transaction Approvers',_results);
+              this.GetTransactions()
+              this.UpdateAvailableBalance();
+              this.updatedTransactions.emit();
+            },
+            () => {
+
+            },
+            () => {
+
+            }
+          )
         }
       }
       catch (error) {
@@ -99,5 +108,7 @@ export class GranteeTransactionsComponent implements OnInit {
       }
     })
   }
+
+
 
 }

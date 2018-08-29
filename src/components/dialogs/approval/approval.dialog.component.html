@@ -1,4 +1,4 @@
-<div>
+<div style="width:auto;">
 	<h2 mat-dialog-title>
 		<b>Transaction Approval</b>
 	</h2>
@@ -12,7 +12,8 @@
 				<br> Transaction Amount: {{transactionAmt}}
 				<br>
 				<div>
-					<button mat-button color="warn" (click)="receiptChange()">{{showReceipt}}</button>
+					<br>
+					<button (click)="receiptChange()">{{showReceipt}}</button>
 				</div>
 				<br>
 				<img *ngIf="showReceiptVal" [src]="defaultProfilePic" />
@@ -26,7 +27,7 @@
 		<textarea matInput placeholder="Enter your comments" id="comments" required [(ngModel)]="comments" rows="30" cols="120"> 
 		</textarea>
 
-		<div *ngIf="approveReject == 'reject'">
+		<div *ngIf="approveReject == 'reject'" class="ex1">
 			<mat-form-field>
 				<font color="red">Select a reason for Rejection</font>
 				<br>
@@ -38,13 +39,13 @@
 				</mat-select>
 			</mat-form-field>
 		</div>
-		<strong>{{data}}</strong>
 	</mat-dialog-content>
 	<mat-dialog-actions>
 
 		<div style="text-align:right; width:100%; padding:0;">
 		<button button (click)="CancelConfirm()">Cancel</button>
-		<button [disabled]="((approveReject == 'reject') && ((!comments) || (!reasonSelected))) || ((approveReject == 'approve')  || (!comments)) " button (click)="CancelConfirm()" >Submit</button>
+		<button [disabled]="((approveReject == 'reject') && ((!comments) || (!reasonSelected))) || ((approveReject == 'approve')  && (!comments)) || (approveReject == 'cancel')"
+			 button (click)="CancelConfirm()">Submit</button>
 		</div>
 	</mat-dialog-actions>
 </div>

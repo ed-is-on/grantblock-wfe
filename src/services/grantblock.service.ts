@@ -47,7 +47,7 @@ export class GrantBlockService {
             if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                 let transactionApprovers: TransactionApprover[] = [];
                 _value.assignedValidators.forEach((_approver) => {
-                    transactionApprovers.push(new TransactionApprover(_approver.userId,_value.requestId,transaction.date,transaction.amount.toString(), enumApprovalStatus.Pending, transaction.status, transaction.receiptImage))
+                    transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), enumApprovalStatus.Pending, transaction.status, transaction.receiptImage))
                 });
 
                 transaction.AddApprovers(transactionApprovers);
@@ -65,7 +65,7 @@ export class GrantBlockService {
         /** A pointer to the service's ConvertToProperCase() function */
         let approvers = response.json().map((_value) => {
             let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
-            let approver = new TransactionApprover(ownerId,_value.requestId,new Date(_value.createdDate),_value.requestValue);
+            let approver = new TransactionApprover(ownerId, _value.requestId, new Date(_value.createdDate), _value.requestValue);
             return approver;
         });
         return approvers;
@@ -96,7 +96,11 @@ export class GrantBlockService {
                         if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                             newTransaction.approvers = [];
                             _value.assignedValidators.forEach((_validator) => {
-                                newTransaction.approvers.push(new TransactionApprover(_validator.userId,_value.requestId,newTransaction.date,newTransaction.amount.toString(),undefined,newTransaction.status,newTransaction.receiptImage))
+                                let transactionStatus = enumApprovalStatus.Pending;
+                                if (_value.approvedValidators && _value.approvedValidators.indexOf(granteeId) > -1) {
+                                    transactionStatus = enumApprovalStatus.Approved;
+                                }
+                                newTransaction.approvers.push(new TransactionApprover(_validator.userId, _value.requestId, newTransaction.date, newTransaction.amount.toString(), transactionStatus, newTransaction.status, newTransaction.receiptImage))
                             })
                         }
                         return newTransaction;
@@ -149,20 +153,23 @@ export class GrantBlockService {
             })
         */
         return this.GetAllTransactions().map((_allTrans: Transactions[]) => {
-            return _allTrans.filter((_trans)=>{
-                return _trans.type.toLocaleLowerCase() === 'drawdown';
-            }).map((_trans) => {
-                if (_trans.type.toLocaleLowerCase() === 'drawdown' && _trans.approvers && _trans.approvers.length > 0) {
-                    return _trans;
-                }
-            }).filter((_trans: Transactions) => {
-                let approvers = _trans.approvers.map((x)=>{return x.approverId});
-                if(approvers.indexOf(_granteeId) > -1){
-                    return _trans;
-                }
-            }).map((_trans: Transactions)=>{
-                return new TransactionApprover(_granteeId,_trans.transactionId, _trans.date, _trans.amount.toString(),undefined,_trans.status, _trans.receiptImage)
+            return _allTrans.filter((_trans) => {
+                return _trans.type.toLocaleLowerCase() === 'drawdown' && _trans.approvers && _trans.approvers.length > 0;
             })
+                // .map((_trans) => {
+                //     if (_trans.type.toLocaleLowerCase() === 'drawdown' ) {
+                //         return _trans;
+                //     }
+                // })
+                .filter((_trans: Transactions) => {
+                    let approvers = _trans.approvers.map((x) => { return x.approverId });
+                    if (approvers.indexOf(_granteeId) > -1) {
+                        return _trans;
+                    }
+                }).map((_trans: Transactions) => {
+                    let approvalStatus = _trans.approvers.filter(x => { return x.approverId === _granteeId })[0].approvalStatus;
+                    return new TransactionApprover(_granteeId, _trans.transactionId, _trans.date, _trans.amount.toString(), approvalStatus, _trans.status, _trans.receiptImage)
+                })
         })
     }
 

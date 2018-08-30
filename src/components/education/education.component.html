@@ -1,21 +1,42 @@
-<ul>
-		<li>
-			<a href="#fund" class="animate">Fund</a>
-		</li>
-		<li>
-			<a href="#audit" class="animate">Audit</a>
-		</li>
-		<li>
-			<a href="#review" class="animate">Review</a>
-		</li>
-</ul>
+<div style="clear:both"></div>
+<div><ul>
+	<li>
+		<a href="#fund" class="animate">Fund</a>
+	</li>
+	<li>
+		<a href="#audit" class="animate">Audit</a>
+	</li>
+	<li>
+		<a href="#review" class="animate">Review</a>
+	</li>
+</ul></div>
+
+<div style="clear:both"></div>
 <div id="edTop">
-    <div class="sec-pod"><span class="testFont">1a</span></div>
-    <div class="sec-podHalf sph1"><span class="testFont">1b</span></div>
-    <div class="sec-podHalf sph2"><span class="testFont">1c</span></div>
+	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(1)" class="mobileButton">Section 1a</div>
+	<div [hidden]="!onMobileViewEd() && edDisplayPod1" class="sec-pod">
+		<span class="testFont">1a</span>
+	</div>
+	<div *ngIf="!onMobileViewEd()" style="clear:both"></div>
+	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(2)" class="mobileButton">Section 1b-c</div>
+	<div [hidden]="!onMobileViewEd() && edDisplayPod2" class="sec-podHalf sph1">
+		<span class="testFont">1b</span>
+	</div>
+	<div [hidden]="!onMobileViewEd() && edDisplayPod2" class="sec-podHalf sph2">
+		<span class="testFont">1c</span>
+
+</div>
 </div>
 <div style="clear:both"></div>
 <div id="edBottom">
-    <div class="sec-pod"><span class="testFont">2a</span></div>
-    <div class="sec-pod"><span class="testFont">2b</span></div>
+	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(3)" class="mobileButton">Section 2a</div>
+	<div [hidden]="!onMobileViewEd() && edDisplayPod3" class="sec-pod">
+		<span class="testFont">2a</span>
+	</div>
+	<div *ngIf="!onMobileViewEd()" style="clear:both"></div>
+	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(4)" class="mobileButton">Section 2b</div>
+	<div [hidden]="!onMobileViewEd() && edDisplayPod4" class="sec-pod">
+		<span class="testFont">2b</span>
+	</div>
 </div>
+<div style="clear:both"></div>

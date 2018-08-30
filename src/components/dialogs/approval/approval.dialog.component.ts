@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormControl, Validators} from '@angular/forms';
+import { TransactionApprover } from '../../../models/approver.model';
 
 export interface reason {
   value: string;
@@ -26,10 +27,13 @@ export class ApprovalDialogComponent implements OnInit {
   showReceiptVal: string='';
   comments: string='';
   reasonSelected: string='';
+  transactionApproval: TransactionApprover;
 
 
   ngOnInit() {
     this.approveReject='cancel';
+    this.transactionApproval = this.data.transactionApprover;
+    console.log(this.transactionApproval);
   }
 
   CloseConfirm(){

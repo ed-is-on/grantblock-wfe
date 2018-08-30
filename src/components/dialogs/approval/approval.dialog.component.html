@@ -8,9 +8,11 @@
 		<div>
 			<div>
 				Transaction Type: Drawdown
-				<br> Transaction Description: Miscellaneous description, blah blah blah.
-				<br> Transaction Amount: {{transactionAmt}}
+				<span>Transaction Description: Miscellaneous description, blah blah blah.</span>
 				<br>
+				<span>Transaction Amount: {{transactionApproval.transactionAmount | currency:'USD'}}</span>
+				<br>
+				<span>Transaction Amount: {{transactionApproval.transactionDate | date:'MMMM dd, yyyy'}}</span>
 				<div>
 					<br>
 					<button (click)="receiptChange()">{{showReceipt}}</button>

@@ -1,47 +1,35 @@
- ul {
 
-    margin: 0;
-    padding: 0;
-
-    width: 100%;
-}
-#mainBar { background-color: slategray; overflow: auto; width: 100%; 
+#mainBar { background-color: orange;
+     width: 100%; 
+     Height: 75px;
+     border-right: 4px solid #333;
  }
 
-.mainNav li {
-   list-style-type: none !important;
-    float: left;
-    font-size: 2em;
-}
-
-.mainNav li a {
-    display: block;
-    color: white;
-    width: 300px;
+#mainBar div {
+    Width: 50%;
+    height: 100%;
     text-align: center;
-    margin: 0px 0px 0px 24px;
-    margin-bottom: -15px !important;
-    border-radius: 10px 10px 0px 0px;
-    padding: 14px 16px;
-    background-color: orange;
+    font-size: 2em;
+    border-left: 4px solid #333;
+    
+    float: left;
+    font-size: 1.75em;
+    color: #333;
     text-decoration: none;
+    padding-top: 25px;
 }
-
-
-
-
-.mainNav li a:hover:not(.activeTab) {
-    background-color: #111;
+ #mainBar div:hover:not(.activeTab) {
+Background-color: #333;
+color: orange;
 }
 
 .mainNav .activeTab {
-    background-color: darkgoldenrod;
-    color: black;
+    Background-color: #333;
+    color: orange;
 }
-
-.animate {
-    -webkit-transition: all 1s ease-in-out;
-    -moz-transition: all 1s ease-in-out;
-    -o-transition: all 1s ease-in-out;
-    transition: all 1s ease-in-out;
+ .animate {
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
 }

@@ -1,35 +1,4 @@
-.sec-pod {
-    background-color:  #333;;
-    width: 600px; 
-    max-width: 600px;
-    height: 350px; 
-    border: 5px solid white; 
-    outline: 3px solid slategray;
-    padding: 20px;
-    margin: 30px;
 
-    float: left;}
-
-.sec-podHalf {
-    background-color:  #333;; 
-    width: 285px; 
-    height: 350px;
-    border: 5px solid white; 
-    outline: 3px solid slategray;
-    padding: 20px;
-    margin: 30px;
- 
-    float: left;}
-
-.testFont {
-    font-size: 10em; 
-    color: white;}
-.sph1 {
-    margin-right: 15px;
-}
-.sph2 { 
-    margin-left: 15px;
-}
 ul {
     list-style-type: none;
     margin: 0;
@@ -65,4 +34,30 @@ li a:hover:not(.active) {
     -moz-transition: all 1s ease-in-out;
     -o-transition: all 1s ease-in-out;
     transition: all 1s ease-in-out;
+}
+.mobileButton {
+    background-color: Orange;
+    text-align: center;
+    border-bottom: solid 5px slategray; 
+    width: 100%; 
+    height: 100px; 
+    padding: 20px;
+    font-size: 2em;
+    color: #111;
+}
+
+@media only screen and (max-width:800px) {
+     li a {
+         width: 200px;
+         margin: 10px 10px ;
+     }
+   
+}
+  
+@media only screen and (max-width:500px) {
+     li a {
+        width: 100px;
+        margin: 10px 10px ;
+    }
+
 }

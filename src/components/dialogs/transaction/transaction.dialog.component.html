@@ -29,7 +29,7 @@
 		</form>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-raised-button (click)="CancelConfirm()">Cancel</button>
-		<button mat-raised-button [disabled]="newTransactionsForm.form.invalid || AllowSubmit()" (click)="CloseConfirm()">Submit</button>
+		<button (click)="CancelConfirm()">Cancel</button>
+		<button [disabled]="newTransactionsForm.form.invalid || AllowSubmit()" (click)="CloseConfirm()">Submit</button>
 	</mat-dialog-actions>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { Transactions } from '../../models/transactions.model';
 import { TransactionApprover, enumApprovalStatus } from '../../models/approver.model';
@@ -22,10 +22,13 @@ export class GranteeTransactionsComponent implements OnInit {
     this.UpdateAvailableBalance();
   }
 
+  /** This property emits an event whenever a new transaction has successfully been created */
+  @Output() updatedTransactions = new EventEmitter<void>();
+
   myTransactions: Transactions[];
-  dataSource;
+  matTableDataSource: MatTableDataSource<Transactions> = new MatTableDataSource<Transactions>();
   allStatuses = enumApprovalStatus;
-  displayedColumns: string[] = ['date', 'amount', 'approvers', 'type']
+  displayedColumns: string[] = ['date', 'amount', 'approvers', 'type', 'status']
   constructor(
     private $transactions: TransactionsService,
     private $grantBlockService: GrantBlockService,
@@ -52,9 +55,8 @@ export class GranteeTransactionsComponent implements OnInit {
   GetTransactions() {
     this.$grantBlockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((results) => {
       this.myTransactions = results.sort((a, b) => { return a.date > b.date ? -1 : a.date < b.date ? 1 : 0; });
-      this.dataSource = new MatTableDataSource(this.myTransactions);
-      this.dataSource.paginator = this.paginator;
-
+      this.matTableDataSource.data = this.myTransactions;
+      this.matTableDataSource.paginator = this.paginator;
     })
   }
 
@@ -83,14 +85,22 @@ export class GranteeTransactionsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Success!!', result)
       try {
         if (result.success) {
-          // const newTransaction = new Transactions(result.data.results.requestor, result.data.newTransaction.grantee.Name, result.data.results.requestValue, new Date(), result.data.purpose || '', result.data.location || '');
-          // // newTransaction.approvers = this.$transactions.SelectRandomApprovers(result.data.granteeId);
-          // this.myTransactions.unshift(newTransaction);
-          this.GetTransactions();
-          this.UpdateAvailableBalance();
+          this.$grantBlockService.AddValidatingGrantees(result.data.results.requestId).subscribe(
+            (_results) => {
+              console.log('Transaction Approvers',_results);
+              this.GetTransactions()
+              this.UpdateAvailableBalance();
+              this.updatedTransactions.emit();
+            },
+            () => {
+
+            },
+            () => {
+
+            }
+          )
         }
       }
       catch (error) {
@@ -98,5 +108,7 @@ export class GranteeTransactionsComponent implements OnInit {
       }
     })
   }
+
+
 
 }

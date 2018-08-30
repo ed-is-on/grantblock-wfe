@@ -4,8 +4,13 @@ import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from './material.module'
+import { MaterialModule} from './material.module'
 import { HighchartsChartModule } from 'highcharts-angular';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatButtonModule} from '@angular/material';
+
 
 // Components
 import { AppComponent } from '../app/app.component';
@@ -16,6 +21,10 @@ import { GranteeApprovalsComponent } from '../components/grantee-approvals/grant
 import { GranteeChartComponent } from '../components/grantee-chart/grantee-chart.component'
 import { MainNavComponent } from '../components/main-nav/main-nav.component'
 import { EducationComponent } from '../components/education/education.component';
+import { EducationDashboardComponent } from '../components/education-dashboard/education-dashboard.component';
+import { EducationAuditComponent } from '../components/education-audit/education-audit.component';
+import { EducationFundComponent } from '../components/education-fund/education-fund.component';
+import { EducationReviewComponent } from '../components/education-review/education-review.component';
 
 // Dialogs
 import { ApprovalDialogComponent } from '../components/dialogs/approval/approval.dialog.component';
@@ -28,7 +37,7 @@ import { DataService } from '../hyperledger/data.service';
 import { GrantBlockService } from '../services/grantblock.service';
 
 @NgModule({
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule],
+  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule,MatFormFieldModule,MatSelectModule, MatRadioModule, MatButtonModule],
   declarations: [
     AppComponent,
     HelloComponent,
@@ -39,7 +48,11 @@ import { GrantBlockService } from '../services/grantblock.service';
     TransactionDialogComponent,
     GranteeChartComponent,
     MainNavComponent, 
-    EducationComponent
+    EducationComponent,
+    EducationDashboardComponent,
+    EducationAuditComponent,
+    EducationFundComponent,
+    EducationReviewComponent
   ],
   providers:[
     GranteeService,

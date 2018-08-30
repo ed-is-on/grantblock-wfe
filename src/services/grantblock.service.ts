@@ -6,6 +6,7 @@ import { Observable, of } from '../../node_modules/rxjs';
 import { Transactions } from '../models/transactions.model';
 import { GranteeService } from './grantee.service';
 import { TransactionsService } from './transactions.service';
+import { TransactionApprover, enumApprovalStatus } from '../models/approver.model';
 
 
 @Injectable()
@@ -13,27 +14,61 @@ export class GrantBlockService {
 
     private apiUrl: string;
     private granteePattern: RegExp = /Grantee\#(g.*)$/;
-    private namespacePrefix: string = "com.usgov.ed.grants";
+    private namespacePrefix = 'com.usgov.ed.grants';
 
     constructor(
         private $http: Http,
         private $granteeService: GranteeService,
         private $transactions: TransactionsService
     ) {
-        this.apiUrl = 'http://edhyperledger.eastus2.cloudapp.azure.com:3000/api/'
+        this.apiUrl = 'http://edhyperledger.eastus2.cloudapp.azure.com:3000/api/';
     }
 
     private GetGrantBlockOwnerId(_granteeId: string): string {
         return `resource%3Acom.usgov.ed.grants.Grantee%23${_granteeId}`;
     }
 
+    private ConvertToProperCase(str): string {
+        return str.toLowerCase().split(/[\s]+|[$_]/).map((word) => {
+            return `${word.charAt(0).toUpperCase()}${word.slice(1)}`
+        }).join(' ');
+    }
+    /**
+     * This functions parses all the transactions returned from the REST call into instances of the Transaction class
+     * @param response http response object containing transactions
+     */
     private parseTransactions(response): any {
-        var transactions = response.json().map((_value) => {
-            var ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
-            return new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type);
+        /** A pointer to the service's ConvertToProperCase() function */
+        let transactions = response.json().map((_value) => {
+            let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
+            _value.type = this.ConvertToProperCase(_value.type);
+            _value.status = this.ConvertToProperCase(_value.status);
+            let transaction = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type, _value.requestId);
+            if (_value.assignedValidators && _value.assignedValidators.length > 0) {
+                let transactionApprovers: TransactionApprover[] = [];
+                _value.assignedValidators.forEach((_approver) => {
+                    transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), enumApprovalStatus.Pending, transaction.status, transaction.receiptImage))
+                });
+
+                transaction.AddApprovers(transactionApprovers);
+            }
+            return transaction;
         });
         return transactions;
 
+    }
+    /**
+     * This functions parses all the transaction approvers returned from the REST call into instances of the Transaction class
+     * @param response http response object containing transactions
+     */
+    private parseTransactionApprovers(response): any {
+        /** A pointer to the service's ConvertToProperCase() function */
+        let approvers = response.json().map((_value) => {
+            let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
+            let approver = new TransactionApprover(ownerId, _value.requestId, new Date(_value.createdDate), _value.requestValue);
+            return approver;
+        });
+        return approvers;
     }
 
     GetAllGrantees(): Observable<Grantee[]> {
@@ -43,9 +78,9 @@ export class GrantBlockService {
             });
         })
             .catch((error) => {
-                console.info('Error Accessing Blockchain', error);
-                return of(this.$granteeService.GetAllGrantees().sort((x, y) => { if (x.Name < y.Name) { return -1 } else { return 1 } }));
-            })
+                console.log('Error Accessing Blockchain', error);
+                return of(this.$granteeService.GetAllGrantees().sort((x, y) => { if (x.Name < y.Name) { return -1; } else { return 1; } }));
+            });
     }
 
     GetAllTransactions(): Observable<any> {
@@ -53,24 +88,40 @@ export class GrantBlockService {
             .map((results) => {
                 return results.json()
                     .map((_value) => {
-                        var transactionId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                        console.log(decodeURIComponent(_value.owner));
+                        const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
+                        // console.log(decodeURIComponent(_value.owner));
                         // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
-                        return _value = new Transactions(transactionId, '', _value.requestValue)
-                    })
-            })
+
+                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                        if (_value.assignedValidators && _value.assignedValidators.length > 0) {
+                            newTransaction.approvers = [];
+                            _value.assignedValidators.forEach((_validator) => {
+                                let transactionStatus = enumApprovalStatus.Pending;
+                                if (_value.approvedValidators && _value.approvedValidators.indexOf(granteeId) > -1) {
+                                    transactionStatus = enumApprovalStatus.Approved;
+                                }
+                                newTransaction.approvers.push(new TransactionApprover(_validator.userId, _value.requestId, newTransaction.date, newTransaction.amount.toString(), transactionStatus, newTransaction.status, newTransaction.receiptImage))
+                            })
+                        }
+                        return newTransaction;
+                    });
+            });
     }
 
+    /**
+     * This function returns all transactions that belong to a grantee
+     * @param _granteeId The id of grantee as a string
+     */
     GetGranteeTransactions(_granteeId: string): Observable<Transactions[]> {
-        var owner = this.GetGrantBlockOwnerId(_granteeId);
+        let owner = this.GetGrantBlockOwnerId(_granteeId);
         return this.$http.get(`${this.apiUrl}queries/selectGranteeActionRequests?owner=${owner}`)
-            .map(this.parseTransactions)
+            .map(this.parseTransactions, this)
             .catch((error) => {
                 console.info('Error Getting Blockchain Transactions', error);
-                var granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
+                let granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
                     .sort((x, y) => { return y.date.valueOf() - x.date.valueOf() })
                     .map((trans) => {
-                        if(trans.type !== 'AWARD'){
+                        if (trans.type !== 'AWARD') {
                             trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
                         }
                         return trans;
@@ -80,15 +131,58 @@ export class GrantBlockService {
     }
 
     /**
+     * This function returns all transaction approvals that belong to a grantee
+     * @param _granteeId The id of grantee as a string
+     */
+    GetGranteeApprovals(_granteeId: string): Observable<TransactionApprover[]> {
+        /*
+        let owner = this.GetGrantBlockOwnerId(_granteeId);
+        return this.$http.get(`${this.apiUrl}queries/selectGranteesActionRequestsForValidation?owner=${owner}`)
+            .map(this.parseTransactionApprovers, this)
+            .catch((error) => {
+                console.info('Error Getting Blockchain Transactions', error);
+                let granteesTransactions = this.$transactions.GetGranteesTransactions(_granteeId)
+                    .sort((x, y) => { return y.date.valueOf() - x.date.valueOf() })
+                    .map((trans) => {
+                        if (trans.type !== 'AWARD') {
+                            trans.approvers = this.$transactions.SelectRandomApprovers(_granteeId);
+                        }
+                        return trans;
+                    })
+                return of(granteesTransactions);
+            })
+        */
+        return this.GetAllTransactions().map((_allTrans: Transactions[]) => {
+            return _allTrans.filter((_trans) => {
+                return _trans.type.toLocaleLowerCase() === 'drawdown' && _trans.approvers && _trans.approvers.length > 0;
+            })
+                // .map((_trans) => {
+                //     if (_trans.type.toLocaleLowerCase() === 'drawdown' ) {
+                //         return _trans;
+                //     }
+                // })
+                .filter((_trans: Transactions) => {
+                    let approvers = _trans.approvers.map((x) => { return x.approverId });
+                    if (approvers.indexOf(_granteeId) > -1) {
+                        return _trans;
+                    }
+                }).map((_trans: Transactions) => {
+                    let approvalStatus = _trans.approvers.filter(x => { return x.approverId === _granteeId })[0].approvalStatus;
+                    return new TransactionApprover(_granteeId, _trans.transactionId, _trans.date, _trans.amount.toString(), approvalStatus, _trans.status, _trans.receiptImage)
+                })
+        })
+    }
+
+    /**
      * This function returns the available balance of the specified grantee.
      * @param _granteeId The string Id of the grantee
-     * @returns Observable<string> 
+     * @returns Observable<string>
      */
     async GetGranteeAvailableBalance(_granteeId: string) {
-        var availableBalance: number = 0;
+        let availableBalance: number = 0;
 
-        var granteesTransactions = await this.GetGranteeTransactions(_granteeId).toPromise();
-        if(granteesTransactions.length > 0){
+        let granteesTransactions = await this.GetGranteeTransactions(_granteeId).toPromise();
+        if (granteesTransactions.length > 0) {
             availableBalance = granteesTransactions
                 .map(x => x.amount)
                 .reduce((_runningTotal, _currentValue) => {
@@ -99,12 +193,28 @@ export class GrantBlockService {
         return availableBalance;
     }
 
+    /**
+     * This function is used to create a new transaction
+     * @param _payload An object containing a requestValue and a requestor id
+     */
     CreateTransaction(_payload: { requestValue: number, requestor: string }): Observable<any> {
-        var result;
+        let result;
         _payload["$class"] = `${this.namespacePrefix}.CreateActionRequest`;
         // console.log(_payload);
         return this.$http.post(`${this.apiUrl}CreateActionRequest`, _payload)
     }
 
-
+    AddValidatingGrantees(_transactionId: string, _numberOfValidators?: number): Observable<Response> {
+        let transactionApprovers: TransactionApprover[] = [];
+        _numberOfValidators = _numberOfValidators || 3;
+        let _payload = {
+            "$class": `${this.namespacePrefix}.AddValidatingGrantees`,
+            "validators": _numberOfValidators.toString(),
+            "request": _transactionId
+        }
+        return this.$http.post(`${this.apiUrl}AddValidatingGrantees`, _payload).map(
+            (results) => {
+                return results.json();
+            });
+    }
 }

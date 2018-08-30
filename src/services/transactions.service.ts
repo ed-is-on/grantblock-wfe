@@ -72,7 +72,7 @@ export class TransactionsService {
       // Make sure the approver is not the grantee and you are not selecting the same approver twice
       if (wizard.Id !== _granteeId && _approvers.map(x => { return x.approverId }).indexOf(wizard.Id) === -1) {
         // Create a new approver with a random number to represent the approval status (0 accepted, 1 rejected, 2 pending)
-        _approvers.push(new TransactionApprover(wizard.Id, Math.floor(Math.random() * 3)))
+        _approvers.push(new TransactionApprover(wizard.Id,undefined,undefined,undefined, Math.floor(Math.random() * 3)))
       }
       // Uncomment the section below for debugging
       /*

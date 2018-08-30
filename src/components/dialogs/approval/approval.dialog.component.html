@@ -1,12 +1,53 @@
-<div>
-	<h2 mat-dialog-title>Grantee Approval</h2>
+<div style="width:auto;">
+	<h2 mat-dialog-title>
+		<b>Transaction Approval</b>
+	</h2>
 	<mat-dialog-content>
-		This is the content for the dialog
+
 		<br>
-		<strong>{{data}}</strong>
+		<div>
+			<div>
+				Transaction Type: Drawdown
+				<span>Transaction Description: Miscellaneous description, blah blah blah.</span>
+				<br>
+				<span>Transaction Amount: {{transactionApproval.transactionAmount | currency:'USD'}}</span>
+				<br>
+				<span>Transaction Amount: {{transactionApproval.transactionDate | date:'MMMM dd, yyyy'}}</span>
+				<div>
+					<br>
+					<button (click)="receiptChange()">{{showReceipt}}</button>
+				</div>
+				<br>
+				<img *ngIf="showReceiptVal" [src]="defaultProfilePic" />
+			</div>
+			<mat-radio-group>
+				<mat-radio-button color="primary" value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>
+				<mat-radio-button color="warn" value="2" (change)="handleChange(2)">I Reject This Transaction </mat-radio-button>
+			</mat-radio-group>
+		</div>
+		<br> Comments (Required)
+		<textarea matInput placeholder="Enter your comments" id="comments" required [(ngModel)]="comments" rows="30" cols="120"> 
+		</textarea>
+
+		<div *ngIf="approveReject == 'reject'" class="ex1">
+			<mat-form-field>
+				<font color="red">Select a reason for Rejection</font>
+				<br>
+				<br>
+				<mat-select [(ngModel)]="reasonSelected">
+					<mat-option *ngFor="let reason of reasons" [value]="reason.value" required>
+						{{reason.viewValue}}
+					</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button mat-raised-button (click)="CloseConfirm()" >Approve</button>
-		<button mat-raised-button (click)="CancelConfirm()" >Reject</button>
+
+		<div style="text-align:right; width:100%; padding:0;">
+		<button button (click)="CancelConfirm()">Cancel</button>
+		<button [disabled]="((approveReject == 'reject') && ((!comments) || (!reasonSelected))) || ((approveReject == 'approve')  && (!comments)) || (approveReject == 'cancel')"
+			 button (click)="CancelConfirm()">Submit</button>
+		</div>
 	</mat-dialog-actions>
 </div>

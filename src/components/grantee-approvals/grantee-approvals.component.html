@@ -1,9 +1,8 @@
 <figure>
-  Review
+	<figcaption>
+		<h2>Reviews</h2>
+	</figcaption>
 	<table>
-		<!-- <figcaption>
-			<h2>Review</h2>
-		</figcaption> -->
 		<thead>
 			<tr>
 				<th>Transaction</th>
@@ -13,32 +12,10 @@
 		<tbody>
 			<tr class="selection" *ngFor="let _trans of myApprovals">
 				<td>{{_trans.transactionId}}</td>
-				<td class="status">
-					<span><button id="approvalButton" class="button awaitingApr" (click)="openDialog()">Awaiting Approval</button></span>
-				</td>
-			</tr>
-			<tr class="selection">
-				<td>0123</td>
-				<td class="status">
-					<span class="approved"><button id="approvalButton" class="button awaitingApr" (click)="openDialog()">Awaiting Approval</button></span>
-				</td>
-			</tr>
-			<tr class="selection">
-				<td>4567</td>
-				<td class="status">
-					<span class="approved">&#9745;</span>
-				</td>
-			</tr>
-			<tr class="selection">
-				<td>8901</td>
-				<td class="status">
-					<span class="approved">&#9745;</span>
-				</td>
-			</tr>
-			<tr class="selection">
-				<td>2345</td>
-				<td class="status">
-					<span class="approved">&#9745;</span>
+				<td class="status" [ngSwitch]="_trans.approvalStatus" >
+					<span *ngSwitchCase="2" ><button id="approvalButton" class="button awaitingApr" (click)="openDialog(_trans)">Awaiting Approval</button></span>
+					<span *ngSwitchCase="0" class="approved">&#9745;</span>
+					<span *ngSwitchCase="1" class="rejected">&#9746;</span>
 				</td>
 			</tr>
 		</tbody>

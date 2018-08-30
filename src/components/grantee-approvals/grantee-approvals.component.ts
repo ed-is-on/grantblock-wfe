@@ -34,7 +34,7 @@ export class GranteeApprovalsComponent implements OnInit {
 
   }
 
-  openDialog(): void {
+  openDialog(approval:TransactionApprover): void {
    
     const dialogRef = this.dialog.open(ApprovalDialogComponent,{
       closeOnNavigation: true,
@@ -42,6 +42,9 @@ export class GranteeApprovalsComponent implements OnInit {
       hasBackdrop:true,
       //height: '800px',
       width: 'auto',
+      data:{
+        transactionApprover: approval
+      }
     });
 
     dialogRef.afterClosed().subscribe(result=>{

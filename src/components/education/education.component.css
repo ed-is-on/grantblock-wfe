@@ -1,29 +1,4 @@
-.sec-pod {
-    width: 600px; 
-    max-width: 600px;
-    min-height: 350px !important; 
-    padding: 10px;
-    margin: 30px;
-    float: left;
-}
 
-.sec-podHalf {
-    width: 285px; 
-    height: 350px;
-    padding: 10px;
-    margin: 30px;
- 
-    float: left;}
-
-.testFont {
-    font-size: 2em; 
-    color: slategray;}
-.sph1 {
-    margin-right: 15px;
-}
-.sph2 { 
-    margin-left: 15px;
-}
 ul {
     list-style-type: none;
     margin: 0;
@@ -72,18 +47,6 @@ li a:hover:not(.active) {
 }
 
 @media only screen and (max-width:800px) {
-    /* For tablets: */
-    .sec-pod {
-        width: 100%; 
-        margin: auto;
-        height: 600px !important; 
-        /* background-color: blue; */
-    }
-    .sec-podHalf {
-        width: 40%; 
-        height: 350px;
-        margin: 2%;
-     }
      li a {
          width: 200px;
          margin: 10px 10px ;
@@ -92,19 +55,6 @@ li a:hover:not(.active) {
 }
   
 @media only screen and (max-width:500px) {
-    /* For mobile phones: */
-    .sec-pod {
-        width: 100%; 
-        margin: auto;
-        height: 400px !important; 
-        /* background-color: red; */
-    }
-    .sec-podHalf {
-        width: 40%; 
-        height: 350px;
-        margin: 2%;
-     }
-
      li a {
         width: 100px;
         margin: 10px 10px ;

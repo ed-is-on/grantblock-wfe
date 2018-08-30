@@ -4,11 +4,18 @@
     width: 600px; 
     max-width: 600px;
     min-height: 350px !important; 
-    padding: 20px;
+    padding: 10px;
     margin: 30px;
     float: left;
 }
-
+.sec-podHalf {
+    width: 285px; 
+    height: 350px;
+    padding: 10px;
+    margin: 30px;
+ 
+    float: left;}
+    
 ul {
     list-style-type: none;
     margin: 0;

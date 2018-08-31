@@ -7,13 +7,24 @@ import { GranteeTransactionsComponent } from '../components/grantee-transactions
 import { EducationComponent } from '../components/education/education.component'
 
 import { GranteeService } from '../services/grantee.service'
+import { EducationDashboardComponent } from '../components/education-dashboard/education-dashboard.component';
+import { EducationAuditComponent } from '../components/education-audit/education-audit.component';
+import { EducationFundComponent } from '../components/education-fund/education-fund.component';
+import { EducationReviewComponent } from '../components/education-review/education-review.component';
+
+const educationChildRoutes: Routes = [
+  { path: '', component: EducationDashboardComponent },
+  { path: 'audit', component: EducationAuditComponent },
+  { path: 'fund', component: EducationFundComponent },
+  { path: 'review', component: EducationReviewComponent },
+]
 
 const routes: Routes = [
   {
     path: 'grantee',
     component: GranteeComponent
   },
-  { path: 'education', component: EducationComponent },
+  { path: 'education', component: EducationComponent, children: educationChildRoutes },
   { path: '', redirectTo: 'grantee', pathMatch: 'full' }
 ]
 

@@ -1,13 +1,16 @@
 <div style="clear:both"></div>
 <div><ul>
-	<li>
-		<a href="#fund" class="animate">Fund</a>
+	<li *ngIf="$false">
+		<a routerLink="dashboard" routerLinkActive="activeTab" class="animate">Dashboard</a>
 	</li>
 	<li>
-		<a href="#audit" class="animate">Audit</a>
+		<a routerLink="fund" routerLinkActive="activeTab" class="animate">Fund</a>
 	</li>
 	<li>
-		<a href="#review" class="animate">Review</a>
+		<a routerLink="audit" routerLinkActive="activeTab" class="animate">Audit</a>
+	</li>
+	<li>
+		<a routerLink="review" routerLinkActive="activeTab" class="animate">Review</a>
 	</li>
 </ul></div>
-<education-dashboard></education-dashboard>
+<router-outlet></router-outlet>

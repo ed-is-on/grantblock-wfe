@@ -13,7 +13,7 @@ export class AzureService {
     constructor(
         private $http: Http
     ) {
-        this.baseUrl = `http://${environment.azureStorage.name}.${environment.azureStorage.baseUrl}:${environment.azureStorage.port}/azure`;
+        this.baseUrl = `http://${environment.azureStorage.name}.eastus2.cloudapp.azure.com:${environment.azureStorage.port}/azure`;
     }
 
     getReceipts(options?:{receiptName?:string,containerName?:string}): Promise<any> {

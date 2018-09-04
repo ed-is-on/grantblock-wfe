@@ -4,5 +4,11 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  azureStorage:{
+    name:'edhyperledger',
+    baseUrl:'blob.core.windows.net',
+    sas: '' ,
+    containerName:'receipts'
+  }
 };

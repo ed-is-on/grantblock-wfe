@@ -7,7 +7,8 @@ export const environment = {
   production: false,
   azureStorage:{
     name:'edhyperledger',
-    baseUrl:'blob.core.windows.net',
+    baseUrl:'eastus2.cloudapp.azure.com',
+    port:'3300',
     sas: '' ,
     containerName:'receipts'
   }

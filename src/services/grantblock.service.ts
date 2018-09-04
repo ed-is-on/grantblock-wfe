@@ -92,7 +92,7 @@ export class GrantBlockService {
                         // console.log(decodeURIComponent(_value.owner));
                         // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
 
-                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId, _value.receiptHash || '', _value.receiptImage || '');
                         if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                             newTransaction.approvers = [];
                             _value.assignedValidators.forEach((_validator) => {
@@ -197,7 +197,7 @@ export class GrantBlockService {
      * This function is used to create a new transaction
      * @param _payload An object containing a requestValue and a requestor id
      */
-    CreateTransaction(_payload: { requestValue: number, requestor: string }): Observable<any> {
+    CreateTransaction(_payload: { requestValue: number, requestor: string, receiptHash?: string, receiptImage?: string }): Observable<any> {
         let result;
         _payload["$class"] = `${this.namespacePrefix}.CreateActionRequest`;
         // console.log(_payload);

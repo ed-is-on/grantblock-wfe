@@ -46,7 +46,7 @@ export class ApprovalDialogComponent implements OnInit {
   }
 
   getReceiptImage(){
-    return `https://${environment.azureStorage.name}.${environment.azureStorage.baseUrl}/receipts/${encodeURIComponent(this.transactionApproval.transactionReceipt)}`
+    return `https://${environment.azureStorage.name}.${environment.azureStorage.baseUrl}/receipts/${this.transactionApproval.transactionReceipt}`
   }
 
   private _prevSelected: any;

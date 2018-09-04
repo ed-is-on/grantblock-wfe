@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormControl, Validators} from '@angular/forms';
 import { TransactionApprover } from '../../../models/approver.model';
+import { environment } from '../../../environments/environment';
 
 export interface reason {
   value: string;
@@ -29,7 +30,6 @@ export class ApprovalDialogComponent implements OnInit {
   reasonSelected: string='';
   transactionApproval: TransactionApprover;
 
-
   ngOnInit() {
     this.approveReject='cancel';
     this.transactionApproval = this.data.transactionApprover;
@@ -43,6 +43,10 @@ export class ApprovalDialogComponent implements OnInit {
 
   CancelConfirm(){
     this.thisDialog.close('Cancel')
+  }
+
+  getReceiptImage(){
+    return `https://${environment.azureStorage.name}.${environment.azureStorage.baseUrl}/receipts/${encodeURIComponent(this.transactionApproval.transactionReceipt)}`
   }
 
   private _prevSelected: any;

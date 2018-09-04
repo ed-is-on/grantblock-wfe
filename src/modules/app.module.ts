@@ -35,6 +35,7 @@ import { GranteeService } from '../services/grantee.service';
 import { TransactionsService } from '../services/transactions.service';
 import { DataService } from '../hyperledger/data.service';
 import { GrantBlockService } from '../services/grantblock.service';
+import { AzureService } from '../services/azure.service';
 
 @NgModule({
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpModule, MaterialModule, HighchartsChartModule,MatFormFieldModule,MatSelectModule, MatRadioModule, MatButtonModule],
@@ -58,7 +59,8 @@ import { GrantBlockService } from '../services/grantblock.service';
     GranteeService,
     TransactionsService,
     DataService,
-    GrantBlockService
+    GrantBlockService,
+    AzureService
   ],
   entryComponents:[
     ApprovalDialogComponent,

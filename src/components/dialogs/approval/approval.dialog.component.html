@@ -18,7 +18,7 @@
 					<button (click)="receiptChange()">{{showReceipt}}</button>
 				</div>
 				<br>
-				<img *ngIf="showReceiptVal" [src]="defaultProfilePic" />
+				<img *ngIf="showReceiptVal" [src]="getReceiptImage()" />
 			</div>
 			<mat-radio-group>
 				<mat-radio-button color="primary" value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>

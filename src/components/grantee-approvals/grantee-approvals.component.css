@@ -1,0 +1,27 @@
+table {
+    width: 100%; 
+    height: 90%; 
+    margin: auto; 
+    text-align: left; 
+    border-collapse: collapse;}
+
+thead { 
+    border-top: 3px solid #484b82;
+    border-bottom: 2px solid #484b82;}
+ 
+ tbody { 
+     border-bottom: 3px solid #484b82;}
+ 
+ tbody tr:nth-child(odd) {
+     background: #eff0f2;}
+ 
+ td, th {
+     padding: 3px;  }
+ 
+ td {
+    border: 1px solid #dddddd; 
+    color: lightslategray; 
+    font-size: 0.75em;}
+th {
+    font-weight: 700;
+}

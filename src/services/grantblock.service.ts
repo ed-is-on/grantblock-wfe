@@ -215,6 +215,10 @@ export class GrantBlockService {
         return this.$http.post(`${this.apiUrl}AddValidatingGrantees`, _payload).map(
             (results) => {
                 return results.json();
-            });
+            },
+            (error)=>{
+                console.log(error);
+            }
+        );
     }
 }

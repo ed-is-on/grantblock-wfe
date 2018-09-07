@@ -68,7 +68,7 @@ export class TransactionDialogComponent implements OnInit {
 
   private CreateTransaction(receipt): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.$grantBlockService.CreateTransaction({ requestValue: this.newTransactionData.amount, requestor: this.data.grantee.Id, receiptHash: receipt.etag, receiptImage: receipt.name })
+      this.$grantBlockService.CreateTransaction({ requestValue: this.newTransactionData.amount, requestor: this.data.grantee.Id, receiptHash: receipt.etag, receiptImage: receipt.name, purpose: this.newTransactionData.purpose })
         .subscribe(
           (results: Response) => {
             if (results.ok) {

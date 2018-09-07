@@ -43,7 +43,7 @@ export class GrantBlockService {
             let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
             _value.type = this.ConvertToProperCase(_value.type);
             _value.status = this.ConvertToProperCase(_value.status);
-            let transaction = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), null, null, _value.status, _value.type, _value.requestId);
+            let transaction = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), _value.purpose || '', null, _value.status, _value.type, _value.requestId,  _value.receiptHash || '', _value.receiptImage || '');
             if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                 let transactionApprovers: TransactionApprover[] = [];
                 _value.assignedValidators.forEach((_approver) => {
@@ -55,7 +55,7 @@ export class GrantBlockService {
                     }else{
                         approvalStatus = enumApprovalStatus.Rejected;
                     }
-                    transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), approvalStatus, transaction.status, transaction.receiptImage))
+                    transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), approvalStatus, transaction.status, transaction.receiptImage, transaction.receiptHash, transaction.purpose))
                 });
 
                 transaction.AddApprovers(transactionApprovers);
@@ -93,27 +93,7 @@ export class GrantBlockService {
 
     GetAllTransactions(): Observable<any> {
         return this.$http.get(`${this.apiUrl}ActionRequest`)
-            .map((results) => {
-                return results.json()
-                    .map((_value) => {
-                        const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                        // console.log(decodeURIComponent(_value.owner));
-                        // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
-
-                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId, _value.receiptHash || '', _value.receiptImage || '');
-                        if (_value.assignedValidators && _value.assignedValidators.length > 0) {
-                            newTransaction.approvers = [];
-                            _value.assignedValidators.forEach((_validator) => {
-                                let transactionStatus = enumApprovalStatus.Pending;
-                                if (_value.approvedValidators && _value.approvedValidators.indexOf(granteeId) > -1) {
-                                    transactionStatus = enumApprovalStatus.Approved;
-                                }
-                                newTransaction.approvers.push(new TransactionApprover(_validator.userId, _value.requestId, newTransaction.date, newTransaction.amount.toString(), transactionStatus, newTransaction.status, newTransaction.receiptImage))
-                            })
-                        }
-                        return newTransaction;
-                    });
-            });
+                .map(this.parseTransactions, this);
     }
 
     /**
@@ -176,7 +156,7 @@ export class GrantBlockService {
                     }
                 }).map((_trans: Transactions) => {
                     let approvalStatus = _trans.approvers.filter(x => { return x.approverId === _granteeId })[0].approvalStatus;
-                    return new TransactionApprover(_granteeId, _trans.transactionId, _trans.date, _trans.amount.toString(), approvalStatus, _trans.status, _trans.receiptImage)
+                    return new TransactionApprover(_granteeId, _trans.transactionId, _trans.date, _trans.amount.toString(), approvalStatus, _trans.status, _trans.receiptImage, _trans.receiptHash, _trans.purpose)
                 })
         })
     }
@@ -205,11 +185,10 @@ export class GrantBlockService {
      * This function is used to create a new transaction
      * @param _payload An object containing a requestValue and a requestor id
      */
-    CreateTransaction(_payload: { requestValue: number, requestor: string, receiptHash?: string, receiptImage?: string }): Observable<any> {
-        let result;
+    CreateTransaction(_payload: { requestValue: number, requestor: string, receiptHash?: string, receiptImage?: string, purpose?:string }): Observable<any> {
         _payload["$class"] = `${this.namespacePrefix}.CreateActionRequest`;
         // console.log(_payload);
-        return this.$http.post(`${this.apiUrl}CreateActionRequest`, _payload)
+        return this.$http.post(`${this.apiUrl}CreateActionRequest`, _payload);
     }
 
     AddValidatingGrantees(_transactionId: string, _numberOfValidators?: number): Observable<Response> {
@@ -228,5 +207,14 @@ export class GrantBlockService {
                 console.log(error);
             }
         );
+    }
+
+    /**
+     * This function is used to validate existing transactions
+     * @param _payload An object containing all the required parameters to validate a transaction
+     */
+    ValidateTransaction(_payload:{approve:Boolean, approver:string,request:string,receiptHash:string}): Observable<any>{
+        _payload["$class"] = `${this.namespacePrefix}.ApproveActionRequest`;
+        return this.$http.post(`${this.apiUrl}ApproveActionRequest`, _payload);
     }
 }

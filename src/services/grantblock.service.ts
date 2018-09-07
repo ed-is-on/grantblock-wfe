@@ -217,4 +217,21 @@ export class GrantBlockService {
         _payload["$class"] = `${this.namespacePrefix}.ApproveActionRequest`;
         return this.$http.post(`${this.apiUrl}ApproveActionRequest`, _payload);
     }
+
+
+    /**
+     * This function gets a record of all actions against the blockchain
+     */
+    GetTransactionHistory():Promise<Transactions[]>{
+        return new Promise((resolve,reject)=>{
+            this.$http.get(`${this.apiUrl}ActionRequest`).subscribe(
+                (results)=>{
+                    resolve(this.parseTransactions(results));
+                },
+                (error)=>{
+                    reject(error);
+                }
+            )
+        })
+    }
 }

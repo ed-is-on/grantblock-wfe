@@ -22,7 +22,7 @@
 				<div class="form-group">
 					<label for="transactionAttachment">Attach File (Max Size: 2MB)</label>
 					<input name="transactionAttachment" (change)="onFileChange($event)" id="transactionAttachment" type="file" required/>
-					<div>{{newTransactionData.attachments | json}}</div>
+					<div>{{fileSize}}</div>
 				</div>
 				<br>
 				<!-- <strong>{{data}}</strong> -->

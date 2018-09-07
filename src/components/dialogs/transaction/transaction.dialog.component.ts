@@ -19,6 +19,7 @@ export class TransactionDialogComponent implements OnInit {
 
   private namespace: string = 'CreateActionRequest';
   private receiptName: string;
+  fileSize: string;
 
   newTransactionData: {
     amount?: number,
@@ -44,11 +45,21 @@ export class TransactionDialogComponent implements OnInit {
     console.log(this.receiptName)
   }
 
+  private formatBytes(bytes, decimals?) {
+    if (bytes == 0) return '0 Bytes';
+    var k = 1024,
+      dm = decimals || 2,
+      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+      i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
   onFileChange(_event) {
     if (_event.target.files && _event.target.files.length) {
       const [file] = _event.target.files;
       this.newTransactionData.attachments = file;
-
+      // console.log(this.newTransactionData.attachments);
+      this.fileSize = this.formatBytes(this.newTransactionData.attachments.size);
     } else {
       this.newTransactionData.attachments = undefined;
     }
@@ -83,7 +94,7 @@ export class TransactionDialogComponent implements OnInit {
           var dataArray = newFile.result;
           this.$azureService.postReceipt({ fileName: this.receiptName, fileAsDataUrl: dataArray }).then(
             (result) => {
-              if(result){
+              if (result) {
                 resolve(result.json().data);
               }
             },
@@ -117,7 +128,10 @@ export class TransactionDialogComponent implements OnInit {
 
   AllowSubmit() {
     let allowSubmit = false;
-    if (this.newTransactionData.amount > this.data.availableBalance) {
+    if (
+      this.newTransactionData.amount > this.data.availableBalance &&
+      this.newTransactionData.attachments.size > 8000
+    ) {
       allowSubmit = true;
     }
     return allowSubmit;

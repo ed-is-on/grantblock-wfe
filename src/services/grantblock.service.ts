@@ -47,7 +47,15 @@ export class GrantBlockService {
             if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                 let transactionApprovers: TransactionApprover[] = [];
                 _value.assignedValidators.forEach((_approver) => {
-                    transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), enumApprovalStatus.Pending, transaction.status, transaction.receiptImage))
+                    let approvalStatus:enumApprovalStatus = enumApprovalStatus.Pending;
+                    if(_value.status.toLowerCase() !== "rejected"){
+                        if(_value.approvedValidators && _value.approvedValidators.length > 0 && _value.approvedValidators.map(x=>{return x.userId}).indexOf(_approver.userId)>-1){
+                            approvalStatus = enumApprovalStatus.Approved;
+                        }
+                    }else{
+                        approvalStatus = enumApprovalStatus.Rejected;
+                    }
+                    transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), approvalStatus, transaction.status, transaction.receiptImage))
                 });
 
                 transaction.AddApprovers(transactionApprovers);

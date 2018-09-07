@@ -4,6 +4,7 @@
 	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(1)" class="mobileButton">Section 1a</div>
 	<div [hidden]="!onMobileViewEd() && edDisplayPod1" class="sec-pod">
 		<span class="testFont">1a</span>
+		<education-fund> blah </education-fund>
 	</div>
 	<div *ngIf="!onMobileViewEd()" style="clear:both"></div>
 	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(2)" class="mobileButton">Section 1b-c</div>

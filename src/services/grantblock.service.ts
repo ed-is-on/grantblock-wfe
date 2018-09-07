@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { GrantBlockNameSpaces } from '../models/namespaces.enum';
 import { Grantee } from '../models/grantee.model';
-import { Observable, of } from '../../node_modules/rxjs';
+import { of } from '../../node_modules/rxjs';  
+import {Observable} from 'rxjs/Rx'    
 import { Transactions } from '../models/transactions.model';
 import { GranteeService } from './grantee.service';
 import { TransactionsService } from './transactions.service';
@@ -87,25 +88,48 @@ export class GrantBlockService {
         return this.$http.get(`${this.apiUrl}ActionRequest`)
             .map((results) => {
                 return results.json()
-                    .map((_value) => {
-                        const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                        // console.log(decodeURIComponent(_value.owner));
-                        // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
+                .map((_value) => {
+                    const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
+                     console.log('paul bassett '+decodeURIComponent(_value.requestValue));
+                    // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
 
-                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
-                        if (_value.assignedValidators && _value.assignedValidators.length > 0) {
-                            newTransaction.approvers = [];
-                            _value.assignedValidators.forEach((_validator) => {
-                                let transactionStatus = enumApprovalStatus.Pending;
-                                if (_value.approvedValidators && _value.approvedValidators.indexOf(granteeId) > -1) {
-                                    transactionStatus = enumApprovalStatus.Approved;
-                                }
-                                newTransaction.approvers.push(new TransactionApprover(_validator.userId, _value.requestId, newTransaction.date, newTransaction.amount.toString(), transactionStatus, newTransaction.status, newTransaction.receiptImage))
-                            })
-                        }
-                        return newTransaction;
-                    });
+                    const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                    if (_value.assignedValidators && _value.assignedValidators.length > 0) {
+                        newTransaction.approvers = [];
+                        _value.assignedValidators.forEach((_validator) => {
+                            let transactionStatus = enumApprovalStatus.Pending;
+                            if (_value.approvedValidators && _value.approvedValidators.indexOf(granteeId) > -1) {
+                                transactionStatus = enumApprovalStatus.Approved;
+                            }
+                            newTransaction.approvers.push(new TransactionApprover(_validator.userId, _value.requestId, newTransaction.date, newTransaction.amount.toString(), transactionStatus, newTransaction.status, newTransaction.receiptImage))
+                        })
+                    }
+                    return newTransaction;
+                });
             });
+    }
+
+    /** Get The total Award amount for All Recipients; this is for the Education/Fund Chart 
+     * question:  how to return multiple values (ie, an array AND total amt)
+    */
+    GetDrawdowns(): Observable<any> {
+        return this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22DRAWDOWN%22%7D%7D`)
+            .map((xresults) => {
+                return xresults.json()
+                .map((_value) => {
+                    const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
+                     console.log('paul bassett '+decodeURIComponent(_value.requestValue));
+                    const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                    return newTransaction;
+                });
+            });
+    }
+
+    GetFundTotal(): Observable<any> {
+        const x = this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22AWARD%22%7D%7D`)
+        .map((results) => results.json().reduce((acc, awards) => acc + awards.requestValue, 0));
+        console.log('x value'+x);
+        return x;
     }
 
     /**
@@ -114,6 +138,7 @@ export class GrantBlockService {
      */
     GetGranteeTransactions(_granteeId: string): Observable<Transactions[]> {
         let owner = this.GetGrantBlockOwnerId(_granteeId);
+        console.log('the owner is: '+owner)
         return this.$http.get(`${this.apiUrl}queries/selectGranteeActionRequests?owner=${owner}`)
             .map(this.parseTransactions, this)
             .catch((error) => {

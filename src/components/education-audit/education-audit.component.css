@@ -1,0 +1,55 @@
+table {
+    width:100%; 
+}
+
+table td {
+    border:0px;
+}
+
+table tr {
+    border: 1px solid lightgray;
+}
+
+.container {
+    padding: 0% 10%;
+}
+
+.detailsContainer, .transactionRow tr, tbody {
+    width: 100%;
+}
+
+.transactionRow{
+    width: 100%;
+    display: inline-flex;
+}
+
+.container tr{
+    display: flex;
+    justify-content: space-around;
+    cursor: pointer;
+    height: 3.5em;
+}
+
+.detailsContainer{
+    border: 0px 1px 1px 1px solid rgb(35, 34, 48) !important;
+    border-radius: 0px 5px 5px 0px;
+    box-shadow: 5px;
+}
+
+.transactionDetails, .receiptContainer{
+    float: left;
+}
+
+.transactionDetails{
+    width:70%;
+    padding: 5% 0%;
+}
+
+.transactionDetails span{
+    width: 100%;
+}
+
+.receiptContainer{
+    width: 30%;
+    text-align: center;
+}

@@ -1,3 +1,34 @@
-<p>
+<!-- <p>
   education-audit works!
-</p>
+</p> -->
+<div>
+  <h3>Audit Transactions</h3>
+</div>
+<div class="container">
+  <table>
+    <div class="transactionRow" *ngFor="let _trans of transactions" (click)="ToggleDetails(_trans.transactionId)">
+      <tr>
+        <span>{{_trans.transactionId}}</span>
+        <span>{{_trans.date | date:'MMM dd yyyy'}}</span>
+        <span>{{_trans.amount | currency:USD}}</span>
+        <span>{{_trans.type}}</span>
+        <span>{{_trans.status}}</span>
+      </tr>
+      <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer">
+        <div class="transactionDetails">
+          <span>{{_trans.purpose}}</span>
+          <div *ngFor="let _approver of _trans.approvers">
+            <span>{{_approver.approverId}}</span>
+            <br>
+            <span>{{GetApprovalStatus(_approver.approvalStatus)}}</span>
+          </div>
+
+        </div>
+        <div class="receiptContainer">
+          <img [src]="ShowImage(_trans)" alt="receipt" />
+        </div>
+      </div>
+    </div>
+  </table>
+  <!-- <div *ngFor="let _trans of transactions">{{_trans | json}}</div> -->
+</div>

@@ -222,9 +222,13 @@ export class GrantBlockService {
     /**
      * This function gets a record of all actions against the blockchain
      */
-    GetTransactionHistory():Promise<Transactions[]>{
+    GetTransactionHistory(_filter?:string):Promise<Transactions[]>{
+        let queryUrl = `${this.apiUrl}ActionRequest`;
+        if(_filter){
+            queryUrl += `?filter=${encodeURI(_filter)}`
+        }
         return new Promise((resolve,reject)=>{
-            this.$http.get(`${this.apiUrl}ActionRequest`).subscribe(
+            this.$http.get(queryUrl).subscribe(
                 (results)=>{
                     resolve(this.parseTransactions(results));
                 },

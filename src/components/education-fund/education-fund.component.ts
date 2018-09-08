@@ -97,9 +97,13 @@ export class EducationFundComponent implements OnInit {
           _amounts.push(total + currentAmount + this.fundTotal);
           return total + currentAmount;
         });
-      // _amounts.unshift(this.selectedGrantee.Amount);
-      console.log('amount array at end '+ _amounts[2])
+
+     // _amounts.unshift(0);  //add a zero starting amount to start of array
+
       this.chartOptions.series[0].data = _amounts;
+      
+      // Add a date for the Zero Amount
+      //this.allTransactions.unshift(this.allTransactions[0])
 
       // Set Dates
       this.chartOptions.xAxis.categories = this.allTransactions.map((_trans) => {

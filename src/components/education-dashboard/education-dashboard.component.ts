@@ -50,7 +50,7 @@ export class EducationDashboardComponent {
 
     this.$grantblockService.GetFundTotal().subscribe((_fundTotal) => {
       this.fundTotal = _fundTotal;
-      console.log('fundtotal '+this.fundTotal)});
+    });
 
     this.$grantblockService.GetDrawdowns().subscribe((_allTransactions) => {
       this.allTransactions = _allTransactions

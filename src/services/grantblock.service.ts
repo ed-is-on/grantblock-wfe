@@ -90,8 +90,6 @@ export class GrantBlockService {
                 return results.json()
                 .map((_value) => {
                     const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                     console.log('paul bassett '+decodeURIComponent(_value.requestValue));
-                    // console.log(decodeURIComponent(_value.owner).match(this.granteePattern));
 
                     const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
                     if (_value.assignedValidators && _value.assignedValidators.length > 0) {
@@ -128,7 +126,6 @@ export class GrantBlockService {
     GetFundTotal(): Observable<any> {
         const x = this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22AWARD%22%7D%7D`)
         .map((results) => results.json().reduce((acc, awards) => acc + awards.requestValue, 0));
-        console.log('x value'+x);
         return x;
     }
 
@@ -138,7 +135,6 @@ export class GrantBlockService {
      */
     GetGranteeTransactions(_granteeId: string): Observable<Transactions[]> {
         let owner = this.GetGrantBlockOwnerId(_granteeId);
-        console.log('the owner is: '+owner)
         return this.$http.get(`${this.apiUrl}queries/selectGranteeActionRequests?owner=${owner}`)
             .map(this.parseTransactions, this)
             .catch((error) => {

@@ -213,7 +213,7 @@ export class GrantBlockService {
      * This function is used to validate existing transactions
      * @param _payload An object containing all the required parameters to validate a transaction
      */
-    ValidateTransaction(_payload:{approve:Boolean, approver:string,request:string,receiptHash:string}): Observable<any>{
+    ValidateTransaction(_payload:{approve:Boolean, approver:string,request:string,receiptHash:string, comment:string, reasonRejected?:string}): Observable<any>{
         _payload["$class"] = `${this.namespacePrefix}.ApproveActionRequest`;
         return this.$http.post(`${this.apiUrl}ApproveActionRequest`, _payload);
     }

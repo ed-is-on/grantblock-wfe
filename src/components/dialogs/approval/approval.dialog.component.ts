@@ -86,7 +86,9 @@ export class ApprovalDialogComponent implements OnInit {
       approve: _response,
       approver: this.transactionApproval.approverId,
       request: this.transactionApproval.transactionId,
-      receiptHash: this.transactionApproval.receiptHash
+      receiptHash: this.transactionApproval.receiptHash,
+      comment: this.comments,
+      reasonRejected: this.reasonSelected
     }).subscribe(
       (result: Response) => {
         if (result.ok) {

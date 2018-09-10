@@ -6,8 +6,8 @@
 </div>
 <div class="container">
   <table>
-    <div class="transactionRow" *ngFor="let _trans of transactions" (click)="ToggleDetails(_trans.transactionId)">
-      <tr>
+    <div class="transactionRow" *ngFor="let _trans of transactions" (click)="ToggleDetails(_trans.transactionId)" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
+      <tr class="rejectedTransaction">
         <span>{{_trans.transactionId}}</span>
         <span>{{_trans.date | date:'MMM dd yyyy'}}</span>
         <span>{{_trans.amount | currency:USD}}</span>

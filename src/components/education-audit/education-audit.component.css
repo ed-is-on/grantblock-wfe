@@ -53,3 +53,11 @@ table tr {
     width: 30%;
     text-align: center;
 }
+
+.approvedTransaction{
+border-left: 5px solid green;
+}
+
+.rejectedTransaction{
+    border-left: 5px solid red;
+}

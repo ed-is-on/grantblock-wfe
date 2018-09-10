@@ -10,8 +10,9 @@ import { enumApprovalStatus } from '../../models/approver.model';
 })
 export class EducationAuditComponent implements OnInit {
 
-  private auditQuery = `{"where":{"and":[{"type":"DRAWDOWN"},{"or":[{"status":"APPROVED"},{"status":"REJECTED"}]}]}}`;
+  private auditQuery = `{"where":{"and":[{"type":"DRAWDOWN"},{"or":[{"status":"APPROVED"},{"status":"REJECTED"},{"status":"VALIDATION_IN_PROGRESS"}]}]}}`;
   transactions:Transactions[];
+  borderClass: string;
 
   constructor(
     private $grantblockService : GrantBlockService
@@ -42,6 +43,14 @@ export class EducationAuditComponent implements OnInit {
         console.log(error);
       }
     )
+  }
+
+  GetBorderClass(_status){
+    if(_status === 'Rejected'){
+      this.borderClass = 'rejectedTransaction';
+    }else if(_status === 'Validation In Progress'){
+      this.borderClass = 'approvedTransaction';
+    }
   }
 
 }

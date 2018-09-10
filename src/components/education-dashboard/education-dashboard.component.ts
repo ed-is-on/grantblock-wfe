@@ -29,14 +29,7 @@ export class EducationDashboardComponent {
      dates: []
    };
 
- /** An input property that runs a function when a new grantee is passed into this component */
- @Input() set UpdateSelectedGrantee(_grantee: Grantee) {
-   this.selectedGrantee = _grantee;
-   this.bootstrapComponent();
- }
-
- /** An event emmitter input property that is used to update the grantee chart component */
- @Input() UpdateTransactions: EventEmitter<void>;
+ Highcharts = Highcharts;
 
  constructor(
    public $transactions: TransactionsService,
@@ -44,24 +37,16 @@ export class EducationDashboardComponent {
  ) { }
 
  ngOnInit() {
-
-
        this.bootstrapComponent();
- 
  }
 
  ngOnDestroy() {
-   if (this.UpdateTransactions) {
-     this.UpdateTransactions.unsubscribe();
-   }
  }
 
  /**
   * This function retrieves transactions for the selected grantee, sorts them by date and then calls another function to parse out the chart data
   */
  bootstrapComponent() {
-   console.log('in education bootstrap')
-   
 
     this.$grantblockService.GetFundTotal().subscribe((_fundTotal) => {
       this.fundTotal = _fundTotal;
@@ -74,7 +59,6 @@ export class EducationDashboardComponent {
       this.topTransactions = _allTransactions
         .sort((a, b) => { return a.amount.valueOf() - b.amount.valueOf()});
 
-      console.log('topTransactions '+this.topTransactions[0].granteeId)
       this.ParseChartData();
     },
       (_error) => {
@@ -88,12 +72,13 @@ export class EducationDashboardComponent {
  ParseChartData() {
 
   let _amounts: number[] = [];
-  let _tranObj:{id:string, amt:number}[] = [];
   let _topTranAmt = [];
   let _topTranId = [];
+  let _topGrantee = [];
+  let _topGranteeCnt = [];
   
-  
-  // adding the initial amount to the chart
+  // Parse Drawdowns for Line-chart
+
   if (this.allTransactions.length > 0) {
       _amounts.push(this.fundTotal);
 
@@ -106,9 +91,7 @@ export class EducationDashboardComponent {
         return total + currentAmount;
       });
 
-      //this.topTransactions
-      //var _topTrans = this.topTransactions.map(tran => ({ id: tran.granteeId, amt: tran.amount }));
-      //console.log('top trans: '+_topTrans[1])
+      // Parse Top Transaction Amounts
       var loop = 0;
       this.topTransactions.forEach(function (arrayItem) {
         var id = arrayItem.granteeId;
@@ -118,14 +101,49 @@ export class EducationDashboardComponent {
         _topTranAmt.push([amt*-1]);
         _topTranId.push([id]);
         }
-        console.log('id: '+id+' amt '+amt);
+       });
+
+       // Parse Grantees with most Drawdowns
+
+      var granteeArray = this.allTransactions.map(function(item) {
+        return item.granteeId
+     
+      });
+     
+    // make map:
+    var m = granteeArray.reduce(function(a, b) {
+      a[b] = ++a[b] || 1;
+      return a;
+    }, {});
+ 
+    // loop through object (M), get array of keys/values:
+    var arr = [];
+    for (var xkey in m) {
+      arr.push([xkey, m[xkey]]);
+
+    }
+    // sort array by values:
+    arr.sort(function(a, b) {
+      return b[1] - a[1];
     });
-   
+    
+    // Parse Top Transaction Amounts
+    var loop = 0;
+    arr.forEach(function (arrayItem) {
+        var id = arrayItem[0];
+        var cnt = arrayItem[1];
+        loop = loop + 1;
+        if (loop < 5) {
+          _topGrantee.push([id]);
+          _topGranteeCnt.push([cnt]);
+    }
+  });
 
    //*------------------ Line Chart of Transactions (start) ----------------//
 
     this.chartOptions.series[0].data = _amounts;
     this.tranChart.series[0].data = _topTranAmt;
+    this.granteeCntChart.series[0].data = _topGranteeCnt
 
     // Set Dates
     this.chartOptions.xAxis.categories = this.allTransactions.map((_trans) => {
@@ -135,7 +153,9 @@ export class EducationDashboardComponent {
     //this.tranChart.xAxis.categories = this.allTransactions.map((_trans) => {
     //    return _trans.date.toLocaleDateString();
     //  })
+
     this.tranChart.xAxis.categories = _topTranId;
+    this.granteeCntChart.xAxis.categories = _topGrantee;
 
     // Display Chart
     this.showChart = true;
@@ -214,11 +234,50 @@ export class EducationDashboardComponent {
           }
         }]
     }
-//*------------------ Line Chart of Transactions (end) ----------------//
 
- 
+    // ----------- Column Chart:  Grantees with most Transactions ---------------------------
 
- Highcharts = Highcharts;
+ granteeCntChart = {
+  chart: {
+    type: 'column'
+  },
+  title: {
+    text: 'Grantees with the Most Transactions'
+  },
+  xAxis: {
+    categories:  chartData.series,
+    crosshair: true
+},
+  yAxis: {
+    min: 0,
+    title: {
+      text: 'Transaction Count'
+    }
+  },
+  legend: {
+    enabled: false
+  },
+  tooltip: {
+    pointFormat: 'Amount of Drawdown: <b>{point.y:.1f} dollar</b>'
+  },
+  series: [{
+    name: 'Population',
+    data: chartData.data,
+    dataLabels: {
+      enabled: true,
+      rotation: -90,
+      color: '#FFFFFF',
+      align: 'right',
+      format: '{point.y:.1f}', // one decimal
+      y: 10, // 10 pixels down from the top
+      style: {
+        fontSize: '13px',
+        fontFamily: 'Verdana, sans-serif'
+      }
+    }
+  }]
+}
+//*------------------ Column Chart of Grantee Counts of Transactions (end) ----------------//
 
 
     /** The section below has code for the resizing of pods */

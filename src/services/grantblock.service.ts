@@ -112,13 +112,13 @@ export class GrantBlockService {
     /** Get The total Award amount for All Recipients; this is for the Education/Fund Chart 
      * question:  how to return multiple values (ie, an array AND total amt)
     */
+   //note, when testing on hyperledger composer, use a filter of:  {"where":{"type":"DRAWDOWN"}}
     GetDrawdowns(): Observable<any> {
         return this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22DRAWDOWN%22%7D%7D`)
             .map((xresults) => {
                 return xresults.json()
                 .map((_value) => {
                     const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                     console.log('paul bassett '+decodeURIComponent(_value.requestValue));
                     const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
                     return newTransaction;
                 });

@@ -3,7 +3,6 @@
 <div id="edTop">
 	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(1)" class="mobileButton">Section 1a</div>
 	<div [hidden]="!onMobileViewEd() && edDisplayPod1" class="sec-pod">
-		<span class="testFont">1a</span>
 		<highcharts-chart
   			[Highcharts]="Highcharts"
   			[(options)]="chartOptions"
@@ -24,17 +23,22 @@
 <div id="edBottom">
 	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(3)" class="mobileButton">Section 2a</div>
 	<div [hidden]="!onMobileViewEd() && edDisplayPod3" class="sec-pod">
-		<span class="testFont">2a</span>
 		<highcharts-chart
   			[Highcharts]="Highcharts"
   			[(options)]="tranChart"
   			[(update)]="showChart"
-  			style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+			  style="width: 100%; height: 400px; display: block;">
+		</highcharts-chart>
 	</div>
 	<div *ngIf="!onMobileViewEd()" style="clear:both"></div>
 	<div [hidden]="onMobileViewEd()" (click)="togglePodEd(4)" class="mobileButton">Section 2b</div>
 	<div [hidden]="!onMobileViewEd() && edDisplayPod4" class="sec-pod">
-		<span class="testFont">2b</span>
+		<highcharts-chart
+  			[Highcharts]="Highcharts"
+  			[(options)]="granteeCntChart"
+  			[(update)]="showChart"
+			  style="width: 100%; height: 400px; display: block;">
+		</highcharts-chart>
 	</div>
 </div>
 <div style="clear:both"></div>

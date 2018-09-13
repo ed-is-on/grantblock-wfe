@@ -17,10 +17,16 @@
       <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer">
         <div class="transactionDetails">
           <span>{{_trans.purpose}}</span>
-          <div *ngFor="let _approver of _trans.approvers">
-            <span>{{_approver.approverId}}</span>
+          <div *ngFor="let _approver of _trans.approvalHistory">
+            <span>{{_approver.approver}}</span>
             <br>
-            <span>{{GetApprovalStatus(_approver.approvalStatus)}}</span>
+            <span>{{_approver.approve}}</span>
+            <br>
+            <span>{{_approver.timestamp | date:'MMM dd yyyy'}}</span>
+            <br>
+            <span>{{_approver.comment}}</span>
+            <br>
+            <span>{{_approver.reasonRejected}}</span>
           </div>
 
         </div>

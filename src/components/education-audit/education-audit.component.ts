@@ -37,7 +37,14 @@ export class EducationAuditComponent implements OnInit {
   GetTransactionsToAudit(){
     this.$grantblockService.GetTransactionHistory(this.auditQuery).then(
       (results)=>{
-        this.transactions = results;
+        this.transactions = results.map((_trans)=>{
+          this.$grantblockService.GetApproveActionRequestHistory(_trans.transactionId).then((x)=>{
+            _trans.approvalHistory = x;
+          }, (_error)=>{
+            console.log(_error);
+          })
+          return _trans;
+        });
       },
       (error)=>{
         console.log(error);

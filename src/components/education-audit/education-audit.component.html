@@ -2,33 +2,34 @@
   education-audit works!
 </p> -->
 <div>
-  <h3>Audit Transactions</h3>
+  <h1>Audit Transactions</h1>
 </div>
 <div class="container">
   <table>
     <div class="transactionRow" *ngFor="let _trans of transactions" (click)="ToggleDetails(_trans.transactionId)" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
-      <tr class="rejectedTransaction">
-        <span>{{_trans.transactionId}}</span>
-        <span>{{_trans.date | date:'MMM dd yyyy'}}</span>
-        <span>{{_trans.amount | currency:USD}}</span>
-        <span>{{_trans.type}}</span>
-        <span>{{_trans.status}}</span>
+      <tr class="transactionHeader" >
+        <td>{{_trans.transactionId}}</td>
+        <td>{{_trans.date | date:'MMM dd yyyy'}}</td>
+        <td>{{_trans.amount | currency:USD}}</td>
+        <td>{{_trans.type}}</td>
+        <td>{{_trans.status}}</td>
       </tr>
-      <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer">
-        <div class="transactionDetails">
-          <span>{{_trans.purpose}}</span>
-          <div *ngFor="let _approver of _trans.approvalHistory">
-            <span>{{_approver.approver}}</span>
-            <br>
-            <span>{{_approver.approve}}</span>
-            <br>
-            <span>{{_approver.timestamp | date:'MMM dd yyyy'}}</span>
-            <br>
-            <span>{{_approver.comment}}</span>
-            <br>
-            <span>{{_approver.reasonRejected}}</span>
-          </div>
-
+      <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer" >
+        <div class="transactionDetails" >
+          <span><b>Purpose:</b> {{_trans.purpose}}</span>
+            <table class="detailTable">
+              <tr>
+                <th id="dTh1" width="200px">Approver</th>
+                <th>Status</th>
+              </tr>
+              <tr  *ngFor="let _approver of _trans.approvalHistory">
+                  <td>{{_approver.approver}}</td>
+                  <td>{{_approver.approve)}}</td>
+                  <td>{{_approver.timestamp | date:'MMM dd yyyy'}}</td>
+                  <td>{{_approver.comment}}</td>
+                  <td>{{_approver.reasonRejected}}</td>
+                </tr>
+            </table>
         </div>
         <div class="receiptContainer">
           <img [src]="ShowImage(_trans)" alt="receipt" />

@@ -7,12 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent  {
   name = 'Angular 6';
-  
-  
-  firstName = 'Bryan'
-  lastName = 'Strong'
-
-  myName(){
-    alert(`${this.firstName} ${this.lastName}`);
-  }
 }

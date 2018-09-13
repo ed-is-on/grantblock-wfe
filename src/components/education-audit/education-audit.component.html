@@ -21,14 +21,17 @@
               <tr>
                 <th id="dTh1" width="200px">Approver</th>
                 <th>Status</th>
+                <th>Date</th>
+                <th>Comment</th>
+                <th>Reason</th>
               </tr>
-              <tr  *ngFor="let _approver of _trans.approvalHistory">
-                  <td>{{_approver.approver}}</td>
-                  <td>{{_approver.approve)}}</td>
-                  <td>{{_approver.timestamp | date:'MMM dd yyyy'}}</td>
-                  <td>{{_approver.comment}}</td>
-                  <td>{{_approver.reasonRejected}}</td>
-                </tr>
+              <tr *ngFor="let _approver of _trans.approvalHistory">
+                <td>{{_approver.approver}}</td>
+                <td>{{_approver.approve}}</td>
+                <td>{{_approver.timestamp | date:'MMM dd yyyy'}}</td>
+                <td>{{_approver.comment}}</td>
+                <td>{{_approver.reasonRejected}}</td>
+              </tr>
             </table>
         </div>
         <div class="receiptContainer">

@@ -17,32 +17,51 @@ table tr {
 .detailsContainer, .transactionRow tr, tbody {
     width: 100%;
 }
+.transactionHeader {
+    background-color: gray !important;
+    display: flex;
+    cursor: pointer;
+    height: 3.5em;
+}
+.transactionHeader:hover {
+    border-top: 5px solid gray;
+    height: 4em;
+}
 
 .transactionRow{
     width: 100%;
     display: inline-flex;
+    background-color: rgb(248, 241, 223);
 }
 
-.container tr{
-    display: flex;
-    justify-content: space-around;
-    cursor: pointer;
-    height: 3.5em;
+.container td{
+    width: 20%;
 }
 
 .detailsContainer{
     border: 0px 1px 1px 1px solid rgb(35, 34, 48) !important;
     border-radius: 0px 5px 5px 0px;
     box-shadow: 5px;
+    
+  
 }
 
 .transactionDetails, .receiptContainer{
     float: left;
+    border-top: 1px solid darkslategray;
+    border-bottom: 1px solid darkslategray;
+    margin: 10px 0px;
 }
 
 .transactionDetails{
-    width:70%;
-    padding: 5% 0%;
+    width:69%;
+    padding: 2% 1%;
+    background: rgb(241, 250, 250);
+    border-top: 1px solid darkslategray;
+    border-bottom: 1px solid darkslategray;
+    margin: 10px 0px;
+    margin-right: 1%;
+    float: left;
 }
 
 .transactionDetails span{
@@ -60,4 +79,12 @@ border-left: 5px solid green;
 
 .rejectedTransaction{
     border-left: 5px solid red;
+}
+
+.detailTable {
+    background: rgba(255,255,255,0.0);
+    border: 0px !important;
+}
+#dTh1 {
+    width: 25%;
 }

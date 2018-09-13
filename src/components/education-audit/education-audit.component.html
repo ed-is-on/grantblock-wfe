@@ -2,26 +2,36 @@
   education-audit works!
 </p> -->
 <div>
-  <h3>Audit Transactions</h3>
+  <h1>Audit Transactions</h1>
 </div>
 <div class="container">
   <table>
-    <div class="transactionRow" *ngFor="let _trans of transactions" (click)="ToggleDetails(_trans.transactionId)" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
-      <tr class="rejectedTransaction">
-        <span>{{_trans.transactionId}}</span>
-        <span>{{_trans.date | date:'MMM dd yyyy'}}</span>
-        <span>{{_trans.amount | currency:USD}}</span>
-        <span>{{_trans.type}}</span>
-        <span>{{_trans.status}}</span>
+    <div style="" class="transactionRow" *ngFor="let _trans of transactions" (click)="ToggleDetails(_trans.transactionId)" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
+      <tr class="transactionHeader" >
+        <td>{{_trans.transactionId}}</td>
+        <td>{{_trans.date | date:'MMM dd yyyy'}}</td>
+        <td>{{_trans.amount | currency:USD}}</td>
+        <td>{{_trans.type}}</td>
+        <td>{{_trans.status}}</td>
       </tr>
-      <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer">
-        <div class="transactionDetails">
-          <span>{{_trans.purpose}}</span>
-          <div *ngFor="let _approver of _trans.approvers">
-            <span>{{_approver.approverId}}</span>
+      <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer" >
+        <div class="transactionDetails" >
+          <span><b>Purpose:</b> {{_trans.purpose}}</span>
+          <!-- <div *ngFor="let _approver of _trans.approvers">
+            <span><b>Approver:</b> {{_approver.approverId}}</span>
             <br>
-            <span>{{GetApprovalStatus(_approver.approvalStatus)}}</span>
-          </div>
+            <span><b>Status:</b>{{GetApprovalStatus(_approver.approvalStatus)}}</span> -->
+            <table class="detailTable">
+              <tr>
+                <th id="dTh1" width="200px">Approver</th>
+                <th>Status</th>
+              </tr>
+              <tr  *ngFor="let _approver of _trans.approvers">
+                  <td>{{_approver.approverId}}</td>
+                  <td>{{GetApprovalStatus(_approver.approvalStatus)}}</td>
+                </tr>
+            </table>
+          <!-- </div> -->
 
         </div>
         <div class="receiptContainer">

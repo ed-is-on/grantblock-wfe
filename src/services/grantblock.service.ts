@@ -8,6 +8,11 @@ import { GranteeService } from './grantee.service';
 import { TransactionsService } from './transactions.service';
 import { TransactionApprover, enumApprovalStatus } from '../models/approver.model';
 
+enum HyperledgerClass{
+    ApproveActionRequest,
+    ActionRequest
+}
+
 
 @Injectable()
 export class GrantBlockService {
@@ -26,6 +31,12 @@ export class GrantBlockService {
 
     private GetGrantBlockOwnerId(_granteeId: string): string {
         return `resource%3Acom.usgov.ed.grants.Grantee%23${_granteeId}`;
+    }
+
+    private FormatResourceRelationship(_class:HyperledgerClass,_id:string):string{
+        // console.log(HyperledgerClass[_class],_id);
+        // console.log(encodeURI(`resource:com.usgov.ed.grants.${HyperledgerClass[_class]}#${_id}`))
+        return encodeURI(`resource:com.usgov.ed.grants.${HyperledgerClass[_class]}#${_id}`);
     }
 
     private ConvertToProperCase(str): string {
@@ -237,5 +248,23 @@ export class GrantBlockService {
                 }
             )
         })
+    }
+
+    GetApproveActionRequestHistory(_filter?){
+        let _filterQuery = encodeURIComponent(`{"where":{"request":"${this.FormatResourceRelationship(HyperledgerClass.ActionRequest,_filter)}"}}`);
+        let _queryUrl:string = _filter == undefined ? `${this.apiUrl}ApproveActionRequest` : `${this.apiUrl}ApproveActionRequest?filter=${_filterQuery}`
+        console.log(_queryUrl)
+        return new Promise((resolve,reject)=>{
+            this.$http.get(`${_queryUrl}`).subscribe(
+                (results)=>{
+                    resolve(results.json().map((x)=>{
+                        x.timestamp = new Date(x.timestamp);
+                        x.approver = decodeURIComponent(x.approver).match(/Grantee\#(g.*)$/)[1]
+                        return x;
+                    }));
+                },
+                error=>{reject(error)}
+            )
+        });
     }
 }

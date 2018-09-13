@@ -62,10 +62,11 @@ export class GrantBlockService {
                     if(_value.status.toLowerCase() !== "rejected"){
                         if(_value.approvedValidators && _value.approvedValidators.length > 0 && _value.approvedValidators.map(x=>{return x.userId}).indexOf(_approver.userId)>-1){
                             approvalStatus = enumApprovalStatus.Approved;
+                        } else if (_value.rejectValidators && _value.rejectValidators.length > 0 && _value.rejectValidators.map(x=>{return x.userId}).indexOf(_approver.userId)>-1){
+                            approvalStatus = enumApprovalStatus.Rejected;
                         }
-                    }else{
-                        approvalStatus = enumApprovalStatus.Rejected;
                     }
+                    
                     transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), approvalStatus, transaction.status, transaction.receiptImage, transaction.receiptHash, transaction.purpose))
                 });
 

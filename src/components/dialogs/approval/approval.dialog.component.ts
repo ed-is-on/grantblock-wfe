@@ -75,9 +75,9 @@ export class ApprovalDialogComponent implements OnInit {
   }
 
   reasons: reason[] = [
-    { value: '0', viewValue: 'Transaction Description does not match receipt description' },
-    { value: '1', viewValue: 'Transaction Amount does not match receipt amount' },
-    { value: '2', viewValue: 'Receipt is missing or unreadable' }
+    { value: 'Transaction Description does not match receipt description', viewValue: 'Transaction Description does not match receipt description' },
+    { value: 'Transaction Amount does not match receipt amount', viewValue: 'Transaction Amount does not match receipt amount' },
+    { value: 'Receipt is missing or unreadable', viewValue: 'Receipt is missing or unreadable' }
   ];
 
   respondToTransaction() {
@@ -92,12 +92,12 @@ export class ApprovalDialogComponent implements OnInit {
     }).subscribe(
       (result: Response) => {
         if (result.ok) {
-          this.thisDialog.close({success:true});
+          this.thisDialog.close({ success: true });
         }
       },
       (error) => {
         confirm(error.json().error.message);
-        this.thisDialog.close({success:false});
+        this.thisDialog.close({ success: false });
       },
       () => { }
     );

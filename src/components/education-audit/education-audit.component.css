@@ -2,8 +2,9 @@ table {
     width:100%; 
 }
 
-table td {
+ td, th {
     border:0px;
+    background: transparent;
 }
 
 table tr {
@@ -18,14 +19,11 @@ table tr {
     width: 100%;
 }
 .transactionHeader {
-    background-color: gray !important;
+    background-color: white;
     display: flex;
     cursor: pointer;
+    color: slategray;
     height: 3.5em;
-}
-.transactionHeader:hover {
-    border-top: 5px solid gray;
-    height: 4em;
 }
 
 .transactionRow{
@@ -34,6 +32,16 @@ table tr {
     background-color: rgb(248, 241, 223);
 }
 
+.transactionRow:hover {
+    border-top: 7px solid gray;
+    border-bottom: 5px solid gray;
+}
+.transactionRow:hover .transactionHeader {
+   background-color: lightgrey;
+   color: black; 
+   font-weight: bold;
+   height: 4em;
+}
 .container td{
     width: 20%;
 }
@@ -54,12 +62,12 @@ table tr {
 }
 
 .transactionDetails{
-    width:69%;
+    width:68%;
     padding: 2% 1%;
     background: rgb(241, 250, 250);
     border-top: 1px solid darkslategray;
     border-bottom: 1px solid darkslategray;
-    margin: 10px 0px;
+    margin: 1% 1%;
     margin-right: 1%;
     float: left;
 }
@@ -69,8 +77,9 @@ table tr {
 }
 
 .receiptContainer{
-    width: 30%;
+    width: 29%;
     text-align: center;
+    margin-right: 1%;
 }
 
 .approvedTransaction{
@@ -83,8 +92,20 @@ border-left: 5px solid green;
 
 .detailTable {
     background: rgba(255,255,255,0.0);
-    border: 0px !important;
+    border-style: solid;
+    border-color: gray;
+    border-width: 3px 0px;
+   
 }
-#dTh1 {
-    width: 25%;
+.detailTable Th {
+   font-weight: bold;
+   border: 0px;
+}
+.detailTable Td {
+    border: 0px;
+    border-bottom: 1px dashed gray
+}
+.animate {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }

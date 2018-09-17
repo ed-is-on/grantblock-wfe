@@ -6,8 +6,8 @@
 </div>
 <div class="container">
   <table>
-    <div class="transactionRow" *ngFor="let _trans of transactions" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
-      <tr class="transactionHeader" (click)="ToggleDetails(_trans.transactionId)"  >
+    <div class="transactionRow animate" *ngFor="let _trans of transactions" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
+      <tr class="transactionHeader animate" (click)="ToggleDetails(_trans.transactionId)" >
         <td>{{_trans.transactionId}}</td>
         <td>{{_trans.date | date:'MMM dd yyyy'}}</td>
         <td>{{_trans.amount | currency:USD}}</td>
@@ -15,15 +15,15 @@
         <td>{{_trans.status}}</td>
       </tr>
       <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer" >
-        <div class="transactionDetails" >
+        <div class="transactionDetails animate" >
           <span><b>Purpose:</b> {{_trans.purpose}}</span>
             <table class="detailTable">
               <tr>
-                <th id="dTh1" width="200px">Approver</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Comment</th>
-                <th>Reason</th>
+                <th width="10%">Approver</th>
+                <th width="10%">Status</th>
+                <th width="10%">Date</th>
+                <th width="55%">Comment</th>
+                <th width="15%">Reason</th>
               </tr>
               <tr *ngFor="let _approver of _trans.approvalHistory">
                 <td>{{_approver.approver}}</td>

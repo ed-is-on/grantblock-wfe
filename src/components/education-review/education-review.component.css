@@ -9,10 +9,10 @@ table {
 
 th { 
         border:0px;
-        background: transparent;
+        background: #ebecec;
         font-weight: bold;
         font-size: 1.5em;
-        border-bottom: 3px solid slategrey;    
+        border-bottom: 4px solid slategrey;    
     }
  td, th {
      padding: 3px;  }

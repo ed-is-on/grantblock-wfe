@@ -3,9 +3,9 @@
   <figcaption>
     <button id="refButton" class="button" (click)="GetTransactions()">Refresh</button>
   </figcaption>
-  <!-- <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-  </mat-form-field> -->
+  <div>
+    <input style="width: 100%; max-width: 100%;" matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </div>
   <table mat-table matSort [dataSource]="matTableDataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="granteeId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Grantee</th>

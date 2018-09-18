@@ -15,7 +15,7 @@ export class EducationReviewComponent implements OnInit {
 
   matTableDataSource: MatTableDataSource<Transactions> = new MatTableDataSource<Transactions>();
   displayedColumns: string[] = [ 'granteeId', 'date', 'amount', 'type', 'status', 'approvers'];
-
+  
   constructor(
     private $grantblockService: GrantBlockService
   ) { }
@@ -33,11 +33,18 @@ export class EducationReviewComponent implements OnInit {
 
   GetTransactions() {
     this.$grantblockService.GetTransactionHistory().then((results) => {
+      // Sorting out the results by date
       this.blockchain = results.sort((a, b) => { return a.date > b.date ? -1 : a.date < b.date ? 1 : 0; });
+      // Setting the angular material table properties
       this.matTableDataSource.data = this.blockchain;
       this.matTableDataSource.paginator = this.paginator;
       this.matTableDataSource.sort = this.sort;
-    }, (error) => {
+      // this.matTableDataSource.filterPredicate = (data:Transactions,filter:string)=>{
+        
+      //   return true
+      // }
+    }, 
+    (error) => {
       this.blockchain = undefined;
       this.errorMessage = error.message;
     })

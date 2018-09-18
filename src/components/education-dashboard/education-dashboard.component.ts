@@ -150,10 +150,6 @@ export class EducationDashboardComponent {
       return _trans.date.toLocaleDateString();
     })
 
-    //this.tranChart.xAxis.categories = this.allTransactions.map((_trans) => {
-    //    return _trans.date.toLocaleDateString();
-    //  })
-
     this.tranChart.xAxis.categories = _topTranId;
     this.granteeCntChart.xAxis.categories = _topGrantee;
 
@@ -215,7 +211,7 @@ export class EducationDashboardComponent {
           enabled: false
         },
         tooltip: {
-          pointFormat: 'Amount of Drawdown: <b>{point.y:.1f} dollar</b>'
+          pointFormat: 'Amount: <b>${point.y:.2f}</b>'
         },
         series: [{
           name: 'Population',
@@ -225,14 +221,17 @@ export class EducationDashboardComponent {
             rotation: -90,
             color: '#FFFFFF',
             align: 'right',
-            format: '{point.y:.1f}', // one decimal
+            format: '${point.y:.2f}', // one decimal
             y: 10, // 10 pixels down from the top
-            style: {
-              fontSize: '13px',
-              fontFamily: 'Verdana, sans-serif'
-            }
+            // style: {
+            //   fontSize: '13px',
+            //   fontFamily: 'Verdana, sans-serif'
+            // }
           }
-        }]
+        }],
+        credits: {
+          enabled: false
+        }
     }
 
     // ----------- Column Chart:  Grantees with most Transactions ---------------------------
@@ -258,7 +257,7 @@ export class EducationDashboardComponent {
     enabled: false
   },
   tooltip: {
-    pointFormat: 'Amount of Drawdown: <b>{point.y:.1f} dollar</b>'
+    pointFormat: 'Number of Transactions: <b>{point.y:.0f}</b>'
   },
   series: [{
     name: 'Population',
@@ -268,14 +267,17 @@ export class EducationDashboardComponent {
       rotation: -90,
       color: '#FFFFFF',
       align: 'right',
-      format: '{point.y:.1f}', // one decimal
+      format: '{point.y:.0f}', // one decimal
       y: 10, // 10 pixels down from the top
-      style: {
-        fontSize: '13px',
-        fontFamily: 'Verdana, sans-serif'
-      }
+      // style: {
+      //   fontSize: '13px',
+      //   fontFamily: 'Verdana, sans-serif'
+      // }
     }
-  }]
+  }],
+  credits: {
+    enabled: false
+  }
 }
 //*------------------ Column Chart of Grantee Counts of Transactions (end) ----------------//
 

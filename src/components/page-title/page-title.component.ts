@@ -9,7 +9,7 @@ export class PageTitleComponent implements OnInit{
     
     @Input() pageInfo:{Title:string,Description:string};
     
-    ngOnInit(){
+    ngOnInit(){ 
         this.pageInfo = this.pageInfo || {Title:'Demo Title', Description:'Demo Description'}
     }
     

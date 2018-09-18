@@ -9,11 +9,10 @@ export class PageTitleComponent implements OnInit{
     
     @Input() pageInfo:{Title:string,Description:string};
     
+    constructor(){
+    }
+    
     ngOnInit(){
         this.pageInfo = this.pageInfo || {Title:'Demo Title', Description:'Demo Description'}
     }
-    
-    constructor(){
-    }
-
 }

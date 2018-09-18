@@ -38,7 +38,6 @@ export class EducationAuditComponent implements OnInit {
     this.$grantblockService.GetTransactionHistory(this.auditQuery).then(
       (results)=>{
         //Modify results with audit sampling algo
-        console.log(results);
         for (var _i = 0; _i< results.length; _i++){
           var amt:number = results[_i].amount;
           var sp:number = _i;
@@ -66,7 +65,6 @@ export class EducationAuditComponent implements OnInit {
           })
             return _trans;
         });
-        console.log(results, this.transactions);
       },
       (error)=>{
         console.log(error);

@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { GrantBlockNameSpaces } from '../models/namespaces.enum';
 import { Grantee } from '../models/grantee.model';
-import { Observable, of } from '../../node_modules/rxjs';
+import { of } from '../../node_modules/rxjs';  
+import {Observable} from 'rxjs/Rx'    
 import { Transactions } from '../models/transactions.model';
 import { GranteeService } from './grantee.service';
 import { TransactionsService } from './transactions.service';
@@ -106,6 +107,28 @@ export class GrantBlockService {
     GetAllTransactions(): Observable<any> {
         return this.$http.get(`${this.apiUrl}ActionRequest`)
                 .map(this.parseTransactions, this);
+    }
+
+    /** Get The total Award amount for All Recipients; this is for the Education/Fund Chart 
+     * question:  how to return multiple values (ie, an array AND total amt)
+    */
+   //note, when testing on hyperledger composer, use a filter of:  {"where":{"type":"DRAWDOWN"}}
+    GetDrawdowns(): Observable<any> {
+        return this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22DRAWDOWN%22%7D%7D`)
+            .map((xresults) => {
+                return xresults.json()
+                .map((_value) => {
+                    const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
+                    const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                    return newTransaction;
+                });
+            });
+    }
+
+    GetFundTotal(): Observable<any> {
+        const x = this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22AWARD%22%7D%7D`)
+        .map((results) => results.json().reduce((acc, awards) => acc + awards.requestValue, 0));
+        return x;
     }
 
     /**

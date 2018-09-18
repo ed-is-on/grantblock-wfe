@@ -33,14 +33,13 @@ table tr {
 }
 
 .transactionRow:hover {
-    border-top: 7px solid gray;
-    border-bottom: 5px solid gray;
+    border-top: 3px solid gray;
+    border-bottom: 2px solid gray;
 }
 .transactionRow:hover .transactionHeader {
    background-color: lightgrey;
    color: black; 
    font-weight: bold;
-   height: 4em;
 }
 .container td{
     width: 20%;

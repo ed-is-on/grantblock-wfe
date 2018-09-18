@@ -12,7 +12,7 @@ export class EducationReviewComponent implements OnInit {
 
   blockchain: Transactions[];
   errorMessage: string;
-
+  pageInfo = {Title: 'Review Transactions', Description: 'Dept. of Education employees can reiew a list of transactions made by granteess'} 
   matTableDataSource: MatTableDataSource<Transactions> = new MatTableDataSource<Transactions>();
   displayedColumns: string[] = [ 'granteeId', 'date', 'amount', 'type', 'status', 'approvers'];
   

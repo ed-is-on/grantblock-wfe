@@ -13,6 +13,7 @@ export class EducationAuditComponent implements OnInit {
   private auditQuery = `{"where":{"and":[{"type":"DRAWDOWN"},{"or":[{"status":"APPROVED"},{"status":"REJECTED"}]}]}}`;
   transactions:Transactions[];
   borderClass: string;
+  pageInfo = {Title: 'Audit Transactions', Description: 'Dept. of Education employees can review a selection of audited transactions.'} 
 
   constructor(
     private $grantblockService : GrantBlockService

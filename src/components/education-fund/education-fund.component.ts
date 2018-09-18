@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EducationFundComponent implements OnInit {
 
+  pageInfo = {Title: 'Education Fund', Description: 'Dept. of Ed Employees can fund grantees directly.'} 
+
   constructor() { }
 
   ngOnInit() {

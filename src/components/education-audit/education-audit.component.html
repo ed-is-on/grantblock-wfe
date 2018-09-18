@@ -1,7 +1,7 @@
 <!-- <p>
   education-audit works!
 </p> -->
-<page-title ></page-title>
+<page-title [pageInfo]="pageInfo" ></page-title>
 <div class="container">
   <table>
     <div class="transactionRow animate" *ngFor="let _trans of transactions" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >

@@ -1,7 +1,7 @@
 <h2>Review Transactions</h2>
 <figure>
   <figcaption>
-    <button (click)="GetTransactions()">Refresh</button>
+    <button id="refButton" class="button" (click)="GetTransactions()">Refresh</button>
   </figcaption>
   <!-- <mat-form-field>
     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
@@ -9,27 +9,27 @@
   <table mat-table matSort [dataSource]="matTableDataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="granteeId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Grantee</th>
-      <td mat-cell *matCellDef="let _trans">{{_trans.granteeId}}</td>
+      <td width="15%" mat-cell *matCellDef="let _trans">{{_trans.granteeId}}</td>
     </ng-container>
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-      <td mat-cell *matCellDef="let _trans">{{_trans.date | date:"MMM dd yyyy"}}</td>
+      <td width="15%" mat-cell *matCellDef="let _trans">{{_trans.date | date:"MMM dd yyyy"}}</td>
     </ng-container>
     <ng-container matColumnDef="amount">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
-      <td mat-cell *matCellDef="let _trans">{{_trans.amount | currency:USD}}</td>
+      <td width="15%" mat-cell *matCellDef="let _trans">{{_trans.amount | currency:USD}}</td>
     </ng-container>
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-      <td mat-cell *matCellDef="let _trans">{{_trans.type}}</td>
+      <td width="15%" mat-cell *matCellDef="let _trans">{{_trans.type}}</td>
     </ng-container>
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-      <td mat-cell *matCellDef="let _trans">{{_trans.status}}</td>
+      <td width="20%" mat-cell *matCellDef="let _trans">{{_trans.status}}</td>
     </ng-container>
     <ng-container matColumnDef="approvers">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Approval Status</th>
-      <td mat-cell *matCellDef="let _trans">
+      <td width="20%" mat-cell *matCellDef="let _trans">
         <span *ngFor="let _approval of _trans.approvers">
           <!-- <span *ngIf="_approval.approvalStatus===0" [class]="GetApprovalClass(_approval)">&#9745;</span>
           <span *ngIf="_approval.approvalStatus===1" [class]="GetApprovalClass(_approval)">&#9746;</span>

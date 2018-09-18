@@ -20,6 +20,7 @@ import { GranteeTransactionsComponent } from '../components/grantee-transactions
 import { GranteeApprovalsComponent } from '../components/grantee-approvals/grantee-approvals.component';
 import { GranteeChartComponent } from '../components/grantee-chart/grantee-chart.component'
 import { MainNavComponent } from '../components/main-nav/main-nav.component'
+import { PageTitleComponent } from '../components/page-title/page-title.component';
 import { EducationComponent } from '../components/education/education.component';
 import { EducationDashboardComponent } from '../components/education-dashboard/education-dashboard.component';
 import { EducationAuditComponent } from '../components/education-audit/education-audit.component';
@@ -48,7 +49,8 @@ import { AzureService } from '../services/azure.service';
     ApprovalDialogComponent,
     TransactionDialogComponent,
     GranteeChartComponent,
-    MainNavComponent, 
+    MainNavComponent,
+    PageTitleComponent, 
     EducationComponent,
     EducationDashboardComponent,
     EducationAuditComponent,

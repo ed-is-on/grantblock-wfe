@@ -59,8 +59,11 @@ export class EducationAuditComponent implements OnInit {
         results = adt; //set adt = results
 
         this.transactions = results.map((_trans)=>{
-          this.$grantblockService.GetApproveActionRequestHistory(_trans.transactionId).then((x)=>{
-            _trans.approvalHistory = x;
+          this.$grantblockService.GetApproveActionRequestHistory(_trans.transactionId).then((x:any[])=>{
+            _trans.approvalHistory = x.map((historianTransaction:any)=>{
+             historianTransaction.approve = historianTransaction.approve === true ? 'Approved' : 'Rejected';
+              return historianTransaction;
+            });
           }, (_error)=>{
             console.log(_error);
           })

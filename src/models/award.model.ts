@@ -2,7 +2,7 @@ export class Award{
     requestId:string;
     status:string;
     createdDate:Date;
-    requestValue:Number;
+    requestValue:number;
     owner:string;
     private assignedValidators:any[];
     private approvedValidators:any[];

@@ -77,6 +77,8 @@ export class EducationFundComponent implements OnInit {
   AwardGrantees(){
     let _awardPayload = [];
     this.newAwards.forEach(_award=>{
+      // Making sure that the award is a positive integer
+      _award.requestValue = Math.abs(_award.requestValue)
       _awardPayload.push(this.$grantblockService.CreateAward(_award))
     })
     console.log(_awardPayload);

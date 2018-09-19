@@ -76,9 +76,11 @@ export class EducationDashboardComponent {
   let _topTranId = [];
   let _topGrantee = [];
   let _topGranteeCnt = [];
+
+  // Sorting the arrays so they display in the correct order
+  this.allTransactions = this.allTransactions.sort((a, b) => { return a.date.valueOf() - b.date.valueOf() });
   
   // Parse Drawdowns for Line-chart
-
   if (this.allTransactions.length > 0) {
       _amounts.push(this.fundTotal);
 
@@ -91,23 +93,9 @@ export class EducationDashboardComponent {
         return total + currentAmount;
       });
 
-      // Parse Top Transaction Amounts
-      var loop = 0;
-      this.topTransactions.forEach(function (arrayItem) {
-        var id = arrayItem.granteeId;
-        var amt = arrayItem.amount;
-        loop = loop + 1;
-        if (loop < 4) {
-        _topTranAmt.push([amt*-1]);
-        _topTranId.push([id]);
-        }
-       });
-
        // Parse Grantees with most Drawdowns
-
       var granteeArray = this.allTransactions.map(function(item) {
-        return item.granteeId
-     
+        return item.granteeId     
       });
      
     // make map:
@@ -126,6 +114,21 @@ export class EducationDashboardComponent {
     arr.sort(function(a, b) {
       return b[1] - a[1];
     });
+
+    // Sorting out the array by transaction amount
+    this.topTransactions = this.allTransactions.sort((a, b) => { return a.amount.valueOf() - b.amount.valueOf()});
+
+      // Parse Top Transaction Amounts
+      var loop = 0;
+      this.topTransactions.forEach(function (arrayItem) {
+        var id = arrayItem.granteeId;
+        var amt = arrayItem.amount;
+        loop = loop + 1;
+        if (loop < 4) {
+        _topTranAmt.push([amt*-1]);
+        _topTranId.push([id]);
+        }
+       });
     
     // Parse Top Transaction Amounts
     var loop = 0;

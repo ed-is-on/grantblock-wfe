@@ -46,6 +46,7 @@ export class EducationAuditComponent implements OnInit {
             results.splice(sp,1);
           }
         }
+        
         var lng:number = results.length;
         var ctn:number = lng / 5; 
         var adt: Array<any> = [];

@@ -1,0 +1,53 @@
+.container {
+    padding: 0% 10%;
+}
+i {color: red;}
+.mat-form-field { width: 100%;}
+#fundAwardBut {
+    float: right; 
+    background-color: white; 
+    color: forestgreen;  
+    border: 2px solid forestgreen;}
+#fundAwardBut:hover { 
+    background-color: forestgreen; 
+    color: white;}
+.button {
+   
+    color: white;
+    padding: 8px 16px;
+    width: 200px;
+    height: 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+table {
+    width:100%;
+    margin-top: 0px; 
+    border-bottom: 5px solid slategrey; 
+}
+
+ td, th {
+    border:0px;
+    background: transparent;
+    border-bottom: 1px solid gray
+}
+th {
+    background: #ebecec;
+    height:3em;
+    color: rgba(0, 0, 0, 0.54);
+    font-weight: bold;
+    font-size: 1.5em;
+    border-Top: 5px solid slategrey;
+    border-bottom: 3px solid slategrey;  
+}
+
+.animate {
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}

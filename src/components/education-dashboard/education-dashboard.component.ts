@@ -115,6 +115,11 @@ export class EducationDashboardComponent {
       return b[1] - a[1];
     });
 
+     // Set Dates
+     this.chartOptions.xAxis.categories = this.allTransactions.map((_trans) => {
+      return _trans.date.toLocaleDateString();
+    })
+
     // Sorting out the array by transaction amount
     this.topTransactions = this.allTransactions.sort((a, b) => { return a.amount.valueOf() - b.amount.valueOf()});
 
@@ -146,12 +151,7 @@ export class EducationDashboardComponent {
 
     this.chartOptions.series[0].data = _amounts;
     this.tranChart.series[0].data = _topTranAmt;
-    this.granteeCntChart.series[0].data = _topGranteeCnt
-
-    // Set Dates
-    this.chartOptions.xAxis.categories = this.allTransactions.map((_trans) => {
-      return _trans.date.toLocaleDateString();
-    })
+    this.granteeCntChart.series[0].data = _topGranteeCnt;
 
     this.tranChart.xAxis.categories = _topTranId;
     this.granteeCntChart.xAxis.categories = _topGrantee;

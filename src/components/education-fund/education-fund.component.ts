@@ -4,6 +4,8 @@ import { GrantBlockService } from '../../services/grantblock.service';
 import { Grantee } from '../../models/grantee.model';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin } from "rxjs";
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'education-fund',
@@ -22,7 +24,9 @@ export class EducationFundComponent implements OnInit {
 
   constructor(
     private $grantblockService: GrantBlockService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    private router : Router
   ) { }
 
   ngOnInit() {
@@ -31,6 +35,12 @@ export class EducationFundComponent implements OnInit {
     })
     this.GetAllGrantees();
     this.onFormChanges();
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 2000,
+    });
   }
 
   onFormChanges(): void {
@@ -83,7 +93,11 @@ export class EducationFundComponent implements OnInit {
     })
     console.log(_awardPayload);
     forkJoin(_awardPayload).subscribe(
-      (results)=>{console.log(results)},
+      (results)=>{
+        console.log(results)
+        this.openSnackBar("Success!!","")
+        this.router.navigateByUrl('/education/review');
+      },
       (error)=>{console.log(error)}
     )
   }

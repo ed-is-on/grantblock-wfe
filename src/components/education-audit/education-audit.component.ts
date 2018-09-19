@@ -37,11 +37,13 @@ export class EducationAuditComponent implements OnInit {
   GetTransactionsToAudit(){
     this.$grantblockService.GetTransactionHistory(this.auditQuery).then(
       (results)=>{
-        //Modify results with audit sampling algo
-        for (var _i = 0; _i< results.length; _i++){
-          var amt:number = results[_i].amount;
-          var sp:number = _i;
+        //console.log(results);
+        //Filter results for less than 1000
+        function isBigEnough(element) { 
+          return (element.amount <= -1000); 
+       } 
 
+<<<<<<< HEAD
           if(amt <= 1000){
             results.splice(sp,1);
           }
@@ -49,14 +51,24 @@ export class EducationAuditComponent implements OnInit {
         
         var lng:number = results.length;
         var ctn:number = lng / 5; 
+=======
+       
+       var leftOver = results.filter(isBigEnough);
+       //console.log(leftOver);
+
+        //Take every third completed transaction for audit
+        var lng:number = leftOver.length;
+        var ctn:number = lng / 3; 
+>>>>>>> test
         var adt: Array<any> = [];
 
         for (var _e=0; _e < ctn;_e++){
-          var temp = results[_e*5];
+          var temp = leftOver[_e*3];
           adt.push(temp);
         }
       
         results = adt; //set adt = results
+        //console.log(results);
 
         this.transactions = results.map((_trans)=>{
           this.$grantblockService.GetApproveActionRequestHistory(_trans.transactionId).then((x)=>{

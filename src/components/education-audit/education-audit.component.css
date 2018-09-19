@@ -1,5 +1,6 @@
 table {
-    width:100%; 
+    width:100%;
+    margin-top: 0px; 
 }
 
  td, th {
@@ -7,12 +8,16 @@ table {
     background: transparent;
 }
 
-table tr {
+.transactionRow  tr {
     border: 1px solid lightgray;
 }
 
 .container {
     padding: 0% 10%;
+}
+.containerTable {
+    border-bottom: 3px solid slategrey;  
+
 }
 
 .detailsContainer, .transactionRow tr, tbody {
@@ -25,7 +30,27 @@ table tr {
     color: slategray;
     height: 3.5em;
 }
+.guideRow{
+    width: 100%;
+    display: inline-block;
+    background: #ebecec;
+    border-Top: 5px solid slategrey;
+    border-bottom: 3px solid slategrey;  
+    margin-top: 20px;
+}
 
+.guide {  
+    width: 100%;
+    background-color: transparent;
+    font-weight: bold;}
+
+.divSec {
+    width:16%;
+    float:left;
+    margin:1% 2%;
+    font-weight: bold;
+    font-size: 1.25em;
+}
 .transactionRow{
     width: 100%;
     display: inline-flex;

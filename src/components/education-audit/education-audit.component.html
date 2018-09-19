@@ -3,15 +3,15 @@
 </p> -->
 <page-title [pageInfo]="pageInfo" ></page-title>
 <div class="container">
-  <table>
-    <div class="transactionRow animate" *ngFor="let _trans of transactions" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
-      <tr>
-        <th>Transaction ID</th>
-        <th>Date</th>
-        <th>Amount</th>
-        <th>Type</th>
-        <th>Status</th>
-      </tr> 
+    <div class="guideRow">
+        <div class="divSec">Transaction ID</div>
+        <div class="divSec">Date</div>
+        <div class="divSec">Amount</div>
+        <div class="divSec">Type</div>
+        <div class="divSec">Status</div> 
+    </div>
+      <table>
+    <div  class="transactionRow animate" *ngFor="let _trans of transactions" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
       <tr class="transactionHeader animate" (click)="ToggleDetails(_trans.transactionId)" >
         <td>{{_trans.transactionId}}</td>
         <td>{{_trans.date | date:'MMM dd yyyy'}}</td>

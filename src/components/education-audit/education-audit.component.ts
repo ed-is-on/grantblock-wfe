@@ -43,6 +43,7 @@ export class EducationAuditComponent implements OnInit {
           return (element.amount <= -1000); 
        } 
 
+       
        var leftOver = results.filter(isBigEnough);
        //console.log(leftOver);
 

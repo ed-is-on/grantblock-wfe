@@ -2,14 +2,15 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { GrantBlockNameSpaces } from '../models/namespaces.enum';
 import { Grantee } from '../models/grantee.model';
-import { of } from '../../node_modules/rxjs';  
-import {Observable} from 'rxjs/Rx'    
+import { of } from '../../node_modules/rxjs';
+import { Observable } from 'rxjs/Rx'
 import { Transactions } from '../models/transactions.model';
 import { GranteeService } from './grantee.service';
 import { TransactionsService } from './transactions.service';
 import { TransactionApprover, enumApprovalStatus } from '../models/approver.model';
+import { Award } from '../models/award.model';
 
-enum HyperledgerClass{
+enum HyperledgerClass {
     ApproveActionRequest,
     ActionRequest
 }
@@ -34,7 +35,7 @@ export class GrantBlockService {
         return `resource%3Acom.usgov.ed.grants.Grantee%23${_granteeId}`;
     }
 
-    private FormatResourceRelationship(_class:HyperledgerClass,_id:string):string{
+    private FormatResourceRelationship(_class: HyperledgerClass, _id: string): string {
         // console.log(HyperledgerClass[_class],_id);
         // console.log(encodeURI(`resource:com.usgov.ed.grants.${HyperledgerClass[_class]}#${_id}`))
         return encodeURI(`resource:com.usgov.ed.grants.${HyperledgerClass[_class]}#${_id}`);
@@ -55,19 +56,19 @@ export class GrantBlockService {
             let ownerId = decodeURIComponent(_value.owner).match(/Grantee\#(g.*)$/)[1];
             _value.type = this.ConvertToProperCase(_value.type);
             _value.status = this.ConvertToProperCase(_value.status);
-            let transaction = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), _value.purpose || '', null, _value.status, _value.type, _value.requestId,  _value.receiptHash || '', _value.receiptImage || '');
+            let transaction = new Transactions(ownerId, '', _value.requestValue, new Date(_value.createdDate), _value.purpose || '', null, _value.status, _value.type, _value.requestId, _value.receiptHash || '', _value.receiptImage || '');
             if (_value.assignedValidators && _value.assignedValidators.length > 0) {
                 let transactionApprovers: TransactionApprover[] = [];
                 _value.assignedValidators.forEach((_approver) => {
-                    let approvalStatus:enumApprovalStatus = enumApprovalStatus.Pending;
-                    if(_value.status.toLowerCase() !== "rejected"){
-                        if(_value.approvedValidators && _value.approvedValidators.length > 0 && _value.approvedValidators.map(x=>{return x.userId}).indexOf(_approver.userId)>-1){
+                    let approvalStatus: enumApprovalStatus = enumApprovalStatus.Pending;
+                    if (_value.status.toLowerCase() !== "rejected") {
+                        if (_value.approvedValidators && _value.approvedValidators.length > 0 && _value.approvedValidators.map(x => { return x.userId }).indexOf(_approver.userId) > -1) {
                             approvalStatus = enumApprovalStatus.Approved;
-                        } else if (_value.rejectValidators && _value.rejectValidators.length > 0 && _value.rejectValidators.map(x=>{return x.userId}).indexOf(_approver.userId)>-1){
+                        } else if (_value.rejectValidators && _value.rejectValidators.length > 0 && _value.rejectValidators.map(x => { return x.userId }).indexOf(_approver.userId) > -1) {
                             approvalStatus = enumApprovalStatus.Rejected;
                         }
                     }
-                    
+
                     transactionApprovers.push(new TransactionApprover(_approver.userId, _value.requestId, transaction.date, transaction.amount.toString(), approvalStatus, transaction.status, transaction.receiptImage, transaction.receiptHash, transaction.purpose))
                 });
 
@@ -106,28 +107,28 @@ export class GrantBlockService {
 
     GetAllTransactions(): Observable<any> {
         return this.$http.get(`${this.apiUrl}ActionRequest`)
-                .map(this.parseTransactions, this);
+            .map(this.parseTransactions, this);
     }
 
     /** Get The total Award amount for All Recipients; this is for the Education/Fund Chart 
      * question:  how to return multiple values (ie, an array AND total amt)
     */
-   //note, when testing on hyperledger composer, use a filter of:  {"where":{"type":"DRAWDOWN"}}
+    //note, when testing on hyperledger composer, use a filter of:  {"where":{"type":"DRAWDOWN"}}
     GetDrawdowns(): Observable<any> {
         return this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22DRAWDOWN%22%7D%7D`)
             .map((xresults) => {
                 return xresults.json()
-                .map((_value) => {
-                    const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
-                    const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
-                    return newTransaction;
-                });
+                    .map((_value) => {
+                        const granteeId = decodeURIComponent(_value.owner).match(this.granteePattern)[1];
+                        const newTransaction = new Transactions(granteeId, '', _value.requestValue, new Date(_value.createdDate), '', '', this.ConvertToProperCase(_value.status), this.ConvertToProperCase(_value.type), _value.requestId);
+                        return newTransaction;
+                    });
             });
     }
 
     GetFundTotal(): Observable<any> {
         const x = this.$http.get(`${this.apiUrl}ActionRequest?filter=%7B%22where%22%3A%7B%22type%22%3A%22AWARD%22%7D%7D`)
-        .map((results) => results.json().reduce((acc, awards) => acc + awards.requestValue, 0));
+            .map((results) => results.json().reduce((acc, awards) => acc + awards.requestValue, 0));
         return x;
     }
 
@@ -220,10 +221,62 @@ export class GrantBlockService {
      * This function is used to create a new transaction
      * @param _payload An object containing a requestValue and a requestor id
      */
-    CreateTransaction(_payload: { requestValue: number, requestor: string, receiptHash?: string, receiptImage?: string, purpose?:string }): Observable<any> {
+    CreateTransaction(_payload: { requestValue: number, requestor: string, receiptHash?: string, receiptImage?: string, purpose?: string }): Observable<any> {
         _payload["$class"] = `${this.namespacePrefix}.CreateActionRequest`;
         // console.log(_payload);
         return this.$http.post(`${this.apiUrl}CreateActionRequest`, _payload);
+    }
+
+    CreateAward(_award: Award) {
+        function getRequestId() {
+            var _id = _award.owner;
+            var _date = new Date();
+            
+            var dd:any = _date.getDate();
+            var mm:any = _date.getMonth() + 1; //January is 0!
+            var yyyy:any = _date.getFullYear();
+            var hr:any = _date.getHours();
+            var min:any = _date.getMinutes();
+            var sec:any = _date.getSeconds();
+            
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            if (hr < 10) {
+                hr = '0' + hr;
+            }
+            if (min < 10) {
+                min = '0' + min;
+            }
+            if (sec < 10) {
+                sec = '0' + sec;
+            }
+
+            var formattedDate = `${yyyy}${mm}${dd}${hr}${min}${sec}`;
+
+            return `${_id}AR${formattedDate}`
+        }
+        // Create the properties to upload
+        let _payload = {
+            // Set the class for the hyperledger transaction
+            "$class": `${this.namespacePrefix}.ActionRequest`,
+            // Merge the properties with the award information
+            "requestId": getRequestId(),//"g5AR20180919083715",
+            "status": "APPROVED",
+            "createdDate": new Date(),
+            "requestValue": _award.requestValue,
+            "owner": _award.owner,
+            "assignedValidators": [],
+            "approvedValidators": [],
+            "rejectValidators": [],
+            "treasuryValidator": false,
+            "type": "AWARD"
+        }
+
+        return this.$http.post(`${this.apiUrl}ActionRequest`, _payload);
     }
 
     AddValidatingGrantees(_transactionId: string, _numberOfValidators?: number): Observable<Response> {
@@ -238,7 +291,7 @@ export class GrantBlockService {
             (results) => {
                 return results.json();
             },
-            (error)=>{
+            (error) => {
                 console.log(error);
             }
         );
@@ -248,7 +301,7 @@ export class GrantBlockService {
      * This function is used to validate existing transactions
      * @param _payload An object containing all the required parameters to validate a transaction
      */
-    ValidateTransaction(_payload:{approve:Boolean, approver:string,request:string,receiptHash:string, comment:string, reasonRejected?:string}): Observable<any>{
+    ValidateTransaction(_payload: { approve: Boolean, approver: string, request: string, receiptHash: string, comment: string, reasonRejected?: string }): Observable<any> {
         _payload["$class"] = `${this.namespacePrefix}.ApproveActionRequest`;
         return this.$http.post(`${this.apiUrl}ApproveActionRequest`, _payload);
     }
@@ -257,37 +310,37 @@ export class GrantBlockService {
     /**
      * This function gets a record of all actions against the blockchain
      */
-    GetTransactionHistory(_filter?:string):Promise<Transactions[]>{
+    GetTransactionHistory(_filter?: string): Promise<Transactions[]> {
         let queryUrl = `${this.apiUrl}ActionRequest`;
-        if(_filter){
+        if (_filter) {
             queryUrl += `?filter=${encodeURI(_filter)}`
         }
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
             this.$http.get(queryUrl).subscribe(
-                (results)=>{
+                (results) => {
                     resolve(this.parseTransactions(results));
                 },
-                (error)=>{
+                (error) => {
                     reject(error);
                 }
             )
         })
     }
 
-    GetApproveActionRequestHistory(_filter?){
-        let _filterQuery = encodeURIComponent(`{"where":{"request":"${this.FormatResourceRelationship(HyperledgerClass.ActionRequest,_filter)}"}}`);
-        let _queryUrl:string = _filter == undefined ? `${this.apiUrl}ApproveActionRequest` : `${this.apiUrl}ApproveActionRequest?filter=${_filterQuery}`
+    GetApproveActionRequestHistory(_filter?) {
+        let _filterQuery = encodeURIComponent(`{"where":{"request":"${this.FormatResourceRelationship(HyperledgerClass.ActionRequest, _filter)}"}}`);
+        let _queryUrl: string = _filter == undefined ? `${this.apiUrl}ApproveActionRequest` : `${this.apiUrl}ApproveActionRequest?filter=${_filterQuery}`
         console.log(_queryUrl)
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve, reject) => {
             this.$http.get(`${_queryUrl}`).subscribe(
-                (results)=>{
-                    resolve(results.json().map((x)=>{
+                (results) => {
+                    resolve(results.json().map((x) => {
                         x.timestamp = new Date(x.timestamp);
                         x.approver = decodeURIComponent(x.approver).match(/Grantee\#(g.*)$/)[1]
                         return x;
                     }));
                 },
-                error=>{reject(error)}
+                error => { reject(error) }
             )
         });
     }

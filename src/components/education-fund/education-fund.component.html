@@ -1,1 +1,29 @@
 <page-title [pageInfo]="pageInfo" ></page-title>
+<form [formGroup]="fundGrantees">
+    <mat-form-field>
+        <mat-select placeholder="Select a Grantee" formControlName="selectedGrantees" multiple>
+            <mat-option *ngFor="let _grantee of allGrantees" [value]="_grantee" >{{_grantee.Name}} ({{_grantee.Id}})</mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
+<div *ngIf="newAwards.length > 0">
+    <table>
+        <thead>
+            <tr>
+                <th>Grantee</th>
+                <th>Current Available Balance</th>
+                <th>Amount to Award</th>
+                <th>New Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let grantee of newAwards">
+                <td>{{grantee.name}} ({{grantee.owner}})</td>
+                <td>{{grantee.availableBalance | currency:USD}}</td>
+                <td><input type="number" max="999999999999" [(ngModel)]="grantee.requestValue" placeholder="Enter Amount"></td>
+                <td>{{ SumTotal(grantee.availableBalance,grantee.requestValue) | currency:USD}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button (click)="AwardGrantees()">Award</button>
+</div>

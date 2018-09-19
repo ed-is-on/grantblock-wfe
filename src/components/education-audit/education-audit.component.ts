@@ -43,15 +43,6 @@ export class EducationAuditComponent implements OnInit {
           return (element.amount <= -1000); 
        } 
 
-<<<<<<< HEAD
-          if(amt <= 1000){
-            results.splice(sp,1);
-          }
-        }
-        
-        var lng:number = results.length;
-        var ctn:number = lng / 5; 
-=======
        
        var leftOver = results.filter(isBigEnough);
        //console.log(leftOver);
@@ -59,7 +50,6 @@ export class EducationAuditComponent implements OnInit {
         //Take every third completed transaction for audit
         var lng:number = leftOver.length;
         var ctn:number = lng / 3; 
->>>>>>> test
         var adt: Array<any> = [];
 
         for (var _e=0; _e < ctn;_e++){

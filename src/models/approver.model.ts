@@ -10,7 +10,9 @@ export class TransactionApprover{
     transactionAmount: string;
     transactionStatus: string;
     transactionReceipt: string;
+    receiptHash: string;
     approvalStatus:enumApprovalStatus = enumApprovalStatus.Pending;
+    transactionPurpose: string;
 
     constructor(
       _approverId:string, 
@@ -19,7 +21,9 @@ export class TransactionApprover{
       _transactionAmount: string,
       _approvalStatus?:number,
       _transactionStatus?: string,
-      _transactionReceipt?: string
+      _transactionReceipt?: string,
+      _receiptHash?: string,
+      _purpose?: string
     ){
       this.approverId = _approverId;
       this.transactionId = _transactionId;
@@ -27,6 +31,8 @@ export class TransactionApprover{
       this.transactionAmount = _transactionAmount;
       this.transactionStatus = _transactionStatus;
       this.transactionReceipt = _transactionReceipt;
+      this.receiptHash = _receiptHash;
+      this.transactionPurpose = _purpose;
       this.approvalStatus = _approvalStatus === null || undefined ? 2 : _approvalStatus;
     }
 

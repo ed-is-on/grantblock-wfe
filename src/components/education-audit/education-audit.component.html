@@ -1,3 +1,49 @@
-<p>
+<!-- <p>
   education-audit works!
-</p>
+</p> -->
+<page-title [pageInfo]="pageInfo" ></page-title>
+<div class="container">
+    <div class="guideRow">
+        <div class="divSec">Transaction ID</div>
+        <div class="divSec">Date</div>
+        <div class="divSec">Amount</div>
+        <div class="divSec">Type</div>
+        <div class="divSec">Status</div> 
+    </div>
+      <table>
+    <div  class="transactionRow animate" *ngFor="let _trans of transactions" [ngClass]="{borderClass:GetBorderClass(_trans.status)}" >
+      <tr class="transactionHeader animate" (click)="ToggleDetails(_trans.transactionId)" >
+        <td>{{_trans.transactionId}}</td>
+        <td>{{_trans.date | date:'MMM dd yyyy'}}</td>
+        <td>{{_trans.amount | currency:USD}}</td>
+        <td>{{_trans.type}}</td>
+        <td>{{_trans.status}}</td>
+      </tr>
+      <div [id]="_trans.transactionId" [hidden]="true" class="detailsContainer" >
+        <div class="transactionDetails animate" >
+          <span><b>Purpose:</b> {{_trans.purpose}}</span>
+            <table class="detailTable">
+              <tr>
+                <th width="10%">Approver</th>
+                <th width="10%">Status</th>
+                <th width="10%">Date</th>
+                <th width="55%">Comment</th>
+                <th width="15%">Reason Rejected</th>
+              </tr>
+              <tr *ngFor="let _approver of _trans.approvalHistory">
+                <td>{{_approver.approver}}</td>
+                <td>{{_approver.approve}}</td>
+                <td>{{_approver.timestamp | date:'MMM dd yyyy'}}</td>
+                <td>{{_approver.comment}}</td>
+                <td>{{_approver.reasonRejected}}</td>
+              </tr>
+            </table>
+        </div>
+        <div class="receiptContainer">
+          <img [src]="ShowImage(_trans)" alt="receipt" />
+        </div>
+      </div>
+    </div>
+  </table>
+  <!-- <div *ngFor="let _trans of transactions">{{_trans | json}}</div> -->
+</div>

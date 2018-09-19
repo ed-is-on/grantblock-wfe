@@ -8,7 +8,8 @@
 		<div>
 			<div>
 				Transaction Type: Drawdown
-				<span>Transaction Description: Miscellaneous description, blah blah blah.</span>
+				<br>
+				<span>Transaction Purpose: {{transactionApproval.transactionPurpose}}</span>
 				<br>
 				<span>Transaction Amount: {{transactionApproval.transactionAmount | currency:'USD'}}</span>
 				<br>
@@ -18,7 +19,7 @@
 					<button (click)="receiptChange()">{{showReceipt}}</button>
 				</div>
 				<br>
-				<img *ngIf="showReceiptVal" [src]="defaultProfilePic" />
+				<img *ngIf="showReceiptVal" [src]="getReceiptImage()" />
 			</div>
 			<mat-radio-group>
 				<mat-radio-button color="primary" value="1" (change)="handleChange(1)">I Approve This Transaction &nbsp; </mat-radio-button>
@@ -47,7 +48,7 @@
 		<div style="text-align:right; width:100%; padding:0;">
 		<button button (click)="CancelConfirm()">Cancel</button>
 		<button [disabled]="((approveReject == 'reject') && ((!comments) || (!reasonSelected))) || ((approveReject == 'approve')  && (!comments)) || (approveReject == 'cancel')"
-			 button (click)="CancelConfirm()">Submit</button>
+			 button (click)="respondToTransaction()">Submit</button>
 		</div>
 	</mat-dialog-actions>
 </div>

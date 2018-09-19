@@ -73,7 +73,7 @@ export class GranteeTransactionsComponent implements OnInit {
   NewTransaction(): void {
 
     const dialogRef = this.dialog.open(TransactionDialogComponent, {
-      width: '500px',
+      width: 'auto',
       height: 'auto',
       closeOnNavigation: true,
       data: {

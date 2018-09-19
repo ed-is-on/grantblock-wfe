@@ -13,6 +13,7 @@ export class Transactions {
   approvers?: TransactionApprover[];
   receiptHash?: string;
   receiptImage?: string;
+  approvalHistory?:any;
 
   constructor(
     _granteeId: string,

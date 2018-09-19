@@ -1,3 +1,32 @@
-<p>
-  education-fund works!
-</p>
+<page-title [pageInfo]="pageInfo" ></page-title>
+<div class="container">
+<form [formGroup]="fundGrantees" >
+    <mat-form-field ><i>* Select a Grantee</i>
+        <mat-select  formControlName="selectedGrantees" multiple>
+            <mat-option *ngFor="let _grantee of allGrantees" [value]="_grantee" >{{_grantee.Name}} ({{_grantee.Id}})</mat-option>
+        </mat-select>
+    </mat-form-field>
+</form>
+
+<div *ngIf="newAwards.length > 0">
+    <table>
+        <thead>
+            <tr>
+                <th width="15%">Grantee</th>
+                <th width="30%">Current Available Balance</th>
+                <th width="25%">Amount to Award</th>
+                <th width="30%">New Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let grantee of newAwards">
+                <td>{{grantee.name}} ({{grantee.owner}})</td>
+                <td>{{grantee.availableBalance | currency:USD}}</td>
+                <td><input type="number" max="999999999999" [(ngModel)]="grantee.requestValue" placeholder="Enter Amount"></td>
+                <td>{{ SumTotal(grantee.availableBalance,grantee.requestValue) | currency:USD}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="fundAwardBut" class="button" (click)="AwardGrantees()">Award</button>
+</div>
+</div>

@@ -17,6 +17,7 @@ const educationChildRoutes: Routes = [
   { path: 'audit', component: EducationAuditComponent },
   { path: 'fund', component: EducationFundComponent },
   { path: 'review', component: EducationReviewComponent },
+  { path: '**', pathMatch: 'full', redirectTo:'' },
 ]
 
 const routes: Routes = [

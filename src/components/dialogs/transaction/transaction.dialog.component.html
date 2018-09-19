@@ -21,7 +21,8 @@
 				</div>
 				<div class="form-group">
 					<label for="transactionAttachment">Attach File (Max Size: 2MB)</label>
-					<input name="transactionAttachment" [(ngModel)]="newTransactionData.attachments" id="transactionAttachment" type="file" />
+					<input name="transactionAttachment" (change)="onFileChange($event)" id="transactionAttachment" type="file" required/>
+					<div>{{fileSize}}</div>
 				</div>
 				<br>
 				<!-- <strong>{{data}}</strong> -->

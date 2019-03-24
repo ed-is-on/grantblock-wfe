@@ -208,6 +208,7 @@ export class GrantBlockService {
         let granteesTransactions = await this.GetGranteeTransactions(_granteeId).toPromise();
         if (granteesTransactions.length > 0) {
             availableBalance = granteesTransactions
+                .filter(x => x.status.toLowerCase() === 'approved')
                 .map(x => x.amount)
                 .reduce((_runningTotal, _currentValue) => {
                     return _runningTotal + _currentValue

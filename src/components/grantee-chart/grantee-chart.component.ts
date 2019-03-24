@@ -65,6 +65,7 @@ export class GranteeChartComponent implements OnInit, OnDestroy {
     if (this.selectedGrantee) {
       this.$grantblockService.GetGranteeTransactions(this.selectedGrantee.Id).subscribe((_allTransactions) => {
         this.allTransactions = _allTransactions
+          .filter(x => x.status.toLowerCase() === 'approved')
           .sort((a, b) => { return a.date.valueOf() - b.date.valueOf() });
         this.ParseChartData();
       },
